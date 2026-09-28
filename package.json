@@ -1,0 +1,31 @@
+{
+  "name": "d6-sirh",
+  "version": "1.4.0",
+  "description": "D6-SIRH — Sistema Integral de RH (app web local)",
+  "main": "server/index.js",
+  "author": "Diego Colombres",
+  "license": "UNLICENSED",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dcolombres/D6-SIRH.git"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "build:css": "tailwindcss -i ./css/input.css -o ./css/app.css --minify",
+    "build:vendor": "node scripts/copy-vendor.mjs",
+    "prestart": "npm run build:css && npm run build:vendor",
+    "helical:deploy-sirh": "powershell -ExecutionPolicy Bypass -File scripts/deploy-helical-sirh.ps1"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.8",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.2",
+    "sql.js": "^1.14.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/container-queries": "^0.1.1",
+    "@tailwindcss/forms": "^0.5.10",
+    "tailwindcss": "^3.4.17"
+  }
+}

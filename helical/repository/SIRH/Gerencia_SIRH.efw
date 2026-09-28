@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<efw>
+    <title>Gerencia SIRH</title>
+    <author>DDS</author>
+    <description>Tablero gerencial de desarrollos del Sistema Integrado de Recursos Humanos (modular)</description>
+    <template>dashboard.html</template>
+    <visible>true</visible>
+    <style>clean</style>
+</efw>

@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>D6 · Admin</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Hanken+Grotesk:wght@600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"/>
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/app.css"/>
+    <script src="/vendor/jspdf.umd.min.js"></script>
+    <script src="/vendor/html2canvas.min.js"></script>
+    <style id="dynamic-brand">
+        :root {
+            --primary-color: #000000;
+            --tertiary-color: #000000;
+        }
+    </style>
+    <style id="custom-css"></style>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
+        h1, h2, h3, h4 { font-family: 'Hanken Grotesk', sans-serif; }
+        .font-data { font-family: 'JetBrains Mono', monospace; }
+
+        /* Custom Components based on DESIGN.md */
+        .status-border-emerald { border-left: 4px solid #10b981; }
+        .status-border-amber { border-left: 4px solid #f59e0b; }
+        .status-border-slate { border-left: 4px solid #64748b; }
+        .status-border-error { border-left: 4px solid #ba1a1a; }
+        .status-border-tertiary { border-left: 4px solid #008cc7; }
+
+        .kanban-column { min-width: 300px; }
+
+        .nav-item.active {
+            background-color: #d5e3fd;
+            color: #131b2e;
+            font-weight: 700;
+        }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e0e3e5; border-radius: 10px; }
+
+        .section-fade {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #brand-logo-container img {
+            max-height: 32px;
+            width: auto;
+        }
+        .circular-progress {
+            --progress: 0;
+            background: radial-gradient(closest-side, white 79%, transparent 80% 100%),
+                        conic-gradient(#000000 calc(var(--progress) * 1%), #e6e8ea 0);
+        }
+
+        /* Sidebar Collapse Logic */
+        .sidebar-collapsed aside {
+            width: 80px;
+        }
+        .sidebar-collapsed header {
+            left: 80px;
+        }
+        .sidebar-collapsed main {
+            margin-left: 80px;
+        }
+        .sidebar-collapsed aside .nav-item span:last-child,
+        .sidebar-collapsed aside p,
+        .sidebar-collapsed aside h1,
+        .sidebar-collapsed aside .system-status-text {
+            display: none;
+        }
+        .sidebar-collapsed aside #brand-logo-container {
+            justify-content: center;
+        }
+        .sidebar-collapsed aside .nav-item {
+            justify-content: center;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        aside, header, main {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 8mm;
+            }
+            aside, header, .no-print, form, .fab-container, script, button, .mt-auto, .pt-6.border-t {
+                display: none !important;
+            }
+            main {
+                margin-left: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+                min-height: auto !important;
+            }
+            body {
+                background: white !important;
+                font-size: 8pt !important;
+                color: black !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .max-w-[1600px] {
+                max-width: 100% !important;
+                width: 100% !important;
+                padding: 0 !important;
+            }
+            section:not(.hidden) {
+                display: block !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            /* Infographic Grid & Spacing */
+            .grid {
+                display: grid !important;
+                gap: 10px !important;
+                margin-bottom: 15px !important;
+            }
+            .p-4, .p-5, .p-6, .p-8 { padding: 8px !important; }
+            .mb-8, .mb-10, .mb-12 { margin-bottom: 10px !important; }
+
+            /* Typography */
+            .text-3xl { font-size: 1.4rem !important; }
+            .text-2xl { font-size: 1.2rem !important; }
+            .text-xl { font-size: 1rem !important; }
+            .text-lg { font-size: 0.9rem !important; }
+            h2, h3, h4 { margin-bottom: 4px !important; line-height: 1.2 !important; }
+
+            /* Compact Cards & Tables */
+            .bg-white, .bg-surface-container-low {
+                border: 1px solid #e5e7eb !important;
+                box-shadow: none !important;
+                border-radius: 6px !important;
+            }
+            table { width: 100% !important; border-collapse: collapse !important; }
+            th, td { padding: 4px 8px !important; font-size: 7.5pt !important; border-bottom: 1px solid #f3f4f6 !important; }
+
+            /* Multi-column layout for diverse sections */
+            /* Overview */
+            #overview-focus-items { grid-template-cols: repeat(4, 1fr) !important; }
+            .grid-cols-12 > div { grid-column: span 12 / span 12 !important; }
+            #section-overview .grid-cols-1.md\:grid-cols-2.lg\:grid-cols-4 { grid-template-cols: repeat(4, 1fr) !important; }
+            #section-overview .grid-cols-12 > .lg\:col-span-6 { grid-column: span 6 / span 6 !important; }
+
+            /* Ranking & Systems & Incidents */
+            #ranking-table-body tr, #table-requests tr { break-inside: avoid; }
+            .grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3,
+            .grid-cols-1.md\:grid-cols-2.lg\:grid-cols-4,
+            .grid-cols-1.lg\:grid-cols-3 {
+                grid-template-cols: repeat(3, 1fr) !important;
+            }
+
+            /* Personnel Matrix */
+            #matrix-personnel-systems {
+                grid-template-cols: repeat(3, 1fr) !important;
+            }
+
+            section.hidden { display: none !important; }
+            #brand-logo-container { display: flex !important; margin-bottom: 10px; border-bottom: 2px solid #000; padding-bottom: 5px; }
+            .status-border-emerald, .status-border-amber, .status-border-slate, .status-border-error { border-left-width: 3px !important; }
+        }
+    </style>
+<body class="p-4 md:p-10">
+
+    <!-- Sidebar Navigation -->
+    <aside class="fixed left-0 top-0 h-screen w-[280px] bg-surface-container-lowest border-r border-outline-variant flex flex-col p-container-padding z-50">
+        <div class="mb-section-gap flex items-center justify-between">
+            <div id="brand-logo-container" class="flex flex-col">
+                <img src="/assets/logo_dgtiyc.png" alt="Logo DGTIyC" class="max-h-10 w-auto mb-2"/>
+                <h1 class="text-xl font-bold tracking-tight text-primary" id="sidebar-app-title">ADMINISTRADOR</h1>
+                <p class="text-on-surface-variant text-xs opacity-70" id="sidebar-app-subtitle">Control y Configuración</p>
+            </div>
+            <button onclick="toggleSidebar()" class="p-2 hover:bg-surface-container rounded-lg transition-all active:scale-95 no-print">
+                <span class="material-symbols-outlined">menu_open</span>
+            </button>
+        </div>
+
+        <nav class="flex-1 space-y-1">
+            <button onclick="switchAdminSection('config')" id="nav-config" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all active:scale-95" title="Configuración Global">
+                <span class="material-symbols-outlined">settings</span>
+                <span id="label-nav-config">Configuración Global</span>
+            </button>
+            <button onclick="switchAdminSection('data')" id="nav-data" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all active:scale-95" title="Gestión de Datos">
+                <span class="material-symbols-outlined">storage</span>
+                <span id="label-nav-data">Gestión de Datos</span>
+            </button>
+            <button onclick="switchAdminSection('report')" id="nav-report" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all active:scale-95" title="Reporte Status">
+                <span class="material-symbols-outlined">description</span>
+                <span id="label-nav-report">Reporte Status</span>
+            </button>
+        </nav>
+    </aside>
+
+    <!-- Top AppBar -->
+    <header class="fixed top-0 right-0 left-[280px] h-touch-target bg-surface-bright flex justify-between items-center px-container-padding z-40 border-b border-outline-variant">
+        <div class="flex items-center gap-4 flex-1">
+            <h2 id="top-bar-title" class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">D6 · Admin</h2>
+        </div>
+        <div class="flex items-center gap-2">
+            <!-- Navigation Links -->
+            <div class="flex items-center gap-1 border-r border-outline-variant pr-4 mr-2">
+                <a href="https://alsina.magyp.gob.ar/" target="_blank" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all active:scale-95 group" title="Alsina">
+                    <span class="material-symbols-outlined text-sm">inventory_2</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider hidden md:inline">Alsina</span>
+                </a>
+                <a href="/pages/index.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all active:scale-95 group" title="Tablero">
+                    <span class="material-symbols-outlined text-sm">dashboard</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider hidden md:inline">Tablero</span>
+                </a>
+                <a href="/pages/informe.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all active:scale-95 group" title="Informe Gerencial">
+                    <span class="material-symbols-outlined text-sm">present_to_all</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider hidden md:inline">Informe Gerencial</span>
+                </a>
+                <a href="/pages/helical.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all active:scale-95 group" title="SIRH · Gerencia (Helical)">
+                    <span class="material-symbols-outlined text-sm">analytics</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider hidden md:inline">SIRH</span>
+                </a>
+            </div>
+
+            <!-- DB Management -->
+            <div class="flex items-center gap-1">
+                <button type="button" onclick="openDataHub()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary text-white hover:opacity-90 transition-all" title="Centro de Datos"><span class="material-symbols-outlined text-sm">sync</span><span class="text-[10px] font-bold uppercase tracking-wider hidden md:inline">Datos</span></button><!--legacy-export--><button onclick="exportData()" style="display:none" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all active:scale-95 group" title="Exportar DB">
+                    <span class="material-symbols-outlined text-sm">download</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider hidden lg:inline">Exportar</span>
+                </button>
+                <label class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all cursor-pointer active:scale-95 group" title="Importar DB">
+                    <span class="material-symbols-outlined text-sm">upload</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider hidden lg:inline">Importar</span>
+                    <input type="file" id="import-file" class="hidden" accept=".json" onchange="importData(event)"/>
+                </label>
+                <button onclick="clearAllData()" class="p-1.5 text-error hover:bg-error/10 rounded-lg transition-all" title="Limpiar Todo">
+                    <span class="material-symbols-outlined text-sm">delete_sweep</span>
+                </button>
+            </div>
+            <button onclick="toggleHelpModal()" class="p-2 text-primary hover:bg-primary/10 rounded-full transition-all no-print" title="Ayuda y Lógica">
+                <span class="material-symbols-outlined">help</span>
+            </button>
+        </div>
+    </header>
+
+<main class="ml-[280px] pt-touch-target min-h-screen">
+        <div class="max-w-[1600px] mx-auto p-container-padding">
+
+    <nav class="max-w-[1200px] mx-auto mb-6 flex justify-between items-center">
+        <div class="flex items-center gap-6">
+            <a href="/pages/index.html" class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-all">
+                <span class="material-symbols-outlined">arrow_back</span>
+                <span class="font-bold text-sm uppercase tracking-wider">Volver al Tablero</span>
+            </a>
+            <h1 class="text-2xl font-bold tracking-tight">ADMINISTRADOR DE SISTEMA</h1>
+        </div>
+        <div id="brand-logo-container"></div>
+    </nav>
+
+
+    <main class="max-w-[1200px] mx-auto">
+
+        <!-- SECTION: CONFIGURACION -->
+        <div id="section-config" class="grid grid-cols-1 lg:grid-cols-2 gap-8 p-6">
+            <div class="lg:col-span-1 space-y-6">
+                <!-- Branding Settings -->
+                <section class="admin-card border-l-4 border-primary p-6">
+                    <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined">palette</span>
+                        Identidad y Marca
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-2">Nombre App</label>
+                                <input type="text" id="app-title-input" class="w-full px-4 py-3 bg-surface-container border-none rounded-xl text-sm focus:ring-2 focus:ring-primary transition-all" onchange="updateSetting('appTitle', this.value)"/>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-2">Subtítulo App</label>
+                                <input type="text" id="app-subtitle-input" class="w-full px-4 py-3 bg-surface-container border-none rounded-xl text-sm focus:ring-2 focus:ring-primary transition-all" onchange="updateSetting('appSubtitle', this.value)"/>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-2">Color Primario</label>
+                            <div class="flex gap-4 items-center">
+                                <input type="color" id="primary-color-picker" class="w-12 h-12 rounded cursor-pointer" onchange="updateBrandColor(this.value)"/>
+                                <input type="text" id="primary-color-hex" class="font-data text-sm bg-surface-container border-none rounded-lg px-3 py-2 w-24" readonly/>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-2">Logo Corporativo</label>
+                            <div class="flex flex-col gap-3">
+                                <label class="flex items-center justify-center gap-2 px-4 py-3 bg-surface-container border border-dashed border-outline-variant rounded-xl cursor-pointer hover:bg-white transition-all">
+                                    <span class="material-symbols-outlined">upload_file</span>
+                                    <span class="text-xs font-bold uppercase">Subir Imagen</span>
+                                    <input type="file" class="hidden" accept="image/*" onchange="handleLogoUpload(event)"/>
+                                </label>
+                                <button onclick="removeLogo()" class="text-[10px] text-error font-bold uppercase hover:underline">Eliminar Logo Actual</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Titles & Labels Settings -->
+                <section class="admin-card border-l-4 border-blue-500 p-6">
+                    <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined">title</span>
+                        Títulos y Etiquetas
+                    </h3>
+                    <div class="space-y-4 max-h-[400px] overflow-y-auto pr-2">
+                        <!-- Sidebar Labels -->
+                        <div>
+                            <p class="text-[9px] font-bold text-blue-700 uppercase mb-3 border-b border-blue-100 pb-1">Barra Lateral (Menu)</p>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[9px] text-on-surface-variant uppercase mb-1">Visión Gral.</label>
+                                    <input type="text" id="sidebarOverview-input" class="w-full px-3 py-2 bg-surface-container border-none rounded-lg text-xs" onchange="updateSetting('sidebarOverview', this.value)"/>
+                                </div>
+                                <div>
+                                    <label class="block text-[9px] text-on-surface-variant uppercase mb-1">Sistemas</label>
+                                    <input type="text" id="sidebarSistemas-input" class="w-full px-3 py-2 bg-surface-container border-none rounded-lg text-xs" onchange="updateSetting('sidebarSistemas', this.value)"/>
+                                </div>
+                                <div>
+                                    <label class="block text-[9px] text-on-surface-variant uppercase mb-1">Incidencias</label>
+                                    <input type="text" id="sidebarIncidents-input" class="w-full px-3 py-2 bg-surface-container border-none rounded-lg text-xs" onchange="updateSetting('sidebarIncidents', this.value)"/>
+                                </div>
+                                <div>
+                                    <label class="block text-[9px] text-on-surface-variant uppercase mb-1">Solicitudes</label>
+                                    <input type="text" id="sidebarRequests-input" class="w-full px-3 py-2 bg-surface-container border-none rounded-lg text-xs" onchange="updateSetting('sidebarRequests', this.value)"/>
+                                </div>
+                                <div>
+                                    <label class="block text-[9px] text-on-surface-variant uppercase mb-1">Ranking</label>
+                                    <input type="text" id="sidebarRanking-input" class="w-full px-3 py-2 bg-surface-container border-none rounded-lg text-xs" onchange="updateSetting('sidebarRanking', this.value)"/>
+                                </div>
+                                <div>
+                                    <label class="block text-[9px] text-on-surface-variant uppercase mb-1">Asignaciones</label>
+                                    <input type="text" id="sidebarAsignacion-input" class="w-full px-3 py-2 bg-surface-container border-none rounded-lg text-xs" onchange="updateSetting('sidebarAsignacion', this.value)"/>
+                                </div>
+                                <div>
+                                    <label class="block text-[9px] text-on-surface-variant uppercase mb-1">Proveedores</label>
+                                    <input type="text" id="sidebarProveedores-input" class="w-full px-3 py-2 bg-surface-container border-none rounded-lg text-xs" onchange="updateSetting('sidebarProveedores', this.value)"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section Headers -->
+                        <div class="space-y-4">
+                            <p class="text-[9px] font-bold text-blue-700 uppercase mb-1 border-b border-blue-100 pb-1">Encabezados de Secciones</p>
+
+                            <div class="bg-surface-container-low p-4 rounded-xl space-y-3">
+                                <label class="block text-[10px] font-bold uppercase">Sección: Visión General</label>
+                                <input type="text" id="titleOverview-input" class="w-full px-3 py-2 bg-white border border-outline-variant rounded-lg text-xs font-bold" placeholder="Título" onchange="updateSetting('titleOverview', this.value)"/>
+                                <input type="text" id="subtitleOverview-input" class="w-full px-3 py-2 bg-white border border-outline-variant rounded-lg text-[10px]" placeholder="Subtítulo" onchange="updateSetting('subtitleOverview', this.value)"/>
+                            </div>
+
+                            <div class="bg-surface-container-low p-4 rounded-xl space-y-3">
+                                <label class="block text-[10px] font-bold uppercase">Sección: Sistemas</label>
+                                <input type="text" id="titleSistemas-input" class="w-full px-3 py-2 bg-white border border-outline-variant rounded-lg text-xs font-bold" placeholder="Título" onchange="updateSetting('titleSistemas', this.value)"/>
+                                <input type="text" id="subtitleSistemas-input" class="w-full px-3 py-2 bg-white border border-outline-variant rounded-lg text-[10px]" placeholder="Subtítulo" onchange="updateSetting('subtitleSistemas', this.value)"/>
+                            </div>
+
+                            <div class="bg-surface-container-low p-4 rounded-xl space-y-3">
+                                <label class="block text-[10px] font-bold uppercase">Sección: Incidencias</label>
+                                <input type="text" id="titleIncidents-input" class="w-full px-3 py-2 bg-white border border-outline-variant rounded-lg text-xs font-bold" placeholder="Título" onchange="updateSetting('titleIncidents', this.value)"/>
+                                <input type="text" id="subtitleIncidents-input" class="w-full px-3 py-2 bg-white border border-outline-variant rounded-lg text-[10px]" placeholder="Subtítulo" onchange="updateSetting('subtitleIncidents', this.value)"/>
+                            </div>
+
+                            <div class="bg-surface-container-low p-4 rounded-xl space-y-3">
+                                <label class="block text-[10px] font-bold uppercase">Sección: Solicitudes</label>
+                                <input type="text" id="titleRequests-input" class="w-full px-3 py-2 bg-white border border-outline-variant rounded-lg text-xs font-bold" placeholder="Título" onchange="updateSetting('titleRequests', this.value)"/>
+                                <input type="text" id="subtitleRequests-input" class="w-full px-3 py-2 bg-white border border-outline-variant rounded-lg text-[10px]" placeholder="Subtítulo" onchange="updateSetting('subtitleRequests', this.value)"/>
+                            </div>
+
+                            <div class="bg-surface-container-low p-4 rounded-xl space-y-3">
+                                <label class="block text-[10px] font-bold uppercase">Sección: Ranking</label>
+                                <input type="text" id="titleRanking-input" class="w-full px-3 py-2 bg-white border border-outline-variant rounded-lg text-xs font-bold" placeholder="Título" onchange="updateSetting('titleRanking', this.value)"/>
+                                <input type="text" id="subtitleRanking-input" class="w-full px-3 py-2 bg-white border border-outline-variant rounded-lg text-[10px]" placeholder="Subtítulo" onchange="updateSetting('subtitleRanking', this.value)"/>
+                            </div>
+
+                            <div class="bg-surface-container-low p-4 rounded-xl space-y-3">
+                                <label class="block text-[10px] font-bold uppercase">Sección: Asignaciones</label>
+                                <input type="text" id="titleAsignacion-input" class="w-full px-3 py-2 bg-white border border-outline-variant rounded-lg text-xs font-bold" placeholder="Título" onchange="updateSetting('titleAsignacion', this.value)"/>
+                                <input type="text" id="subtitleAsignacion-input" class="w-full px-3 py-2 bg-white border border-outline-variant rounded-lg text-[10px]" placeholder="Subtítulo" onchange="updateSetting('subtitleAsignacion', this.value)"/>
+                            </div>
+
+                            <div class="bg-surface-container-low p-4 rounded-xl space-y-3">
+                                <label class="block text-[10px] font-bold uppercase">Sección: Proveedores</label>
+                                <input type="text" id="titleProveedores-input" class="w-full px-3 py-2 bg-white border border-outline-variant rounded-lg text-xs font-bold" placeholder="Título" onchange="updateSetting('titleProveedores', this.value)"/>
+                                <input type="text" id="subtitleProveedores-input" class="w-full px-3 py-2 bg-white border border-outline-variant rounded-lg text-[10px]" placeholder="Subtítulo" onchange="updateSetting('subtitleProveedores', this.value)"/>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Helical / SIRH Gerencia -->
+                <section class="admin-card border-l-4 border-indigo-500 p-6">
+                    <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined">analytics</span>
+                        Helical / SIRH Gerencia
+                    </h3>
+                    <p class="text-[11px] text-on-surface-variant mb-4 bg-surface-container p-3 rounded-lg">
+                        Conectá el tablero embebido de Helical Insight (Docker local) para Gerencia sobre desarrollos del SIRH modular.
+                        Convención: carpeta <span class="font-data">SIRH</span> y archivo <span class="font-data">Gerencia_SIRH.efw</span>.
+                    </p>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-2">URL base Helical</label>
+                            <input type="url" id="helical-base-url" class="w-full px-4 py-3 bg-surface-container border-none rounded-xl text-sm font-data focus:ring-2 focus:ring-primary transition-all" placeholder="https://localhost/hi-ee/" onchange="updateSetting('helicalBaseUrl', this.value)"/>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-2">Directorio (dir)</label>
+                                <input type="text" id="helical-dir" class="w-full px-4 py-3 bg-surface-container border-none rounded-xl text-sm font-data focus:ring-2 focus:ring-primary transition-all" placeholder="SIRH" onchange="updateSetting('helicalDir', this.value)"/>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-2">Archivo (file)</label>
+                                <input type="text" id="helical-file" class="w-full px-4 py-3 bg-surface-container border-none rounded-xl text-sm font-data focus:ring-2 focus:ring-primary transition-all" placeholder="Gerencia_SIRH.efw" onchange="updateSetting('helicalFile', this.value)"/>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-2">Autenticación</label>
+                            <select id="helical-auth-mode" class="w-full px-4 py-3 bg-surface-container border-none rounded-xl text-sm focus:ring-2 focus:ring-primary transition-all" onchange="updateHelicalAuthMode(this.value)">
+                                <option value="none">Ninguna (login en Helical)</option>
+                                <option value="url_creds">Credenciales en URL</option>
+                                <option value="token">Token SSO (authToken)</option>
+                            </select>
+                        </div>
+                        <div id="helical-auth-creds" class="grid grid-cols-1 md:grid-cols-2 gap-4 hidden">
+                            <div>
+                                <label class="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-2">Usuario</label>
+                                <input type="text" id="helical-username" autocomplete="off" class="w-full px-4 py-3 bg-surface-container border-none rounded-xl text-sm focus:ring-2 focus:ring-primary transition-all" onchange="updateSetting('helicalUsername', this.value)"/>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-2">Contraseña</label>
+                                <input type="password" id="helical-password" autocomplete="off" class="w-full px-4 py-3 bg-surface-container border-none rounded-xl text-sm focus:ring-2 focus:ring-primary transition-all" onchange="updateSetting('helicalPassword', this.value)"/>
+                            </div>
+                        </div>
+                        <div id="helical-auth-token-wrap" class="hidden">
+                            <label class="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-2">authToken</label>
+                            <input type="text" id="helical-auth-token" autocomplete="off" class="w-full px-4 py-3 bg-surface-container border-none rounded-xl text-sm font-data focus:ring-2 focus:ring-primary transition-all" onchange="updateSetting('helicalAuthToken', this.value)"/>
+                        </div>
+                        <a href="/pages/helical.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white text-xs font-bold uppercase hover:opacity-90 transition-all">
+                            <span class="material-symbols-outlined text-sm">open_in_new</span>
+                            Abrir SIRH · Gerencia
+                        </a>
+                    </div>
+                </section>
+
+                <!-- CSS Management -->
+                <section class="admin-card p-6">
+                    <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined">css</span>
+                        Gestión de CSS Personalizado
+                    </h3>
+                    <p class="text-[11px] text-on-surface-variant mb-4 bg-surface-container p-3 rounded-lg">
+                        Inyecte estilos CSS adicionales para personalizar la apariencia de todo el tablero. Los cambios se aplicarán globalmente.
+                    </p>
+                    <textarea id="custom-css-input" rows="12" class="w-full font-data text-xs bg-surface-container border-none rounded-xl p-4 focus:ring-2 focus:ring-primary resize-none" placeholder="/* Ejemplo: .admin-card { border-radius: 0; } */" onchange="updateCustomCSS(this.value)"></textarea>
+                    <div class="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <p class="text-[10px] text-on-surface-variant font-bold uppercase italic">* Se requiere recargar el tablero para ver efectos visuales profundos.</p>
+                        <button onclick="saveCustomCSS()" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-on-primary hover:bg-primary-container transition-all active:scale-95" title="Guardar CSS personalizado">
+                            <span class="material-symbols-outlined text-sm">save</span>
+                            <span class="text-sm font-medium">Guardar CSS</span>
+                        </button>
+                    </div>
+                </section>
+            </div>
+
+            <div class="lg:col-span-1 space-y-6">
+                <!-- Roles Management -->
+                <section class="admin-card border-l-4 border-emerald-500 p-6">
+                    <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined">badge</span>
+                        Gestión de Roles (Siglas)
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="bg-surface-container-low p-4 rounded-xl">
+                            <label class="block text-[10px] font-bold uppercase mb-3">Agregar Nuevo Rol</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="new-role-code" class="w-20 px-3 py-2 bg-white border border-outline-variant rounded-lg text-xs font-data uppercase" placeholder="Sigla"/>
+                                <input type="text" id="new-role-name" class="flex-1 px-3 py-2 bg-white border border-outline-variant rounded-lg text-xs" placeholder="Nombre del Rol"/>
+                                <button onclick="addRole()" class="bg-primary text-white px-4 rounded-lg font-bold text-[10px] uppercase">Añadir</button>
+                            </div>
+                        </div>
+
+                        <div id="roles-list-container" class="space-y-2 max-h-[300px] overflow-y-auto pr-2">
+                            <!-- Dynamic Roles -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- System Reset -->
+                <section class="admin-card border-l-4 border-error p-6">
+                    <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined">restart_alt</span>
+                        Mantenimiento
+                    </h3>
+                    <p class="text-xs text-on-surface-variant mb-6">
+                        Borra todos los sistemas, incidencias, solicitudes y personal, restaurando los valores iniciales.
+                    </p>
+                    <button onclick="clearAllData()" class="w-full bg-error/10 text-error border border-error/20 px-6 py-3 rounded-xl font-bold text-xs uppercase hover:bg-error hover:text-white transition-all active:scale-95 flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-sm">delete_sweep</span>
+                        Reiniciar Todo
+                    </button>
+                </section>
+            </div>
+        </div>
+
+        <!-- SECTION: DATOS -->
+        <div id="section-data" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-8 p-6">
+            <div class="lg:col-span-1 space-y-6">
+                <!-- Summary Card -->
+                <section class="admin-card border-l-4 border-primary p-6">
+                    <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined">analytics</span>
+                        Resumen de Inventario
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center p-4 bg-surface-container rounded-xl">
+                            <span class="text-[10px] font-bold uppercase text-on-surface-variant">Sistemas</span>
+                            <span class="font-bold font-data text-lg" id="count-systems">0</span>
+                        </div>
+                        <div class="flex justify-between items-center p-4 bg-surface-container rounded-xl">
+                            <span class="text-[10px] font-bold uppercase text-on-surface-variant">Incidentes</span>
+                            <span class="font-bold font-data text-lg" id="count-unattended">0</span>
+                        </div>
+                        <div class="flex justify-between items-center p-4 bg-surface-container rounded-xl">
+                            <span class="text-[10px] font-bold uppercase text-on-surface-variant">Solicitudes</span>
+                            <span class="font-bold font-data text-lg" id="count-requests">0</span>
+                        </div>
+                        <div class="flex justify-between items-center p-4 bg-surface-container rounded-xl">
+                            <span class="text-[10px] font-bold uppercase text-on-surface-variant">Personal</span>
+                            <span class="font-bold font-data text-lg" id="count-personnel">0</span>
+                        </div>
+                        <div class="flex justify-between items-center p-4 bg-surface-container rounded-xl">
+                            <span class="text-[10px] font-bold uppercase text-on-surface-variant">Proveedores</span>
+                            <span class="font-bold font-data text-lg" id="count-providers">0</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Mass Load -->
+                <section class="admin-card p-6">
+                    <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+                        <span class="material-symbols-outlined">upload</span>
+                        Cargas Masivas
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-[10px] font-bold text-red-700 uppercase tracking-widest mb-2">Sistemas (Prioridad Alta)</label>
+                            <textarea id="txt-high" rows="4" class="w-full text-xs font-data bg-surface-container border-none rounded-xl p-4 resize-none focus:ring-2 focus:ring-primary" placeholder="Nombre Sistema 1&#10;Nombre Sistema 2..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-amber-700 uppercase tracking-widest mb-2">Sistemas (Prioridad Media)</label>
+                            <textarea id="txt-mid" rows="4" class="w-full text-xs font-data bg-surface-container border-none rounded-xl p-4 resize-none focus:ring-2 focus:ring-primary" placeholder="Nombre Sistema 1&#10;Nombre Sistema 2..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-emerald-700 uppercase tracking-widest mb-2">Sistemas (Prioridad Baja)</label>
+                            <textarea id="txt-low" rows="4" class="w-full text-xs font-data bg-surface-container border-none rounded-xl p-4 resize-none focus:ring-2 focus:ring-primary" placeholder="Nombre Sistema 1&#10;Nombre Sistema 2..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-error uppercase tracking-widest mb-2">Incidentes Pendientes</label>
+                            <textarea id="txt-unattended" rows="4" class="w-full text-xs font-data bg-surface-container border-none rounded-xl p-4 resize-none focus:ring-2 focus:ring-primary" placeholder="Nombre Incidente 1&#10;Nombre Incidente 2..."></textarea>
+                        </div>
+                        <div class="md:col-span-1">
+                            <label class="block text-[10px] font-bold text-blue-700 uppercase tracking-widest mb-2">Solicitudes de Servicio</label>
+                            <textarea id="txt-requests" rows="4" class="w-full text-xs font-data bg-surface-container border-none rounded-xl p-4 resize-none focus:ring-2 focus:ring-primary" placeholder="Nombre Solicitud 1&#10;Nombre Solicitud 2..."></textarea>
+                        </div>
+                        <div class="md:col-span-1">
+                            <label class="block text-[10px] font-bold text-primary uppercase tracking-widest mb-2">Personal (Nombre y Apellido)</label>
+                            <textarea id="txt-personnel" rows="4" class="w-full text-xs font-data bg-surface-container border-none rounded-xl p-4 resize-none focus:ring-2 focus:ring-primary" placeholder="Persona 1&#10;Persona 2..."></textarea>
+                            <p class="text-[9px] mt-1 text-on-surface-variant italic">Se cargarán con el rol temporal 'XX' para su edición posterior.</p>
+                        </div>
+                        <div class="md:col-span-1">
+                            <label class="block text-[10px] font-bold text-emerald-700 uppercase tracking-widest mb-2">Proveedores (Nombre)</label>
+                            <textarea id="txt-providers" rows="4" class="w-full text-xs font-data bg-surface-container border-none rounded-xl p-4 resize-none focus:ring-2 focus:ring-primary" placeholder="Proveedor 1&#10;Proveedor 2..."></textarea>
+                            <p class="text-[9px] mt-1 text-on-surface-variant italic">Se cargarán como 'Activo' sin rubro; completar la ficha desde el Tablero.</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 flex justify-end">
+                        <button onclick="processMassLoad()" class="bg-primary text-white px-10 py-4 rounded-xl font-bold text-sm uppercase hover:shadow-lg transition-all active:scale-95">
+                            Procesar Carga
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Detailed Edit -->
+                <section class="admin-card p-6">
+                    <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+                        <span class="material-symbols-outlined">edit_square</span>
+                        Base de Datos (Edición Manual)
+                    </h3>
+                    <div class="space-y-4" id="edit-list-container">
+                        <!-- Dynamic -->
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- SECTION: REPORTE STATUS -->
+        <div id="section-report" class="hidden bg-surface-container-low text-on-background font-body-md">
+            <!-- Report Action Bar -->
+            <div class="flex flex-wrap items-center gap-4 px-6 py-4 bg-surface-container-lowest border-b border-outline-variant">
+                <div class="flex items-center gap-3">
+                    <button onclick="saveState()" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-on-primary hover:bg-primary-container transition-all active:scale-95" title="Guardar cambios">
+                        <span class="material-symbols-outlined text-sm">save</span>
+                        <span class="text-sm font-medium">Guardar</span>
+                    </button>
+                    <button type="button" id="magic-report-button" onclick="loadDDSDataIntoReport()" class="flex items-center gap-2 px-4 py-2 rounded-lg text-primary hover:bg-primary-container transition-all active:scale-95" title="Generar informe de status con datos del tablero">
+                        <span class="material-symbols-outlined text-sm">magic</span>
+                        <span class="text-sm font-medium" id="magic-report-text">Magic Report</span>
+                    </button>
+                    <button onclick="addItem()" class="flex items-center gap-2 px-4 py-2 rounded-lg text-primary hover:bg-surface-container transition-all active:scale-95" title="Añadir nuevo ítem">
+                        <span class="material-symbols-outlined text-sm">add</span>
+                        <span class="text-sm font-medium">Añadir Ítem</span>
+                    </button>
+                    <button onclick="togglePreview()" id="preview-toggle" class="flex items-center gap-2 px-4 py-2 rounded-lg text-on-surface hover:bg-surface-container transition-all active:scale-95" title="Alternar modo de vista previa">
+                        <span class="material-symbols-outlined text-sm">visibility</span>
+                        <span class="text-sm font-medium" id="preview-text">Vista Previa</span>
+                    </button>
+                    <button onclick="clearReport()" class="flex items-center gap-2 px-4 py-2 rounded-lg text-error hover:bg-surface-container transition-all active:scale-95" title="Limpiar y comenzar nuevo reporte">
+                        <span class="material-symbols-outlined text-sm">refresh</span>
+                        <span class="text-sm font-medium">Limpiar</span>
+                    </button>
+                </div>
+                <div class="flex items-center gap-3 ml-auto">
+                    <button onclick="exportToPDF()" id="export-pdf-button" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-on-primary hover:bg-primary-container transition-all active:scale-95 shadow-sm" title="Exportar a PDF">
+                        <span class="material-symbols-outlined text-sm" id="export-pdf-icon">picture_as_pdf</span>
+                        <span class="text-sm font-medium" id="export-pdf-text">Exportar PDF</span>
+                        <span id="export-pdf-spinner" class="hidden material-symbols-outlined animate-spin">progress_activity</span>
+                    </button>
+                </div>
+            </div>
+            <!-- Main Canvas -->
+            <div class="mx-auto max-w-[1200px] px-6 py-6">
+                <div class="canvas-area" id="capture-target">
+                    <!-- Professional Header Section -->
+                    <header class="mb-8 border-b-2 border-primary/20 pb-6">
+                        <div class="flex flex-col gap-2">
+                            <input class="w-full bg-transparent border-none p-0 font-headline-lg text-headline-lg text-on-surface focus:ring-0 placeholder:text-on-surface-variant/20" id="report-title" oninput="autoSave()" placeholder="Título del Reporte Corporativo" type="text"/>
+                            <div class="flex items-center justify-between mt-2">
+                                <div class="flex items-center gap-2 text-on-surface-variant">
+                                    <span class="material-symbols-outlined" style="font-size: 16px;">calendar_today</span>
+                                    <span class="text-label-sm uppercase tracking-wider font-semibold" id="current-date"></span>
+                                </div>
+                                <div class="text-[10px] font-bold text-primary/60 uppercase tracking-[0.2em] border border-primary/20 px-2 py-0.5 rounded">
+                                    Documento Clasificado
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+                    <!-- Items List -->
+                    <div class="flex flex-col gap-6" id="items-container">
+                        <!-- Items dynamically injected here -->
+                    </div>
+                    <!-- Footer Section -->
+                    <footer class="mt-12 pt-8 border-t border-outline-variant">
+                        <div class="grid grid-cols-2 gap-8 mb-8">
+                            <div class="flex flex-col gap-1 border-l-2 border-primary/10 pl-4">
+                                <span class="text-[10px] uppercase tracking-widest text-outline font-bold">Elaborado por</span>
+                                <input class="bg-transparent border-none p-0 w-full text-body-md font-semibold text-on-surface focus:ring-0 placeholder:text-on-surface-variant/30" id="author-name" oninput="autoSave()" placeholder="Nombre del Responsable" type="text"/>
+                                <span class="text-[10px] text-outline italic">Firma Digital Registrada</span>
+                            </div>
+                            <div class="flex flex-col gap-1 border-l-2 border-primary/10 pl-4">
+                                <span class="text-[10px] uppercase tracking-widest text-outline font-bold">Dirigido a</span>
+                                <input class="bg-transparent border-none p-0 w-full text-body-md font-semibold text-on-surface focus:ring-0 placeholder:text-on-surface-variant/30" id="authority-name" oninput="autoSave()" placeholder="Nombre de la Autoridad" type="text"/>
+                                <span class="text-[10px] text-outline italic">Copia Controlada</span>
+                            </div>
+                        </div>
+                        <div class="text-center pt-4">
+                            <p class="text-[9px] text-outline uppercase tracking-tighter opacity-50">© 2026 Report Studio - DDS</p>
+                            <div class="flex justify-center gap-4 mt-1 opacity-30">
+                                <div class="h-1 w-12 bg-outline-variant"></div>
+                                <div class="h-1 w-12 bg-outline-variant"></div>
+                                <div class="h-1 w-12 bg-outline-variant"></div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+            </div>
+    </main>
+</main>
+    
+    <!-- Help Modal -->
+    <div id="help-modal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="toggleHelpModal()"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl max-h-[85vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+            <div class="px-8 py-6 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary">help</span>
+                    <h2 class="text-xl font-bold">Ayuda — Administración</h2>
+                </div>
+                <button type="button" onclick="toggleHelpModal()" class="p-2 hover:bg-surface-container-high rounded-full transition-all">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="p-8 overflow-y-auto space-y-6 text-on-surface" id="readme-content">
+                <section class="space-y-3">
+                    <h3 class="text-lg font-bold text-primary border-b border-outline-variant pb-2">Secciones</h3>
+                    <ul class="list-disc pl-5 text-sm space-y-1">
+                        <li><strong>Configuración Global:</strong> marca, colores, títulos, roles, CSS y Helical/SIRH.</li>
+                        <li><strong>Gestión de Datos:</strong> resumen, carga masiva y edición rápida.</li>
+                        <li><strong>Reporte Status:</strong> Magic Report y exportación PDF.</li>
+                    </ul>
+                </section>
+                <section class="space-y-3">
+                    <h3 class="text-lg font-bold text-primary border-b border-outline-variant pb-2">Atajos</h3>
+                    <p class="text-sm">Ctrl+1 Tablero · Ctrl+2 Admin · Ctrl+3 Informe · Ctrl+4 Reporte Status</p>
+                </section>
+            </div>
+            <div class="px-8 py-4 border-t border-outline-variant bg-surface-container-lowest text-right">
+                <button type="button" onclick="toggleHelpModal()" class="bg-primary text-white px-6 py-2 rounded-xl font-bold text-xs uppercase">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Hub Modal -->
+    <div id="data-hub-modal" class="fixed inset-0 z-[110] hidden">
+        <div class="absolute inset-0 bg-black/40" onclick="closeDataHub()"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center">
+                <h2 class="text-lg font-bold">Centro de Datos</h2>
+                <button type="button" onclick="closeDataHub()" class="p-1 hover:bg-surface-container rounded-full"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <p class="text-sm text-on-surface-variant">Exportá un paquete JSON firmado y envialo a las otras PCs. Al importar se reemplaza el tablero completo.</p>
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-1">Tu nombre (firma del paquete)</label>
+                <input id="data-hub-operator" type="text" class="w-full px-4 py-3 bg-surface-container border-none rounded-xl text-sm" placeholder="Ej: Ana — Coordinación"/>
+                <div class="flex flex-wrap gap-2 pt-2">
+                    <button type="button" onclick="handleExportPackage()" class="flex-1 min-w-[140px] bg-primary text-white px-4 py-3 rounded-xl text-xs font-bold uppercase">Exportar paquete</button>
+                    <label class="flex-1 min-w-[140px] flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold uppercase border border-outline-variant cursor-pointer hover:bg-surface-container">
+                        Importar…
+                        <input type="file" class="hidden" accept=".json,application/json" onchange="handleImportFileSelected(event)"/>
+                    </label>
+                </div>
+                <button type="button" id="btn-undo-import" onclick="undoLastImport()" class="hidden w-full text-xs font-bold uppercase text-error py-2">Deshacer último import</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import preview -->
+    <div id="import-preview-modal" class="fixed inset-0 z-[120] hidden">
+        <div class="absolute inset-0 bg-black/50" onclick="cancelImportPreview()"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xl bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-outline-variant">
+                <h2 class="text-lg font-bold">Confirmar importación</h2>
+            </div>
+            <div class="p-6 space-y-4">
+                <div id="import-preview-meta" class="space-y-1"></div>
+                <table class="w-full text-left">
+                    <thead><tr class="text-[10px] uppercase opacity-50"><th class="py-1">Colección</th><th class="text-right">Antes</th><th class="text-right">Después</th><th class="text-right">Δ</th></tr></thead>
+                    <tbody id="import-preview-body"></tbody>
+                </table>
+                <div class="flex gap-2 justify-end pt-2">
+                    <button type="button" onclick="cancelImportPreview()" class="px-4 py-2 rounded-xl text-xs font-bold uppercase bg-surface-container">Cancelar</button>
+                    <button type="button" onclick="confirmImportPreview()" class="px-4 py-2 rounded-xl text-xs font-bold uppercase bg-primary text-white">Aplicar paquete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Onboarding -->
+    <div id="onboarding-modal" class="fixed inset-0 z-[130] hidden">
+        <div class="absolute inset-0 bg-black/50"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 space-y-5">
+            <h2 class="text-2xl font-bold tracking-tight">D6</h2>
+            <p class="text-sm text-on-surface-variant">App para el Director y 2 Coordinadores. Misma herramienta: editar, exportar el JSON y pasarlo a las otras máquinas.</p>
+            <ol class="text-sm list-decimal pl-5 space-y-1">
+                <li>Trabajá en <strong>Hoy / Operación / Equipo</strong>.</li>
+                <li>Usá <strong>Datos</strong> para exportar o importar el paquete.</li>
+                <li>El botón <strong>?</strong> explica cada sección.</li>
+            </ol>
+            <label class="block text-[10px] font-bold uppercase tracking-widest">Tu nombre (opcional)</label>
+            <input id="onboarding-name" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm" placeholder="Quien firma los paquetes"/>
+            <div class="flex gap-2">
+                <button type="button" onclick="skipOnboarding()" class="flex-1 px-4 py-3 rounded-xl text-xs font-bold uppercase bg-surface-container">Ahora no</button>
+                <button type="button" onclick="completeOnboarding()" class="flex-1 px-4 py-3 rounded-xl text-xs font-bold uppercase bg-primary text-white">Empezar</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <script src="/js/desktop-bridge.js"></script>
+    <script type="module" src="/js/admin/app.js"></script>
+</body>
+</html>

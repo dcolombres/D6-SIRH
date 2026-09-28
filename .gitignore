@@ -1,0 +1,26 @@
+node_modules/
+dist/
+out/
+*.log
+.DS_Store
+Thumbs.db
+electron-err.txt
+electron-out.txt
+
+# SQLite local
+data/*.sqlite
+data/*.sqlite-*
+data/*.db
+!data/.gitkeep
+
+# Data dumps / backups
+dds_backup_*.json
+Junio.json
+2026-*.json
+026-*.json
+
+# Tailwind / IDE
+.css-cache/
+.idea/
+.vscode/
+*.local

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>D6 · SIRH Módulos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Hanken+Grotesk:wght@600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/app.css"/>
+    <style id="dynamic-brand">:root { --primary-color: #111111; }</style>
+    <style id="custom-css"></style>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        .nav-item.active { background-color: #111111; color: #fff; font-weight: 700; }
+        .sidebar-collapsed aside { width: 80px; }
+        .sidebar-collapsed header { left: 80px; }
+        .sidebar-collapsed main { margin-left: 80px; }
+        .sidebar-collapsed aside .sidebar-label,
+        .sidebar-collapsed aside #sidebar-app-subtitle,
+        .sidebar-collapsed aside #brand-logo-container h1,
+        .sidebar-collapsed aside #brand-logo-container p { display: none; }
+        .sidebar-collapsed aside #brand-logo-container { justify-content: center; }
+        .sidebar-collapsed aside .nav-item { justify-content: center; padding-left: 0; padding-right: 0; }
+        aside, header, main { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .sirh-badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+        .sirh-badge.ok { background: #d8f3e7; color: #006c4a; }
+        .sirh-badge.warn { background: #fdecc8; color: #b45309; }
+        .sirh-badge.danger { background: #fadada; color: #ba1a1a; }
+        .sirh-badge.info { background: #dce8ff; color: #004ac6; }
+        .sirh-badge.muted { background: #eef1f5; color: #5c5f66; }
+        #sirh-toast { position: fixed; bottom: 24px; right: 24px; z-index: 120; max-width: 420px; }
+    </style>
+</head>
+<body class="text-on-surface font-body bg-surface">
+
+<aside class="fixed left-0 top-0 h-screen w-[280px] bg-surface-container-lowest border-r border-outline-variant flex flex-col p-container-padding z-50">
+    <div class="mb-section-gap flex items-center justify-between">
+        <div id="brand-logo-container" class="flex flex-col">
+            <h1 class="text-2xl font-bold tracking-tight text-primary" id="sidebar-app-title">D6</h1>
+            <p class="text-on-surface-variant text-sm opacity-70" id="sidebar-app-subtitle">Gestión y reportería SIRH</p>
+        </div>
+        <button type="button" onclick="toggleSidebar()" class="p-2 hover:bg-surface-container rounded-lg transition-all">
+            <span class="material-symbols-outlined">menu_open</span>
+        </button>
+    </div>
+    <nav class="flex-1 px-2 space-y-1 overflow-y-auto">
+        <p class="px-4 pt-1 pb-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/70 sidebar-label">SIRH</p>
+        <a href="/pages/index.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Hoy">
+            <span class="material-symbols-outlined">today</span><span class="sidebar-label text-sm font-semibold">Hoy</span>
+        </a>
+        <a href="/pages/sirh.html" id="nav-sirh" class="nav-item active w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all">
+            <span class="material-symbols-outlined">view_module</span><span class="sidebar-label text-sm font-semibold">Módulos</span>
+        </a>
+        <a href="/pages/helical.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all">
+            <span class="material-symbols-outlined">analytics</span><span class="sidebar-label text-sm font-semibold">Gerencia</span>
+        </a>
+        <a href="/pages/index.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" onclick="sessionStorage.setItem('dds_goto','reports')">
+            <span class="material-symbols-outlined">description</span><span class="sidebar-label text-sm font-semibold">Reportes SIRH</span>
+        </a>
+        <p class="px-4 pt-4 pb-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/70 sidebar-label border-t border-outline-variant/50 mt-3">Secundario</p>
+        <a href="/pages/informe.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all">
+            <span class="material-symbols-outlined">present_to_all</span><span class="sidebar-label text-sm font-semibold">Informe</span>
+        </a>
+        <a href="/pages/admin.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all">
+            <span class="material-symbols-outlined">settings</span><span class="sidebar-label text-sm font-semibold">Admin</span>
+        </a>
+    </nav>
+</aside>
+
+<header class="fixed top-0 right-0 left-[280px] h-touch-target bg-surface-bright flex justify-between items-center px-container-padding z-40 border-b border-outline-variant">
+    <h2 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant truncate">D6 · Módulos SIRH</h2>
+    <div class="flex items-center gap-2">
+        <a href="/pages/helical.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all text-[10px] font-bold uppercase">
+            <span class="material-symbols-outlined text-sm">analytics</span> Ver Helical
+        </a>
+        <button type="button" onclick="publishSirh()" id="btn-publish" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary text-white hover:opacity-90 transition-all text-[10px] font-bold uppercase">
+            <span class="material-symbols-outlined text-sm">cloud_upload</span> Publicar en Helical
+        </button>
+        <button type="button" onclick="toggleHelpModal()" class="p-2 text-primary hover:bg-primary/10 rounded-full"><span class="material-symbols-outlined">help</span></button>
+    </div>
+</header>
+
+<div id="help-modal" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-black/50" onclick="toggleHelpModal()"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl max-h-[85vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+        <div class="px-8 py-6 border-b flex justify-between items-center bg-surface-container-low">
+            <h2 class="text-xl font-bold">Guía de Uso</h2>
+            <button type="button" onclick="toggleHelpModal()" class="p-2 rounded-full hover:bg-surface-container-high"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <div class="p-8 overflow-y-auto"><div id="readme-content" class="space-y-6"></div></div>
+    </div>
+</div>
+
+<main class="ml-[280px] pt-touch-target min-h-screen p-6">
+    <div class="max-w-[1400px] mx-auto space-y-6">
+        <div class="flex flex-wrap items-end justify-between gap-4">
+            <div>
+                <p class="text-[10px] font-bold uppercase tracking-widest text-primary">Sistema Integrado de Recursos Humanos</p>
+                <h1 class="text-2xl font-bold tracking-tight">ABM de módulos</h1>
+                <p class="text-sm text-on-surface-variant mt-1">Fuente de verdad en SQLite. Publicá para actualizar el tablero Helical de Gerencia.</p>
+                <p class="text-[10px] font-data text-on-surface-variant mt-1" id="sirh-db-path">—</p>
+            </div>
+            <button type="button" onclick="openSirhForm()" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold uppercase">
+                <span class="material-symbols-outlined text-sm">add</span> Nuevo módulo
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+            <input id="filter-q" type="search" placeholder="Buscar módulo, responsable, proveedor…" class="md:col-span-2 px-4 py-3 bg-surface-container rounded-xl border-none text-sm" oninput="renderSirhTable()"/>
+            <select id="filter-estado" class="px-4 py-3 bg-surface-container rounded-xl border-none text-sm" onchange="renderSirhTable()">
+                <option value="">Todos los estados</option>
+            </select>
+            <select id="filter-prioridad" class="px-4 py-3 bg-surface-container rounded-xl border-none text-sm" onchange="renderSirhTable()">
+                <option value="">Todas las prioridades</option>
+            </select>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="bg-white border border-outline-variant rounded-2xl p-5">
+                <h3 class="text-sm font-bold uppercase tracking-widest mb-3">Estados</h3>
+                <canvas id="sirh-chart-estado" height="200"></canvas>
+            </div>
+            <div class="bg-white border border-outline-variant rounded-2xl p-5">
+                <h3 class="text-sm font-bold uppercase tracking-widest mb-3">Avance</h3>
+                <canvas id="sirh-chart-avance" height="200"></canvas>
+            </div>
+        </div>
+
+        <div class="bg-white border border-outline-variant rounded-2xl overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-surface-container-low text-[10px] uppercase tracking-wider text-on-surface-variant">
+                        <tr>
+                            <th class="text-left px-4 py-3">Módulo</th>
+                            <th class="text-left px-3 py-3">Estado</th>
+                            <th class="text-left px-3 py-3">Avance</th>
+                            <th class="text-left px-3 py-3">Fechas</th>
+                            <th class="text-left px-3 py-3">Responsable</th>
+                            <th class="text-left px-3 py-3">Proveedor</th>
+                            <th class="text-right px-4 py-3">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sirh-tbody"></tbody>
+                </table>
+            </div>
+            <p class="px-4 py-3 text-xs text-on-surface-variant border-t" id="sirh-count">0 módulos</p>
+        </div>
+    </div>
+</main>
+
+<!-- Modal ABM -->
+<div id="sirh-modal" class="fixed inset-0 z-[110] hidden">
+    <div class="absolute inset-0 bg-black/40" onclick="closeSirhForm()"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl max-h-[90vh] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+        <div class="px-6 py-4 border-b flex justify-between items-center">
+            <h3 class="text-lg font-bold" id="sirh-modal-title">Módulo</h3>
+            <button type="button" onclick="closeSirhForm()" class="p-2 rounded-full hover:bg-surface-container"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <form id="sirh-form" class="p-6 overflow-y-auto space-y-4" onsubmit="saveSirhForm(event)">
+            <input type="hidden" id="f-id"/>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="md:col-span-2">
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Nombre del módulo *</label>
+                    <input id="f-modulo" required class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm"/>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Fase / área</label>
+                    <input id="f-fase" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm" placeholder="Core RRHH, Nómina…"/>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Estado</label>
+                    <select id="f-estado" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm"></select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Prioridad</label>
+                    <select id="f-prioridad" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm"></select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Riesgo</label>
+                    <select id="f-riesgo" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm"></select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Avance %</label>
+                    <input id="f-avance" type="number" min="0" max="100" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm"/>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Fecha inicio</label>
+                    <input id="f-fecha-inicio" type="date" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm"/>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Fin prevista</label>
+                    <input id="f-fecha-fin-prevista" type="date" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm"/>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Fin real</label>
+                    <input id="f-fecha-fin-real" type="date" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm"/>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Responsable</label>
+                    <input id="f-responsable" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm"/>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Proveedor</label>
+                    <input id="f-proveedor" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm" placeholder="Opcional"/>
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Próximo hito</label>
+                    <input id="f-hito" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm"/>
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Bloqueo / nota</label>
+                    <textarea id="f-bloqueo" rows="2" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm resize-none"></textarea>
+                </div>
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
+                <button type="button" onclick="closeSirhForm()" class="px-4 py-2 rounded-xl border border-outline-variant text-xs font-bold uppercase">Cancelar</button>
+                <button type="submit" class="px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold uppercase">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="sirh-toast" class="hidden"></div>
+
+<script src="/js/desktop-bridge.js"></script>
+<script src="/vendor/chart.umd.js"></script>
+<script type="module" src="/js/sirh/app.js"></script>
+</body>
+</html>

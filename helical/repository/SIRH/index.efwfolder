@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<efwfolder>
+    <visible>true</visible>
+    <title>SIRH</title>
+    <description>Sistema Integrado de Recursos Humanos — tableros para Gerencia</description>
+    <security>
+        <createdBy>1</createdBy>
+        <organization></organization>
+    </security>
+</efwfolder>

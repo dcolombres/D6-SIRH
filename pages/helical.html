@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>DDS - SIRH · Gerencia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Hanken+Grotesk:wght@600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/app.css"/>
+    <style id="dynamic-brand">
+        :root { --primary-color: #111111; }
+    </style>
+    <style id="custom-css"></style>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .nav-item.active {
+            background-color: #111111;
+            color: #ffffff;
+            font-weight: 700;
+        }
+        .sidebar-collapsed aside { width: 80px; }
+        .sidebar-collapsed header { left: 80px; }
+        .sidebar-collapsed main { margin-left: 80px; }
+        .sidebar-collapsed aside .sidebar-label,
+        .sidebar-collapsed aside #sidebar-app-subtitle,
+        .sidebar-collapsed aside #brand-logo-container h1,
+        .sidebar-collapsed aside #brand-logo-container p { display: none; }
+        .sidebar-collapsed aside #brand-logo-container { justify-content: center; }
+        .sidebar-collapsed aside .nav-item {
+            justify-content: center;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        aside, header, main {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .helical-main {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - var(--touch-target, 56px));
+            min-height: 0;
+        }
+        .helical-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid #d8dadd;
+            background: #f7f9fb;
+        }
+        .helical-toolbar h1 {
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+        .helical-toolbar-meta {
+            font-size: 10px;
+            color: #5c5f66;
+            font-family: 'JetBrains Mono', monospace;
+            max-width: 42rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        #helical-status[data-kind="ok"] { color: #006c4a; }
+        #helical-status[data-kind="error"] { color: #ba1a1a; }
+        #helical-status[data-kind="info"] { color: #5c5f66; }
+        .helical-frame-wrap {
+            flex: 1;
+            min-height: 0;
+            position: relative;
+            background: #e8eaed;
+        }
+        #helical-frame {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            background: #fff;
+        }
+        .helical-offline {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background: #f7f9fb;
+        }
+        .helical-offline-card {
+            max-width: 32rem;
+            width: 100%;
+            background: #fff;
+            border: 1px solid #d8dadd;
+            border-radius: 1rem;
+            padding: 1.75rem;
+        }
+        .helical-offline-card h2 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .helical-offline-card p,
+        .helical-offline-card li {
+            font-size: 0.875rem;
+            color: #5c5f66;
+            line-height: 1.5;
+        }
+        .helical-offline-card ol {
+            margin: 0.75rem 0 1.25rem 1.25rem;
+            list-style: decimal;
+        }
+        .helical-offline-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body class="text-on-surface font-body">
+
+    <aside class="fixed left-0 top-0 h-screen w-[280px] bg-surface-container-lowest border-r border-outline-variant flex flex-col p-container-padding z-50">
+        <div class="mb-section-gap flex items-center justify-between">
+            <div id="brand-logo-container" class="flex flex-col">
+                <h1 class="text-2xl font-bold tracking-tight text-primary" id="sidebar-app-title">D6</h1>
+                <p class="text-on-surface-variant text-sm opacity-70" id="sidebar-app-subtitle">Gestión y reportería SIRH</p>
+            </div>
+            <button type="button" onclick="toggleSidebar()" class="p-2 hover:bg-surface-container rounded-lg transition-all active:scale-95">
+                <span class="material-symbols-outlined">menu_open</span>
+            </button>
+        </div>
+
+        <nav class="flex-1 px-2 space-y-1 overflow-y-auto">
+            <p class="px-4 pt-1 pb-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/70 sidebar-label">SIRH</p>
+            <a href="/pages/index.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Hoy">
+                <span class="material-symbols-outlined">today</span>
+                <span class="sidebar-label text-sm font-semibold">Hoy</span>
+            </a>
+            <a href="/pages/sirh.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Módulos">
+                <span class="material-symbols-outlined">view_module</span>
+                <span class="sidebar-label text-sm font-semibold">Módulos</span>
+            </a>
+            <a href="/pages/helical.html" id="nav-helical" class="nav-item active w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Gerencia">
+                <span class="material-symbols-outlined">analytics</span>
+                <span class="sidebar-label text-sm font-semibold">Gerencia</span>
+            </a>
+            <p class="px-4 pt-4 pb-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/70 sidebar-label border-t border-outline-variant/50 mt-3">Secundario</p>
+            <a href="/pages/index.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Operación">
+                <span class="material-symbols-outlined">hub</span>
+                <span class="sidebar-label text-sm font-semibold">Operación</span>
+            </a>
+            <a href="/pages/informe.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Informe">
+                <span class="material-symbols-outlined">present_to_all</span>
+                <span class="sidebar-label text-sm font-semibold">Informe</span>
+            </a>
+            <a href="/pages/admin.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Admin">
+                <span class="material-symbols-outlined">settings</span>
+                <span class="sidebar-label text-sm font-semibold">Admin</span>
+            </a>
+        </nav>
+    </aside>
+
+    <header class="fixed top-0 right-0 left-[280px] h-touch-target bg-surface-bright flex justify-between items-center px-container-padding z-40 border-b border-outline-variant">
+        <div class="flex items-center gap-4 flex-1 min-w-0">
+            <h2 id="top-bar-title" class="text-sm font-bold uppercase tracking-widest text-on-surface-variant truncate">D6 · Gerencia SIRH</h2>
+            <span id="helical-status" data-kind="info" class="text-[10px] font-bold uppercase tracking-wider hidden sm:inline">—</span>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+            <div class="flex items-center gap-1 border-r border-outline-variant pr-3 mr-1">
+                <a href="/pages/index.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all" title="Tablero">
+                    <span class="material-symbols-outlined text-sm">dashboard</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider hidden md:inline">Tablero</span>
+                </a>
+                <a href="/pages/informe.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all" title="Informe Gerencial">
+                    <span class="material-symbols-outlined text-sm">present_to_all</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider hidden lg:inline">Informe</span>
+                </a>
+                <a href="/pages/admin.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all" title="Configurar Helical">
+                    <span class="material-symbols-outlined text-sm">tune</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider hidden lg:inline">Config</span>
+                </a>
+            </div>
+            <button type="button" onclick="openHelicalHome()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all" title="Inicio / login Helical">
+                <span class="material-symbols-outlined text-sm">login</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider hidden md:inline">Inicio</span>
+            </button>
+            <button type="button" onclick="openHelicalDashboard()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all" title="Abrir dashboard SIRH">
+                <span class="material-symbols-outlined text-sm">analytics</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider hidden md:inline">Dashboard SIRH</span>
+            </button>
+            <button type="button" onclick="reloadHelicalFrame()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all" title="Reintentar / recargar">
+                <span class="material-symbols-outlined text-sm">refresh</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider hidden md:inline">Recargar</span>
+            </button>
+            <button type="button" onclick="openHelicalExternal()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary text-white hover:opacity-90 transition-all" title="Abrir en navegador">
+                <span class="material-symbols-outlined text-sm">open_in_new</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider hidden md:inline">Navegador</span>
+            </button>
+            <button type="button" onclick="toggleHelpModal()" class="p-2 text-primary hover:bg-primary/10 rounded-full transition-all" title="Ayuda">
+                <span class="material-symbols-outlined">help</span>
+            </button>
+        </div>
+    </header>
+
+    <div id="help-modal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="toggleHelpModal()"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl max-h-[85vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+            <div class="px-8 py-6 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary">help</span>
+                    <h2 class="text-xl font-bold">Guía de Uso</h2>
+                </div>
+                <button type="button" onclick="toggleHelpModal()" class="p-2 hover:bg-surface-container-high rounded-full transition-all">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="p-8 overflow-y-auto">
+                <div id="readme-content" class="space-y-6 text-on-surface"></div>
+            </div>
+            <div class="px-8 py-4 border-t border-outline-variant bg-surface-container-lowest text-right">
+                <button type="button" onclick="toggleHelpModal()" class="bg-primary text-white px-6 py-2 rounded-xl font-bold text-xs uppercase">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="ml-[280px] pt-touch-target min-h-screen">
+        <div class="helical-main">
+            <div class="helical-toolbar">
+                <div class="min-w-0 flex-1">
+                    <h1>SIRH · Gerencia</h1>
+                    <p class="helical-toolbar-meta" id="helical-viewer-url" title="URL del dashboard">—</p>
+                    <p class="text-[11px] text-on-surface-variant mt-1" id="helical-auth-hint"></p>
+                </div>
+                <p class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold shrink-0">Sistema Integrado de Recursos Humanos</p>
+            </div>
+            <div class="helical-frame-wrap">
+                <div id="helical-offline" class="helical-offline hidden">
+                    <div class="helical-offline-card">
+                        <h2>Helical Insight no está disponible</h2>
+                        <p>DDS no pudo contactar el servidor configurado. Revisá Docker y la URL en Admin.</p>
+                        <p class="mt-2 font-data text-xs break-all" id="helical-configured-url"></p>
+                        <ol>
+                            <li>Levantá el contenedor de Helical Insight (nginx en <strong>https://localhost</strong>).</li>
+                            <li>Confirmá que responde en el navegador: <span class="font-data">https://localhost/hi-ee/</span>.</li>
+                            <li>En <strong>Admin → Helical / SIRH Gerencia</strong> verificá URL, dir y file.</li>
+                            <li>Si el iframe falla por CORS/cookies, habilitá CORS en el <code class="font-data">web.xml</code> de Helical (ver docs).</li>
+                        </ol>
+                        <div class="helical-offline-actions">
+                            <button type="button" onclick="reloadHelicalFrame()" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white text-xs font-bold uppercase">
+                                <span class="material-symbols-outlined text-sm">refresh</span>
+                                Reintentar
+                            </button>
+                            <button type="button" id="helical-force-load" onclick="forceLoadHelical()" class="flex items-center gap-2 px-4 py-2 rounded-lg border border-outline-variant text-xs font-bold uppercase">
+                                <span class="material-symbols-outlined text-sm">play_arrow</span>
+                                Cargar igual
+                            </button>
+                            <button type="button" onclick="openHelicalExternal()" class="flex items-center gap-2 px-4 py-2 rounded-lg border border-outline-variant text-xs font-bold uppercase">
+                                <span class="material-symbols-outlined text-sm">open_in_new</span>
+                                Abrir en navegador
+                            </button>
+                            <a href="/pages/admin.html" class="flex items-center gap-2 px-4 py-2 rounded-lg border border-outline-variant text-xs font-bold uppercase">
+                                <span class="material-symbols-outlined text-sm">tune</span>
+                                Ir a Admin
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <iframe id="helical-frame" class="hidden" title="Dashboard Helical SIRH Gerencia" allow="fullscreen"></iframe>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/desktop-bridge.js"></script>
+    <script type="module" src="/js/helical/app.js"></script>
+</body>
+</html>

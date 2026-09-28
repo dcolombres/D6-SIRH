@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>D6 · SIRH</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Hanken+Grotesk:wght@600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"/>
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/app.css"/>
+    <script src="/vendor/jspdf.umd.min.js"></script>
+    <script src="/vendor/html2canvas.min.js"></script>
+    <style id="dynamic-brand">
+        :root {
+            --primary-color: #000000;
+            --tertiary-color: #000000;
+        }
+    </style>
+    <style id="custom-css"></style>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
+        h1, h2, h3, h4 { font-family: 'Hanken Grotesk', sans-serif; }
+        .font-data { font-family: 'JetBrains Mono', monospace; }
+        
+        /* Custom Components based on DESIGN.md */
+        .status-border-emerald { border-left: 4px solid #10b981; }
+        .status-border-amber { border-left: 4px solid #f59e0b; }
+        .status-border-slate { border-left: 4px solid #64748b; }
+        .status-border-error { border-left: 4px solid #ba1a1a; }
+        .status-border-tertiary { border-left: 4px solid #008cc7; }
+
+        .kanban-column { min-width: 300px; }
+        
+        .nav-item.active {
+            background-color: #d5e3fd;
+            color: #131b2e;
+            font-weight: 700;
+        }
+        
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e0e3e5; border-radius: 10px; }
+        
+        .section-fade {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #brand-logo-container img {
+            max-height: 32px;
+            width: auto;
+        }
+        .circular-progress {
+            --progress: 0;
+            background: radial-gradient(closest-side, white 79%, transparent 80% 100%),
+                        conic-gradient(#000000 calc(var(--progress) * 1%), #e6e8ea 0);
+        }
+
+        /* Sidebar Collapse Logic */
+        .sidebar-collapsed aside {
+            width: 80px;
+        }
+        .sidebar-collapsed header {
+            left: 80px;
+        }
+        .sidebar-collapsed main {
+            margin-left: 80px;
+        }
+        .sidebar-collapsed aside .nav-item span:last-child,
+        .sidebar-collapsed aside p,
+        .sidebar-collapsed aside h1,
+        .sidebar-collapsed aside .system-status-text {
+            display: none;
+        }
+        .sidebar-collapsed aside #brand-logo-container {
+            justify-content: center;
+        }
+        .sidebar-collapsed aside .nav-item {
+            justify-content: center;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        
+        aside, header, main {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 8mm;
+            }
+            aside, header, .no-print, form, .fab-container, script, button, .mt-auto, .pt-6.border-t {
+                display: none !important;
+            }
+            main {
+                margin-left: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+                min-height: auto !important;
+            }
+            body {
+                background: white !important;
+                font-size: 8pt !important;
+                color: black !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .max-w-[1600px] {
+                max-width: 100% !important;
+                width: 100% !important;
+                padding: 0 !important;
+            }
+            section:not(.hidden) {
+                display: block !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            
+            /* Infographic Grid & Spacing */
+            .grid { 
+                display: grid !important;
+                gap: 10px !important; 
+                margin-bottom: 15px !important;
+            }
+            .p-4, .p-5, .p-6, .p-8 { padding: 8px !important; }
+            .mb-8, .mb-10, .mb-12 { margin-bottom: 10px !important; }
+            
+            /* Typography */
+            .text-3xl { font-size: 1.4rem !important; }
+            .text-2xl { font-size: 1.2rem !important; }
+            .text-xl { font-size: 1rem !important; }
+            .text-lg { font-size: 0.9rem !important; }
+            h2, h3, h4 { margin-bottom: 4px !important; line-height: 1.2 !important; }
+            
+            /* Compact Cards & Tables */
+            .bg-white, .bg-surface-container-low {
+                border: 1px solid #e5e7eb !important;
+                box-shadow: none !important;
+                border-radius: 6px !important;
+            }
+            table { width: 100% !important; border-collapse: collapse !important; }
+            th, td { padding: 4px 8px !important; font-size: 7.5pt !important; border-bottom: 1px solid #f3f4f6 !important; }
+            
+            /* Multi-column layout for diverse sections */
+            /* Overview */
+            #overview-focus-items { grid-template-cols: repeat(4, 1fr) !important; }
+            .grid-cols-12 > div { grid-column: span 12 / span 12 !important; }
+            #section-overview .grid-cols-1.md\:grid-cols-2.lg\:grid-cols-4 { grid-template-cols: repeat(4, 1fr) !important; }
+            #section-overview .grid-cols-12 > .lg\:col-span-6 { grid-column: span 6 / span 6 !important; }
+            
+            /* Ranking & Systems & Incidents */
+            #list-ranking tr, #list-requests tr { break-inside: avoid; }
+            .grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3, 
+            .grid-cols-1.md\:grid-cols-2.lg\:grid-cols-4,
+            .grid-cols-1.lg\:grid-cols-3 {
+                grid-template-cols: repeat(3, 1fr) !important;
+            }
+            
+            /* Personnel Matrix */
+            #matrix-personnel-systems {
+                grid-template-cols: repeat(3, 1fr) !important;
+            }
+
+            section.hidden { display: none !important; }
+            #brand-logo-container { display: flex !important; margin-bottom: 10px; border-bottom: 2px solid #000; padding-bottom: 5px; }
+            .status-border-emerald, .status-border-amber, .status-border-slate, .status-border-error { border-left-width: 3px !important; }
+        }
+    </style>
+</head>
+<body class="text-on-surface font-body selection:bg-secondary-container">
+
+    <!-- Sidebar Navigation -->
+    <aside class="fixed left-0 top-0 h-screen w-[280px] bg-surface-container-lowest border-r border-outline-variant flex flex-col p-container-padding z-50">
+        <div class="mb-section-gap flex items-center justify-between">
+            <div id="brand-logo-container" class="flex flex-col">
+                <h1 class="text-2xl font-bold tracking-tight text-primary" id="sidebar-app-title">D6</h1>
+                <p class="text-on-surface-variant text-sm opacity-70" id="sidebar-app-subtitle">Gestión y reportería SIRH</p>
+            </div>
+            <button onclick="toggleSidebar()" class="p-2 hover:bg-surface-container rounded-lg transition-all active:scale-95 no-print">
+                <span class="material-symbols-outlined">menu_open</span>
+            </button>
+        </div>
+        
+        
+        <nav class="flex-1 px-2 space-y-1 overflow-y-auto">
+            <p class="px-4 pt-1 pb-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/70 sidebar-label">SIRH</p>
+            <button onclick="switchSection('overview')" id="nav-overview" class="nav-item active w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Hoy">
+                <span class="material-symbols-outlined">today</span>
+                <span id="label-nav-overview" class="sidebar-label text-sm font-semibold">Hoy</span>
+            </button>
+            <a href="/pages/sirh.html" id="nav-modulos" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Módulos">
+                <span class="material-symbols-outlined">view_module</span>
+                <span class="sidebar-label text-sm font-semibold">Módulos</span>
+            </a>
+            <a href="/pages/helical.html" id="nav-gerencia" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Gerencia Helical">
+                <span class="material-symbols-outlined">analytics</span>
+                <span class="sidebar-label text-sm font-semibold">Gerencia</span>
+            </a>
+            <button onclick="switchSection('reports')" id="nav-reports" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Reportes">
+                <span class="material-symbols-outlined">description</span>
+                <span class="sidebar-label text-sm font-semibold">Reportes SIRH</span>
+            </button>
+            <p class="px-4 pt-4 pb-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/70 sidebar-label border-t border-outline-variant/50 mt-3">Operación</p>
+            <button onclick="switchSection('operacion')" id="nav-operacion" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Operación">
+                <span class="material-symbols-outlined">hub</span>
+                <span class="sidebar-label text-sm font-semibold">Operación</span>
+            </button>
+            <button onclick="switchSection('proveedores')" id="nav-proveedores" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Proveedores">
+                <span class="material-symbols-outlined">handshake</span>
+                <span id="label-nav-proveedores" class="sidebar-label text-sm font-semibold">Proveedores</span>
+            </button>
+            <button onclick="switchSection('equipo')" id="nav-equipo" class="hidden nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Equipo">
+                <span class="material-symbols-outlined">groups</span>
+                <span class="sidebar-label text-sm font-semibold">Equipo</span>
+            </button>
+        </nav>
+    </aside>
+
+    <!-- Top AppBar -->
+    <header class="fixed top-0 right-0 left-[280px] h-touch-target bg-surface-bright flex justify-between items-center px-container-padding z-40 border-b border-outline-variant">
+        <div class="flex items-center gap-4 flex-1">
+            <h2 id="top-bar-title" class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">D6 · SIRH</h2>
+        </div>
+        
+        <div class="flex items-center gap-2">
+            <div id="data-hub-status" class="text-[10px] font-data text-on-surface-variant mr-2 max-w-[220px] truncate hidden sm:block"></div>
+            <a href="/pages/informe.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all" title="Informe Gerencial">
+                <span class="material-symbols-outlined text-sm">present_to_all</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider hidden lg:inline">Informe</span>
+            </a>
+            <a href="/pages/helical.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all" title="SIRH · Gerencia (Helical)">
+                <span class="material-symbols-outlined text-sm">analytics</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider hidden lg:inline">SIRH</span>
+            </a>
+            <a href="/pages/sirh.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all" title="SIRH Datos ABM">
+                <span class="material-symbols-outlined text-sm">database</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider hidden xl:inline">Datos</span>
+            </a>
+            <button type="button" onclick="openDataHub()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary text-white hover:opacity-90 transition-all active:scale-95" title="Centro de Datos">
+                <span class="material-symbols-outlined text-sm">sync</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider hidden md:inline">Datos</span>
+            </button>
+            <a href="/pages/admin.html" class="p-2 text-secondary hover:bg-surface-container-high rounded-lg transition-all" title="Marca y etiquetas">
+                <span class="material-symbols-outlined text-sm">palette</span>
+            </a>
+            <button type="button" onclick="toggleHelpModal()" class="p-2 text-primary hover:bg-primary/10 rounded-full transition-all no-print" title="Ayuda">
+                <span class="material-symbols-outlined">help</span>
+            </button>
+        </div>
+    </header>
+
+    
+    <!-- Data Hub Modal -->
+    <div id="data-hub-modal" class="fixed inset-0 z-[110] hidden">
+        <div class="absolute inset-0 bg-black/40" onclick="closeDataHub()"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center">
+                <h2 class="text-lg font-bold">Centro de Datos</h2>
+                <button type="button" onclick="closeDataHub()" class="p-1 hover:bg-surface-container rounded-full"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <p class="text-sm text-on-surface-variant">Exportá un paquete JSON firmado y envialo a las otras PCs. Al importar se reemplaza el tablero completo.</p>
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-1">Tu nombre (firma del paquete)</label>
+                <input id="data-hub-operator" type="text" class="w-full px-4 py-3 bg-surface-container border-none rounded-xl text-sm" placeholder="Ej: Ana — Coordinación"/>
+                <div class="flex flex-wrap gap-2 pt-2">
+                    <button type="button" onclick="handleExportPackage()" class="flex-1 min-w-[140px] bg-primary text-white px-4 py-3 rounded-xl text-xs font-bold uppercase">Exportar paquete</button>
+                    <label class="flex-1 min-w-[140px] flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold uppercase border border-outline-variant cursor-pointer hover:bg-surface-container">
+                        Importar…
+                        <input type="file" class="hidden" accept=".json,application/json" onchange="handleImportFileSelected(event)"/>
+                    </label>
+                </div>
+                <button type="button" id="btn-undo-import" onclick="undoLastImport()" class="hidden w-full text-xs font-bold uppercase text-error py-2">Deshacer último import</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import preview -->
+    <div id="import-preview-modal" class="fixed inset-0 z-[120] hidden">
+        <div class="absolute inset-0 bg-black/50" onclick="cancelImportPreview()"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xl bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-outline-variant">
+                <h2 class="text-lg font-bold">Confirmar importación</h2>
+            </div>
+            <div class="p-6 space-y-4">
+                <div id="import-preview-meta" class="space-y-1"></div>
+                <table class="w-full text-left">
+                    <thead><tr class="text-[10px] uppercase opacity-50"><th class="py-1">Colección</th><th class="text-right">Antes</th><th class="text-right">Después</th><th class="text-right">Δ</th></tr></thead>
+                    <tbody id="import-preview-body"></tbody>
+                </table>
+                <div class="flex gap-2 justify-end pt-2">
+                    <button type="button" onclick="cancelImportPreview()" class="px-4 py-2 rounded-xl text-xs font-bold uppercase bg-surface-container">Cancelar</button>
+                    <button type="button" onclick="confirmImportPreview()" class="px-4 py-2 rounded-xl text-xs font-bold uppercase bg-primary text-white">Aplicar paquete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Onboarding -->
+    <div id="onboarding-modal" class="fixed inset-0 z-[130] hidden">
+        <div class="absolute inset-0 bg-black/50"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 space-y-5">
+            <h2 class="text-2xl font-bold tracking-tight">D6</h2>
+            <p class="text-sm text-on-surface-variant">App para el Director y 2 Coordinadores. Misma herramienta: editar, exportar el JSON y pasarlo a las otras máquinas.</p>
+            <ol class="text-sm list-decimal pl-5 space-y-1">
+                <li>Trabajá en <strong>Hoy / Operación / Equipo</strong>.</li>
+                <li>Usá <strong>Datos</strong> para exportar o importar el paquete.</li>
+                <li>El botón <strong>?</strong> explica cada sección.</li>
+            </ol>
+            <label class="block text-[10px] font-bold uppercase tracking-widest">Tu nombre (opcional)</label>
+            <input id="onboarding-name" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm" placeholder="Quien firma los paquetes"/>
+            <div class="flex gap-2">
+                <button type="button" onclick="skipOnboarding()" class="flex-1 px-4 py-3 rounded-xl text-xs font-bold uppercase bg-surface-container">Ahora no</button>
+                <button type="button" onclick="completeOnboarding()" class="flex-1 px-4 py-3 rounded-xl text-xs font-bold uppercase bg-primary text-white">Empezar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="help-modal" class="fixed inset-0 z-100 z-[100] hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="toggleHelpModal()"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl max-h-[85vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+            <div class="px-8 py-6 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary">help</span>
+                    <h2 class="text-xl font-bold">Guía de Uso y Lógica del Sistema</h2>
+                </div>
+                <button onclick="toggleHelpModal()" class="p-2 hover:bg-surface-container-high rounded-full transition-all">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="p-8 overflow-y-auto prose prose-sm max-w-none prose-slate">
+                <div id="readme-content" class="space-y-6 text-on-surface">
+                    <!-- README Content Injection -->
+                </div>
+            </div>
+            <div class="px-8 py-4 border-t border-outline-variant bg-surface-container-lowest text-right">
+                <button onclick="toggleHelpModal()" class="bg-primary text-white px-6 py-2 rounded-xl font-bold text-xs uppercase">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="ml-[280px] pt-touch-target min-h-screen">
+        <div class="max-w-[1600px] mx-auto p-container-padding">
+
+            <div id="ops-tabs" class="hidden no-print mb-6 flex gap-2 flex-wrap">
+                <button type="button" data-ops-tab="sistemas" onclick="switchSection('sistemas')" class="px-4 py-2 rounded-lg bg-primary text-white text-[10px] font-bold uppercase">Sistemas</button>
+                <button type="button" data-ops-tab="incidents" onclick="switchSection('incidents')" class="px-4 py-2 rounded-lg text-[10px] font-bold uppercase border border-outline-variant">Incidencias</button>
+                <button type="button" data-ops-tab="pipeline" onclick="switchSection('pipeline')" class="px-4 py-2 rounded-lg text-[10px] font-bold uppercase border border-outline-variant">Solicitudes</button>
+            </div>
+            <div id="team-tabs" class="hidden no-print mb-6 flex gap-2 flex-wrap">
+                <button type="button" data-team-tab="ranking" onclick="switchSection('ranking')" class="px-4 py-2 rounded-lg bg-primary text-white text-[10px] font-bold uppercase">Ranking</button>
+                <button type="button" data-team-tab="asignacion" onclick="switchSection('asignacion')" class="px-4 py-2 rounded-lg text-[10px] font-bold uppercase border border-outline-variant">Asignaciones</button>
+            </div>
+
+            
+            
+            <section id="section-reports" class="section-fade hidden">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-on-surface mb-2" id="title-reports">Reportes</h2>
+                    <p id="subtitle-reports" class="text-on-surface-variant text-sm">Exportá CSV o PDF para dirección y coordinación.</p>
+                </div>
+                <div id="reports-panel"></div>
+            </section>
+
+            <!-- OVERVIEW SECTION -->
+            <section id="section-overview" class="section-fade">
+                <div class="mb-10 flex justify-between items-end">
+                    <div>
+                        <h2 class="text-3xl font-bold text-on-surface mb-2" id="title-overview">Hoy</h2>
+                        <p id="subtitle-overview" class="text-on-surface-variant text-sm">Qué requiere atención ahora</p>
+                    </div>
+                    <button onclick="switchSection('reports')" class="no-print flex items-center gap-2 px-6 py-3 bg-white border border-outline-variant rounded-xl hover:bg-surface-container-high transition-all shadow-sm group">
+                        <span class="material-symbols-outlined text-sm group-hover:scale-110 transition-transform">description</span>
+                        <span class="text-xs font-bold uppercase tracking-wider">Ir a Reportes</span>
+                    </button>
+                </div>
+
+                <!-- Core Operational Metrics -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-12">
+                    <div class="bg-white border border-outline-variant rounded-2xl p-6 shadow-sm flex items-center gap-5 relative overflow-hidden group">
+                        <div class="absolute right-0 top-0 w-24 h-full bg-emerald-500/5 -skew-x-12 translate-x-12"></div>
+                        <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-emerald-600 text-3xl">view_module</span>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">Módulos SIRH</p>
+                            <h3 class="text-3xl font-bold font-data" id="overview-avg-workload">0</h3>
+                        </div>
+                    </div>
+                    <div class="bg-white border border-outline-variant rounded-2xl p-6 shadow-sm flex items-center gap-5 relative overflow-hidden group">
+                         <div class="absolute right-0 top-0 w-24 h-full bg-error/5 -skew-x-12 translate-x-12"></div>
+                        <div class="w-14 h-14 rounded-2xl bg-error/10 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-error text-3xl">warning</span>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">Riesgo alto</p>
+                            <h3 class="text-3xl font-bold font-data" id="overview-critical-count">0</h3>
+                        </div>
+                    </div>
+                    <div class="bg-white border border-outline-variant rounded-2xl p-6 shadow-sm flex items-center gap-5 relative overflow-hidden group">
+                        <div class="absolute right-0 top-0 w-24 h-full bg-primary/5 -skew-x-12 translate-x-12"></div>
+                        <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary text-3xl">rocket_launch</span>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">Avance medio</p>
+                            <h3 class="text-3xl font-bold font-data" id="overview-pipeline-load">0%</h3>
+                        </div>
+                    </div>
+                    <div class="bg-white border border-outline-variant rounded-2xl p-6 shadow-sm flex items-center gap-5 relative overflow-hidden group">
+                        <div class="absolute right-0 top-0 w-24 h-full bg-amber-500/5 -skew-x-12 translate-x-12"></div>
+                        <div class="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-amber-600 text-3xl">event_busy</span>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">Vencidos</p>
+                            <h3 class="text-3xl font-bold font-data" id="overview-staff-efficiency">0</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Executive Insights Grid -->
+                <div class="grid grid-cols-12 gap-gutter mb-gutter">
+                    <div class="col-span-12 lg:col-span-5 flex flex-col gap-gutter">
+                        <div class="bg-surface-container-low border border-outline-variant rounded-3xl p-8 h-full">
+                            <div class="flex justify-between items-center mb-8">
+                                <div>
+                                    <h3 class="text-xl font-bold">Foco SIRH</h3>
+                                    <p class="text-xs text-on-surface-variant">Riesgos altos y módulos con plazo vencido.</p>
+                                </div>
+                                <a href="/pages/sirh.html" class="px-3 py-1 bg-primary text-white text-[10px] font-bold rounded-full uppercase tracking-widest">Módulos</a>
+                            </div>
+                            <div class="grid grid-cols-1 gap-4" id="overview-focus-items"></div>
+                        </div>
+                    </div>
+                    <div class="col-span-12 lg:col-span-3 bg-white border border-outline-variant rounded-2xl p-6 shadow-sm">
+                        <h4 class="font-bold mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">donut_large</span>
+                            Por estado
+                        </h4>
+                        <canvas id="overview-chart-estado" height="220"></canvas>
+                        <div class="space-y-3 mt-4" id="overview-system-health"></div>
+                    </div>
+                    <div class="col-span-12 lg:col-span-4 bg-white border border-outline-variant rounded-2xl p-6 shadow-sm">
+                        <h4 class="font-bold mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">bar_chart</span>
+                            Avance por módulo
+                        </h4>
+                        <canvas id="overview-chart-avance" height="260"></canvas>
+                    </div>
+                </div>
+
+                <div class="hidden">
+                    <div id="overview-top-performers"></div>
+                    <div id="overview-low-performers"></div>
+                    <div id="overview-max-workload"></div>
+                    <div id="overview-min-workload"></div>
+                    <div id="overview-priority-dist"></div>
+                </div>
+            </section>
+
+            <!-- RANKING SECTION -->
+            <section id="section-ranking" class="section-fade hidden">
+                <div class="mb-8 flex flex-col lg:flex-row lg:justify-between lg:items-end gap-4">
+                    <div>
+                        <h2 class="text-3xl font-bold text-on-surface" id="title-ranking">Ranking de Personal</h2>
+                        <p class="text-on-surface-variant" id="subtitle-ranking">Gestión de desempeño y eficiencia según roles estratégicos.</p>
+                        <div class="text-on-surface-variant text-sm mt-2">
+                            Referencias: <span class="font-bold">C</span>: Compromiso / <span class="font-bold">R</span>: Respuesta / <span class="font-bold">Ca</span>: Capacidad / <span class="font-bold">Co</span>: Conocimiento
+                        </div>
+                        <div class="text-on-surface-variant text-sm mt-1" id="roles-reference-list">
+                            <!-- Dynamic Roles -->
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3 no-print">
+                        <div class="relative min-w-[200px] flex-1 max-w-xs">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant scale-90">search</span>
+                            <input type="text" id="ranking-search" class="w-full bg-white border border-outline-variant rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="Buscar personal..."/>
+                        </div>
+                        <div class="flex bg-surface-container rounded-xl p-1 border border-outline-variant">
+                            <button type="button" id="btn-ranking-cards" onclick="toggleRankingView('cards')" title="Tarjetas" aria-label="Vista tarjetas" class="p-2 rounded-lg text-on-surface-variant transition-all flex items-center justify-center">
+                                <span class="material-symbols-outlined text-[20px]">grid_view</span>
+                            </button>
+                            <button type="button" id="btn-ranking-table" onclick="toggleRankingView('table')" title="Planilla" aria-label="Vista planilla" class="p-2 rounded-lg bg-primary text-white transition-all flex items-center justify-center">
+                                <span class="material-symbols-outlined text-[20px]">table_rows</span>
+                            </button>
+                        </div>
+                        <button type="button" onclick="exportToCSV('ranking')" title="Exportar CSV" aria-label="Exportar CSV" class="p-2.5 bg-white border border-outline-variant rounded-xl hover:bg-surface-container-high transition-all shadow-sm flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[20px]">csv</span>
+                        </button>
+                        <button type="button" onclick="window.print()" title="Imprimir PDF" aria-label="Imprimir PDF" class="p-2.5 bg-white border border-outline-variant rounded-xl hover:bg-surface-container-high transition-all shadow-sm flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="list-ranking" class="mb-12"></div>
+
+                <!-- Gestion Ranking Form (Moved to Bottom) -->
+                <div class="bg-white border border-outline-variant p-8 rounded-2xl shadow-sm no-print">
+                    <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">person_add</span>
+                        Gestionar Personal
+                    </h3>
+                    <form id="form-ranking" class="grid grid-cols-1 md:grid-cols-6 gap-6 items-end">
+                        <div class="md:col-span-2 space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Nombre Completo</label>
+                            <input id="rank-name" required class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm" placeholder="Ej: Sarah Jenkins" type="text"/>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Rol</label>
+                            <select id="rank-dept" class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm font-bold">
+                                <!-- Dynamic Roles -->
+                            </select>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest" title="Compromiso">Compromiso</label>
+                            <input id="rank-compromiso" required min="0" max="100" class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm font-data" placeholder="90" type="number"/>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest" title="Respuesta">Respuesta</label>
+                            <input id="rank-respuesta" required min="0" max="100" class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm font-data" placeholder="90" type="number"/>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest" title="Capacidad">Capacidad</label>
+                            <input id="rank-capacidad" required min="0" max="100" class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm font-data" placeholder="90" type="number"/>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest" title="Conocimiento">Conocimiento</label>
+                            <input id="rank-conocimiento" required min="0" max="100" class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm font-data" placeholder="90" type="number"/>
+                        </div>
+                        <div class="md:col-span-2 flex gap-2">
+                            <button type="submit" id="rank-submit" class="flex-1 bg-primary text-white h-[48px] rounded-xl font-bold text-xs uppercase hover:bg-opacity-90 active:scale-95 transition-all shadow-md">
+                                Guardar Personal
+                            </button>
+                            <button type="button" id="rank-cancel" onclick="cancelEdit('ranking')" class="hidden bg-surface-container-highest text-on-surface h-[48px] px-4 rounded-xl font-bold text-xs uppercase hover:bg-surface-dim transition-all">
+                                <span class="material-symbols-outlined text-sm">close</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- SISTEMAS SECTION -->
+            <section id="section-sistemas" class="section-fade hidden">
+                <div class="mb-8 flex flex-col lg:flex-row lg:justify-between lg:items-end gap-4">
+                    <div>
+                        <h2 class="text-3xl font-bold text-on-surface" id="title-sistemas">Prioridad de Sistemas</h2>
+                        <p class="text-on-surface-variant" id="subtitle-sistemas">Matriz de priorización de infraestructura global.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3 no-print">
+                        <div class="relative min-w-[200px] flex-1 max-w-xs">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant scale-90">search</span>
+                            <input type="text" id="sistemas-search" class="w-full bg-white border border-outline-variant rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="Buscar sistema..."/>
+                        </div>
+                        <div class="flex bg-surface-container rounded-xl p-1 border border-outline-variant">
+                            <button type="button" id="btn-sistemas-cards" onclick="toggleSistemasView('cards')" title="Tarjetas" aria-label="Vista tarjetas" class="p-2 rounded-lg bg-primary text-white transition-all flex items-center justify-center">
+                                <span class="material-symbols-outlined text-[20px]">grid_view</span>
+                            </button>
+                            <button type="button" id="btn-sistemas-table" onclick="toggleSistemasView('table')" title="Planilla" aria-label="Vista planilla" class="p-2 rounded-lg text-on-surface-variant transition-all flex items-center justify-center">
+                                <span class="material-symbols-outlined text-[20px]">table_rows</span>
+                            </button>
+                        </div>
+                        <button type="button" onclick="exportToCSV('sistemas')" title="Exportar CSV" aria-label="Exportar CSV" class="p-2.5 bg-white border border-outline-variant rounded-xl hover:bg-surface-container-high transition-all shadow-sm flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[20px]">csv</span>
+                        </button>
+                        <button type="button" onclick="window.print()" title="Imprimir PDF" aria-label="Imprimir PDF" class="p-2.5 bg-white border border-outline-variant rounded-xl hover:bg-surface-container-high transition-all shadow-sm flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="sistemas-cards-view" class="grid grid-cols-1 lg:grid-cols-3 gap-gutter mb-8">
+                    <!-- Alta Column -->
+                    <div class="flex flex-col gap-4">
+                        <div class="bg-surface-container-low p-4 border-b-4 border-error flex justify-between items-center rounded-t-lg">
+                            <span class="font-bold text-error">Alta</span>
+                            <span class="bg-error text-white text-[10px] px-2 py-0.5 rounded-full font-bold">CRÍTICO</span>
+                        </div>
+                        <div id="kanban-alta" class="flex flex-col gap-4"></div>
+                    </div>
+                    <!-- Media Column -->
+                    <div class="flex flex-col gap-4">
+                        <div class="bg-surface-container-low p-4 border-b-4 border-[#f59e0b] flex justify-between items-center rounded-t-lg">
+                            <span class="font-bold text-[#f59e0b]">Media</span>
+                            <span class="bg-[#f59e0b] text-white text-[10px] px-2 py-0.5 rounded-full font-bold">ADVERTENCIA</span>
+                        </div>
+                        <div id="kanban-media" class="flex flex-col gap-4"></div>
+                    </div>
+                    <!-- Baja Column -->
+                    <div class="flex flex-col gap-4">
+                        <div class="bg-surface-container-low p-4 border-b-4 border-[#008cc7] flex justify-between items-center rounded-t-lg">
+                            <span class="font-bold text-[#008cc7]">Baja</span>
+                            <span class="bg-[#008cc7] text-white text-[10px] px-2 py-0.5 rounded-full font-bold">ESTABLE</span>
+                        </div>
+                        <div id="kanban-baja" class="flex flex-col gap-4"></div>
+                    </div>
+                </div>
+
+                <div id="sistemas-table-view" class="hidden mb-8 bg-white border border-outline-variant rounded-2xl overflow-hidden shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-surface-container-low border-b border-outline-variant">
+                                <tr id="sistemas-table-head"></tr>
+                            </thead>
+                            <tbody id="sistemas-table-body" class="divide-y divide-outline-variant/30"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-outline-variant p-8 rounded-2xl shadow-sm no-print">
+                    <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+                        <span class="material-symbols-outlined">settings_suggest</span>
+                        Gestionar Sistema
+                    </h3>
+                    <form id="form-sistemas" class="grid grid-cols-1 md:grid-cols-4 gap-6 items-start">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Nombre del Sistema</label>
+                            <input id="sys-name" required class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm" placeholder="Ej: Base de Datos Core" type="text"/>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Prioridad</label>
+                            <select id="sys-priority" class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm font-bold">
+                                <option value="Alta">Alta</option>
+                                <option value="Media">Media</option>
+                                <option value="Baja">Baja</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1 col-span-1 md:col-span-2">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Asignar Equipo</label>
+                            <div class="flex gap-2">
+                                <select id="sys-team-select" class="flex-1 bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm">
+                                    <option value="">Seleccionar personal...</option>
+                                    <!-- Dinámico: Opciones del Ranking -->
+                                </select>
+                                <button type="button" onclick="addTeamMember()" class="bg-surface-container-highest text-on-surface px-4 rounded-xl font-bold text-xs uppercase hover:bg-surface-dim transition-all">
+                                    Añadir
+                                </button>
+                            </div>
+                            <div id="sys-team-list" class="flex flex-wrap gap-2 mt-3 min-h-[44px] p-3 bg-surface-container-lowest border border-dashed border-outline-variant rounded-xl">
+                                <!-- Dinámico: Tags de miembros seleccionados -->
+                            </div>
+                        </div>
+                        <div class="md:col-span-4 space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Descripción / Info Extra</label>
+                            <textarea id="sys-desc" class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all h-24 resize-none text-sm" placeholder="Detalles sobre el estado, equipo responsable o mantenimiento..."></textarea>
+                        </div>
+                        <div class="md:col-span-4 flex justify-end gap-2 pt-2">
+                            <button type="button" id="sys-cancel" onclick="cancelEdit('sistemas')" class="hidden bg-surface-container-highest text-on-surface px-8 py-3 rounded-xl font-bold text-xs uppercase hover:bg-surface-dim transition-all">
+                                Cancelar
+                            </button>
+                            <button type="submit" id="sys-submit" class="bg-primary text-white px-10 py-3 rounded-xl font-bold text-xs uppercase hover:shadow-lg hover:bg-opacity-90 active:scale-95 transition-all">
+                                Guardar Sistema
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- INCIDENT HUB SECTION -->
+            <section id="section-incidents" class="section-fade hidden">
+                <div class="mb-10 flex flex-col lg:flex-row lg:justify-between lg:items-end gap-4">
+                    <div>
+                        <h2 class="text-3xl font-bold text-on-surface" id="title-incidents">Hub</h2>
+                        <p class="text-on-surface-variant" id="subtitle-incidents">Control y monitoreo de incidentes críticos y proyectos desatendidos.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3 no-print">
+                        <div class="relative min-w-[200px] flex-1 max-w-xs">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant scale-90">search</span>
+                            <input type="text" id="incidents-search" class="w-full bg-white border border-outline-variant rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="Buscar incidente..."/>
+                        </div>
+                        <div class="flex bg-surface-container rounded-xl p-1 border border-outline-variant">
+                            <button type="button" id="btn-hub-cards" onclick="toggleHubView('cards')" title="Tarjetas" aria-label="Vista tarjetas" class="p-2 rounded-lg bg-primary text-white transition-all flex items-center justify-center">
+                                <span class="material-symbols-outlined text-[20px]">grid_view</span>
+                            </button>
+                            <button type="button" id="btn-hub-table" onclick="toggleHubView('table')" title="Planilla" aria-label="Vista planilla" class="p-2 rounded-lg text-on-surface-variant transition-all flex items-center justify-center">
+                                <span class="material-symbols-outlined text-[20px]">table_rows</span>
+                            </button>
+                        </div>
+                        <button type="button" onclick="exportToCSV('incidents')" title="Exportar CSV" aria-label="Exportar CSV" class="p-2.5 bg-white border border-outline-variant rounded-xl hover:bg-surface-container-high transition-all shadow-sm flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[20px]">csv</span>
+                        </button>
+                        <button type="button" onclick="window.print()" title="Imprimir PDF" aria-label="Imprimir PDF" class="p-2.5 bg-white border border-outline-variant rounded-xl hover:bg-surface-container-high transition-all shadow-sm flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mb-12">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-8 bg-amber-500 rounded-full"></div>
+                            <h3 class="text-xl font-bold">Monitor de Incidentes</h3>
+                            <span class="px-2 py-0.5 bg-amber-100 text-amber-800 text-[10px] font-bold rounded-full uppercase" id="incident-count-badge">0 Pendientes</span>
+                        </div>
+                    </div>
+                    <div id="list-unattended" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter">
+                        <!-- Dynamic Cards -->
+                    </div>
+                </div>
+
+                <!-- Form Incidencias -->
+                <div class="bg-surface-container-low p-8 rounded-3xl border border-outline-variant no-print">
+                    <div class="flex items-center gap-2 mb-8">
+                        <span class="material-symbols-outlined text-error">warning</span>
+                        <h3 class="text-xl font-bold">Registrar Nuevo Incidente</h3>
+                    </div>
+                    <form id="form-unattended" class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Nombre del Proyecto / Sistema</label>
+                            <input id="unat-title" required class="w-full bg-white border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm" placeholder="Ej: Integración CRM" type="text"/>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Status / Motivo</label>
+                            <input id="unat-status" required class="w-full bg-white border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm" placeholder="Ej: Falta de presupuesto" type="text"/>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Semaforo (Prioridad)</label>
+                            <select id="unat-priority" required class="w-full bg-white border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm font-bold">
+                                <option value="Alta">Alta (Rojo)</option>
+                                <option value="Media">Media (Amarillo)</option>
+                                <option value="Baja">Baja (Verde)</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-4 space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Descripción Técnica</label>
+                            <textarea id="unat-desc" required maxlength="500" class="w-full bg-white border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all h-24 resize-none text-sm" placeholder="Detalle técnico del incidente..."></textarea>
+                        </div>
+                        <div class="md:col-span-3 flex justify-end gap-2">
+                            <button type="button" id="unat-cancel" onclick="cancelEdit('unattended')" class="hidden bg-surface-container-highest text-on-surface px-8 py-3 rounded-xl font-bold text-xs uppercase hover:bg-surface-dim transition-all">
+                                Cancelar
+                            </button>
+                            <button type="submit" id="unat-submit" class="bg-primary text-white px-10 py-3 rounded-xl font-bold text-xs uppercase hover:shadow-lg hover:bg-opacity-90 active:scale-95 transition-all">
+                                Registrar Incidente
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="mt-10 bg-white border border-outline-variant rounded-2xl overflow-hidden shadow-sm">
+                    <div class="bg-surface-container-low px-6 py-4 border-b border-outline-variant flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-8 bg-emerald-500 rounded-full"></div>
+                            <h3 class="text-xl font-bold">Incidencias Cerradas</h3>
+                            <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded-full uppercase" id="closed-incident-count-badge">0 cerradas</span>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-surface-container-low border-b border-outline-variant">
+                                <tr>
+                                    <th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Semáforo</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Incidente</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Status / Motivo</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Descripción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-closed-incidents" class="divide-y divide-outline-variant/30">
+                                <tr><td colspan="4" class="px-6 py-10 text-center text-on-surface-variant opacity-50 italic">Aún no hay incidencias cerradas.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- NOTAS DE IMPULSO SECTION -->
+            <section id="section-pipeline" class="section-fade hidden">
+                <div class="mb-10 flex flex-col lg:flex-row lg:justify-between lg:items-end gap-4">
+                    <div>
+                        <h2 class="text-3xl font-bold text-on-surface" id="title-requests">Notas de Impulso</h2>
+                        <p class="text-on-surface-variant" id="subtitle-requests">Gestión de expedientes y flujo de requerimientos de desarrollo.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3 no-print">
+                        <div class="relative min-w-[200px] flex-1 max-w-xs">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant scale-90">search</span>
+                            <input type="text" id="pipeline-search" class="w-full bg-white border border-outline-variant rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="Buscar solicitud..."/>
+                        </div>
+                        <div class="flex bg-surface-container rounded-xl p-1 border border-outline-variant">
+                            <button type="button" id="btn-pipeline-cards" onclick="togglePipelineView('cards')" title="Tarjetas" aria-label="Vista tarjetas" class="p-2 rounded-lg text-on-surface-variant transition-all flex items-center justify-center">
+                                <span class="material-symbols-outlined text-[20px]">grid_view</span>
+                            </button>
+                            <button type="button" id="btn-pipeline-table" onclick="togglePipelineView('table')" title="Planilla" aria-label="Vista planilla" class="p-2 rounded-lg bg-primary text-white transition-all flex items-center justify-center">
+                                <span class="material-symbols-outlined text-[20px]">table_rows</span>
+                            </button>
+                        </div>
+                        <button type="button" onclick="exportToCSV('pipeline')" title="Exportar CSV" aria-label="Exportar CSV" class="p-2.5 bg-white border border-outline-variant rounded-xl hover:bg-surface-container-high transition-all shadow-sm flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[20px]">csv</span>
+                        </button>
+                        <button type="button" onclick="window.print()" title="Imprimir PDF" aria-label="Imprimir PDF" class="p-2.5 bg-white border border-outline-variant rounded-xl hover:bg-surface-container-high transition-all shadow-sm flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mb-12">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-8 bg-primary rounded-full"></div>
+                            <h3 class="text-xl font-bold">Backlog</h3>
+                            <span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded-full uppercase" id="request-count-badge">0 en Backlog</span>
+                        </div>
+                        <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest" id="request-table-summary">Mostrando 0 solicitudes</p>
+                    </div>
+                    <div id="list-requests"></div>
+                </div>
+
+                <!-- Form Pipeline -->
+                <div class="bg-surface-container-low p-8 rounded-3xl border border-outline-variant no-print">
+                    <div class="flex items-center gap-2 mb-8">
+                        <span class="material-symbols-outlined text-primary">add_task</span>
+                        <h3 class="text-xl font-bold">Nueva Solicitud de Desarrollo</h3>
+                    </div>
+                    <form id="form-requests" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Servicio / Funcionalidad</label>
+                            <input id="req-feature" required class="w-full bg-white border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm" placeholder="Ej: Módulo de Auditoría" type="text"/>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">EXPTE (Formato NO-2026-...)</label>
+                            <input id="req-expte" class="w-full bg-white border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm font-data" placeholder="NO-2026-53557500-APN-DSTYOMDP#MEC" type="text"/>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 md:col-span-2">
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Prioridad</label>
+                                <select id="req-priority" class="w-full bg-white border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm font-bold">
+                                    <option value="Alta">Alta</option>
+                                    <option value="Estándar">Estándar</option>
+                                    <option value="Baja">Baja</option>
+                                </select>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Progreso (%)</label>
+                                <input id="req-progress" required min="0" max="100" class="w-full bg-white border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm font-data" placeholder="75" type="number"/>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Status Actual</label>
+                                <input id="req-status" required class="w-full bg-white border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm" placeholder="Ej: En Alcance" type="text"/>
+                            </div>
+                        </div>
+                        <div class="md:col-span-2 flex justify-end gap-2">
+                            <button type="button" id="req-cancel" onclick="cancelEdit('requests')" class="hidden bg-surface-container-highest text-on-surface px-8 py-3 rounded-xl font-bold text-xs uppercase hover:bg-surface-dim transition-all">
+                                Cancelar
+                            </button>
+                            <button type="submit" id="req-submit" class="bg-primary text-white px-10 py-3 rounded-xl font-bold text-xs uppercase hover:shadow-lg hover:bg-opacity-90 active:scale-95 transition-all">
+                                Guardar Solicitud
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="mt-10 bg-white border border-outline-variant rounded-2xl overflow-hidden shadow-sm">
+                    <div class="bg-surface-container-low px-6 py-4 border-b border-outline-variant flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-8 bg-emerald-500 rounded-full"></div>
+                            <h3 class="text-xl font-bold">Solicitudes Cerradas</h3>
+                            <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded-full uppercase" id="closed-requests-count-badge">0 cerradas</span>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-surface-container-low border-b border-outline-variant">
+                                <tr>
+                                    <th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Prioridad</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Solicitud</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">EXPTE</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Nota de Cierre</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest text-right">Cerrado</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-closed-requests" class="divide-y divide-outline-variant/30">
+                                <tr><td colspan="6" class="px-6 py-10 text-center text-on-surface-variant opacity-50 italic">Aún no hay solicitudes cerradas.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ASIGNACION DE PERSONAL SECTION -->
+            <section id="section-asignacion" class="section-fade hidden">
+                <div class="mb-10 flex flex-col lg:flex-row lg:justify-between lg:items-end gap-4">
+                    <div>
+                        <h2 class="text-3xl font-bold text-on-surface" id="title-asignacion">Asignaciones</h2>
+                        <p class="text-on-surface-variant" id="subtitle-asignacion">Vista detallada de carga y responsabilidades.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3 no-print">
+                        <div class="relative min-w-[200px] flex-1 max-w-xs">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant scale-90">search</span>
+                            <input type="text" id="asignacion-search" class="w-full bg-white border border-outline-variant rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="Buscar asignación..."/>
+                        </div>
+                        <div class="flex bg-surface-container rounded-xl p-1 border border-outline-variant">
+                            <button type="button" id="btn-asignacion-cards" onclick="toggleAsignacionView('cards')" title="Tarjetas" aria-label="Vista tarjetas" class="p-2 rounded-lg bg-primary text-white transition-all flex items-center justify-center">
+                                <span class="material-symbols-outlined text-[20px]">grid_view</span>
+                            </button>
+                            <button type="button" id="btn-asignacion-table" onclick="toggleAsignacionView('table')" title="Planilla" aria-label="Vista planilla" class="p-2 rounded-lg text-on-surface-variant transition-all flex items-center justify-center">
+                                <span class="material-symbols-outlined text-[20px]">table_rows</span>
+                            </button>
+                        </div>
+                        <button type="button" onclick="exportToCSV('asignacion')" title="Exportar CSV" aria-label="Exportar CSV" class="p-2.5 bg-white border border-outline-variant rounded-xl hover:bg-surface-container-high transition-all shadow-sm flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[20px]">csv</span>
+                        </button>
+                        <button type="button" onclick="window.print()" title="Imprimir PDF" aria-label="Imprimir PDF" class="p-2.5 bg-white border border-outline-variant rounded-xl hover:bg-surface-container-high transition-all shadow-sm flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="matrix-personnel-systems" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Dynamic Personnel Cards with their Systems -->
+                </div>
+            </section>
+
+            <!-- PROVEEDORES SECTION -->
+            <section id="section-proveedores" class="section-fade hidden">
+                <div class="mb-10 flex flex-col lg:flex-row lg:justify-between lg:items-end gap-4">
+                    <div>
+                        <h2 class="text-3xl font-bold text-on-surface" id="title-proveedores">Proveedores</h2>
+                        <p class="text-on-surface-variant" id="subtitle-proveedores">Gestión de proveedores, tareas y vinculación con sistemas e incidencias.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3 no-print">
+                        <div class="relative min-w-[200px] flex-1 max-w-xs">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant scale-90">search</span>
+                            <input type="text" id="proveedores-search" class="w-full bg-white border border-outline-variant rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="Buscar proveedor..."/>
+                        </div>
+                        <div class="flex bg-surface-container rounded-xl p-1 border border-outline-variant">
+                            <button type="button" id="btn-proveedores-cards" onclick="toggleProveedoresView('cards')" title="Tarjetas" aria-label="Vista tarjetas" class="p-2 rounded-lg bg-primary text-white transition-all flex items-center justify-center">
+                                <span class="material-symbols-outlined text-[20px]">grid_view</span>
+                            </button>
+                            <button type="button" id="btn-proveedores-table" onclick="toggleProveedoresView('table')" title="Planilla" aria-label="Vista planilla" class="p-2 rounded-lg text-on-surface-variant transition-all flex items-center justify-center">
+                                <span class="material-symbols-outlined text-[20px]">table_rows</span>
+                            </button>
+                        </div>
+                        <button type="button" onclick="exportToCSV('proveedores')" title="Exportar CSV" aria-label="Exportar CSV" class="p-2.5 bg-white border border-outline-variant rounded-xl hover:bg-surface-container-high transition-all shadow-sm flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[20px]">csv</span>
+                        </button>
+                        <button type="button" onclick="window.print()" title="Imprimir PDF" aria-label="Imprimir PDF" class="p-2.5 bg-white border border-outline-variant rounded-xl hover:bg-surface-container-high transition-all shadow-sm flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="list-proveedores" class="mb-12">
+                    <!-- Dynamic Provider Cards / Table -->
+                </div>
+
+                <!-- Form Proveedores -->
+                <div class="bg-white border border-outline-variant p-8 rounded-2xl shadow-sm no-print">
+                    <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">domain_add</span>
+                        Gestionar Proveedor
+                    </h3>
+                    <form id="form-proveedores" class="grid grid-cols-1 md:grid-cols-4 gap-6 items-start">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Nombre del Proveedor</label>
+                            <input id="prov-name" required class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm" placeholder="Ej: Proveedor SA" type="text"/>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Rubro</label>
+                            <input id="prov-rubro" class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm" placeholder="Ej: Conectividad" type="text"/>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Estado</label>
+                            <select id="prov-status" class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm font-bold">
+                                <option value="Activo">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Persona de Contacto</label>
+                            <input id="prov-contact" class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm" placeholder="Ej: Juan Pérez" type="text"/>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Email</label>
+                            <input id="prov-email" class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm" placeholder="contacto@proveedor.com" type="email"/>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Teléfono</label>
+                            <input id="prov-phone" class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm" placeholder="+54 11 0000-0000" type="text"/>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Nº de Contrato</label>
+                            <input id="prov-contract-number" class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm" placeholder="Ej: CT-2026-0001" type="text"/>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Vencimiento de Contrato</label>
+                            <input id="prov-contract-expiry" class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm" type="date"/>
+                        </div>
+                        <div class="space-y-1 md:col-span-2">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Condición de Pago</label>
+                            <input id="prov-payment-terms" class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm" placeholder="Ej: 30 días" type="text"/>
+                        </div>
+                        <div class="md:col-span-4 space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Notas</label>
+                            <textarea id="prov-notes" class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all h-24 resize-none text-sm" placeholder="Información adicional sobre el proveedor..."></textarea>
+                        </div>
+                        <div class="md:col-span-4 flex justify-end gap-2 pt-2">
+                            <button type="button" id="prov-cancel" onclick="cancelEdit('proveedores')" class="hidden bg-surface-container-highest text-on-surface px-8 py-3 rounded-xl font-bold text-xs uppercase hover:bg-surface-dim transition-all">
+                                Cancelar
+                            </button>
+                            <button type="submit" id="prov-submit" class="bg-primary text-white px-10 py-3 rounded-xl font-bold text-xs uppercase hover:shadow-lg hover:bg-opacity-90 active:scale-95 transition-all">
+                                Guardar Proveedor
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+        </div>
+    </main>
+    
+
+    <!-- System Edit Modal -->
+    <div id="system-edit-modal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeSystemEditModal()"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl max-h-[85vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+            <div class="px-8 py-6 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary">settings_suggest</span>
+                    <h2 class="text-xl font-bold">Gestionar Sistema Asignado</h2>
+                </div>
+                <button onclick="closeSystemEditModal()" class="p-2 hover:bg-surface-container-high rounded-full transition-all">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="p-8 overflow-y-auto">
+                <form id="form-modal-sistemas" class="grid grid-cols-1 md:grid-cols-4 gap-6 items-start">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Nombre del Sistema</label>
+                        <input id="modal-sys-name" required class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm" placeholder="Ej: Base de Datos Core" type="text"/>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Prioridad</label>
+                        <select id="modal-sys-priority" class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm font-bold">
+                            <option value="Alta">Alta</option>
+                            <option value="Media">Media</option>
+                            <option value="Baja">Baja</option>
+                        </select>
+                    </div>
+                    <div class="space-y-1 col-span-1 md:col-span-2">
+                        <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Asignar Equipo</label>
+                        <div class="flex gap-2">
+                            <select id="modal-sys-team-select" class="flex-1 bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all text-sm">
+                                <option value="">Seleccionar personal...</option>
+                                <!-- Dinámico: Opciones del Ranking -->
+                            </select>
+                            <button type="button" onclick="addModalTeamMember()" class="bg-surface-container-highest text-on-surface px-4 rounded-xl font-bold text-xs uppercase hover:bg-surface-dim transition-all">
+                                Añadir
+                            </button>
+                        </div>
+                        <div id="modal-sys-team-list" class="flex flex-wrap gap-2 mt-3 min-h-[44px] p-3 bg-surface-container-lowest border border-dashed border-outline-variant rounded-xl">
+                            <!-- Dinámico: Tags de miembros seleccionados -->
+                        </div>
+                    </div>
+                    <div class="md:col-span-4 space-y-1">
+                        <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Descripción / Info Extra</label>
+                        <textarea id="modal-sys-desc" class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary transition-all h-24 resize-none text-sm" placeholder="Detalles sobre el estado, equipo responsable o mantenimiento..."></textarea>
+                    </div>
+                    <div class="md:col-span-4 flex justify-end gap-2 pt-2">
+                        <button type="button" id="modal-sys-cancel" onclick="closeSystemEditModal()" class="bg-surface-container-highest text-on-surface px-8 py-3 rounded-xl font-bold text-xs uppercase hover:bg-surface-dim transition-all">
+                            Cancelar
+                        </button>
+                        <button type="submit" id="modal-sys-submit" class="bg-primary text-white px-10 py-3 rounded-xl font-bold text-xs uppercase hover:shadow-lg hover:bg-opacity-90 active:scale-95 transition-all">
+                            Guardar Sistema
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Provider Manage Modal -->
+    <div id="provider-manage-modal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeProviderModal()"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+            <div class="px-8 py-6 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary">handshake</span>
+                    <div>
+                        <h2 class="text-xl font-bold">Gestionar Proveedor</h2>
+                        <p class="text-xs text-on-surface-variant" id="provider-modal-name">-</p>
+                    </div>
+                </div>
+                <button onclick="closeProviderModal()" class="p-2 hover:bg-surface-container-high rounded-full transition-all">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="p-8 overflow-y-auto space-y-8">
+                <!-- Vínculos -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Responsables Internos</label>
+                        <div class="flex gap-2">
+                            <select id="provider-team-select" class="flex-1 bg-surface-container-low border border-outline-variant rounded-xl px-3 py-2.5 outline-none focus:ring-2 focus:ring-primary transition-all text-xs">
+                                <option value="">Seleccionar personal...</option>
+                            </select>
+                            <button type="button" onclick="addProviderTag('team')" class="bg-surface-container-highest text-on-surface px-3 rounded-xl font-bold text-xs uppercase hover:bg-surface-dim transition-all">
+                                <span class="material-symbols-outlined text-sm">add</span>
+                            </button>
+                        </div>
+                        <div id="provider-team-list" class="flex flex-wrap gap-2 mt-2 min-h-[44px] p-3 bg-surface-container-lowest border border-dashed border-outline-variant rounded-xl"></div>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Sistemas Vinculados</label>
+                        <div class="flex gap-2">
+                            <select id="provider-systems-select" class="flex-1 bg-surface-container-low border border-outline-variant rounded-xl px-3 py-2.5 outline-none focus:ring-2 focus:ring-primary transition-all text-xs">
+                                <option value="">Seleccionar sistema...</option>
+                            </select>
+                            <button type="button" onclick="addProviderTag('systems')" class="bg-surface-container-highest text-on-surface px-3 rounded-xl font-bold text-xs uppercase hover:bg-surface-dim transition-all">
+                                <span class="material-symbols-outlined text-sm">add</span>
+                            </button>
+                        </div>
+                        <div id="provider-systems-list" class="flex flex-wrap gap-2 mt-2 min-h-[44px] p-3 bg-surface-container-lowest border border-dashed border-outline-variant rounded-xl"></div>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Incidencias Vinculadas</label>
+                        <div class="flex gap-2">
+                            <select id="provider-incidents-select" class="flex-1 bg-surface-container-low border border-outline-variant rounded-xl px-3 py-2.5 outline-none focus:ring-2 focus:ring-primary transition-all text-xs">
+                                <option value="">Seleccionar incidencia...</option>
+                            </select>
+                            <button type="button" onclick="addProviderTag('incidents')" class="bg-surface-container-highest text-on-surface px-3 rounded-xl font-bold text-xs uppercase hover:bg-surface-dim transition-all">
+                                <span class="material-symbols-outlined text-sm">add</span>
+                            </button>
+                        </div>
+                        <div id="provider-incidents-list" class="flex flex-wrap gap-2 mt-2 min-h-[44px] p-3 bg-surface-container-lowest border border-dashed border-outline-variant rounded-xl"></div>
+                    </div>
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" onclick="saveProviderLinks()" class="bg-primary text-white px-8 py-2.5 rounded-xl font-bold text-xs uppercase hover:shadow-lg hover:bg-opacity-90 active:scale-95 transition-all">
+                        Guardar Vínculos
+                    </button>
+                </div>
+
+                <!-- Tareas del Proveedor -->
+                <div class="pt-6 border-t border-outline-variant">
+                    <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">task_alt</span>
+                        Tareas del Proveedor
+                    </h3>
+
+                    <form id="form-provider-task" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-surface-container-low p-5 rounded-2xl border border-outline-variant">
+                        <div class="space-y-1 md:col-span-2">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Título de la Tarea</label>
+                            <input id="ptask-title" required class="w-full bg-white border border-outline-variant rounded-xl px-3 py-2.5 outline-none focus:ring-2 focus:ring-primary transition-all text-xs" placeholder="Ej: Renovar certificado SSL" type="text"/>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Prioridad</label>
+                            <select id="ptask-priority" class="w-full bg-white border border-outline-variant rounded-xl px-3 py-2.5 outline-none focus:ring-2 focus:ring-primary transition-all text-xs font-bold">
+                                <option value="Alta">Alta</option>
+                                <option value="Media">Media</option>
+                                <option value="Baja">Baja</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1 flex items-end gap-2">
+                            <button type="submit" id="ptask-submit" class="flex-1 bg-primary text-white h-[42px] rounded-xl font-bold text-xs uppercase hover:bg-opacity-90 active:scale-95 transition-all">
+                                Agregar
+                            </button>
+                            <button type="button" id="ptask-cancel" onclick="cancelEditProviderTask()" class="hidden bg-surface-container-highest text-on-surface h-[42px] px-3 rounded-xl font-bold text-xs uppercase hover:bg-surface-dim transition-all">
+                                <span class="material-symbols-outlined text-sm">close</span>
+                            </button>
+                        </div>
+                        <div class="md:col-span-4 space-y-1">
+                            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Descripción</label>
+                            <textarea id="ptask-desc" class="w-full bg-white border border-outline-variant rounded-xl px-3 py-2.5 outline-none focus:ring-2 focus:ring-primary transition-all h-16 resize-none text-xs" placeholder="Detalle de la tarea..."></textarea>
+                        </div>
+                    </form>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+                        <div class="flex flex-col gap-3">
+                            <div class="bg-surface-container-low p-3 border-b-4 border-error flex justify-between items-center rounded-t-lg">
+                                <span class="font-bold text-error text-sm">Alta</span>
+                            </div>
+                            <div id="provider-tasks-alta" class="flex flex-col gap-3"></div>
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            <div class="bg-surface-container-low p-3 border-b-4 border-[#f59e0b] flex justify-between items-center rounded-t-lg">
+                                <span class="font-bold text-[#f59e0b] text-sm">Media</span>
+                            </div>
+                            <div id="provider-tasks-media" class="flex flex-col gap-3"></div>
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            <div class="bg-surface-container-low p-3 border-b-4 border-[#008cc7] flex justify-between items-center rounded-t-lg">
+                                <span class="font-bold text-[#008cc7] text-sm">Baja</span>
+                            </div>
+                            <div id="provider-tasks-baja" class="flex flex-col gap-3"></div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-outline-variant/50">
+                        <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-2" id="provider-tasks-done-count">0 tareas completadas</p>
+                        <div id="provider-tasks-done-list" class="flex flex-wrap gap-2"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="px-8 py-4 border-t border-outline-variant bg-surface-container-lowest text-right">
+                <button onclick="closeProviderModal()" class="bg-primary text-white px-6 py-2 rounded-xl font-bold text-xs uppercase">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+        <script src="/js/desktop-bridge.js"></script>
+        <script src="/vendor/chart.umd.js"></script>
+        <script type="module" src="/js/board/app.js"></script>
+</body>
+</html>
