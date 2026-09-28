@@ -6,7 +6,7 @@ const SECTION_HELP = {
   overview: {
     title: 'Hoy (D6 · SIRH)',
     see: 'KPIs de módulos SIRH: total, riesgo alto, avance medio y vencidos, con gráficos.',
-    do: 'Saltá a Módulos para editar o a Gerencia para el tablero Helical.',
+    do: 'Saltá a Módulos para editar o a Gerencia para el tablero.',
   },
   operacion: {
     title: 'Operación',
@@ -28,21 +28,6 @@ const SECTION_HELP = {
     see: 'Expedientes con progreso y estado.',
     do: 'Actualizá avance y cerrá cuando corresponda.',
   },
-  equipo: {
-    title: 'Equipo',
-    see: 'Sección legacy (oculta en D6).',
-    do: 'El foco está en módulos SIRH.',
-  },
-  ranking: {
-    title: 'Ranking',
-    see: 'Legacy — no es el eje de D6.',
-    do: 'Usá Módulos / Gerencia SIRH.',
-  },
-  asignacion: {
-    title: 'Asignaciones',
-    see: 'Legacy — no es el eje de D6.',
-    do: 'Usá Módulos / Gerencia SIRH.',
-  },
   proveedores: {
     title: 'Proveedores',
     see: 'Fichas, vínculos y tareas (secundario).',
@@ -51,27 +36,27 @@ const SECTION_HELP = {
   reports: {
     title: 'Reportes SIRH',
     see: 'CSV de módulos SQLite y exportes de operación.',
-    do: 'Exportá módulos o abrí Gerencia Helical / Informe.',
+    do: 'Exportá módulos o abrí Gerencia / Informe.',
   },
   informe: {
     title: 'Informe Gerencial',
     see: 'Pantallazo global con KPIs para Gerencia General.',
     do: 'Exportá PDF desde la barra superior.',
   },
-  helical: {
-    title: 'Gerencia (Helical)',
-    see: 'Tablero EFW embebido con avance de módulos SIRH.',
-    do: 'Login Helical → Dashboard. Editá en Módulos y Publicá.',
+  gerencia: {
+    title: 'Gerencia SIRH',
+    see: 'Tablero nativo con KPIs, filtros, gráficos y detalle de módulos (misma data SQLite).',
+    do: 'Filtrá por estado/riesgo; editá en Módulos si hace falta actualizar un dato.',
   },
   sirh: {
     title: 'Módulos SIRH (ABM)',
-    see: 'SQLite local: estados, fechas, responsable y proveedor.',
-    do: 'Alta/edición/baja y Publicar para sincronizar Helical.',
+    see: 'Alta/edición de módulos en SQLite: estados, fechas, responsable y proveedor.',
+    do: 'Guardá cambios y abrí Gerencia o Hoy para ver el impacto.',
   },
   admin: {
     title: 'Administración',
-    see: 'Marca, etiquetas y conexión Helical/SIRH.',
-    do: 'Ajustá identidad y la URL del dashboard Helical.',
+    see: 'Marca, etiquetas y preferencias locales.',
+    do: 'Ajustá identidad visual; los módulos viven en SQLite.',
   },
 };
 
@@ -82,15 +67,13 @@ export function setHelpSection(sectionId) {
 function syncBlock() {
   return `
     <section class="space-y-3">
-      <h3 class="text-lg font-bold text-primary border-b border-outline-variant pb-2">Sincronizar entre máquinas</h3>
+      <h3 class="text-lg font-bold text-primary border-b border-outline-variant pb-2">Flujo SIRH</h3>
       <ol class="list-decimal pl-5 text-sm space-y-2">
-        <li><strong>Editar</strong> en esta PC.</li>
-        <li><strong>Exportar paquete</strong> desde el Centro de Datos (firma con tu nombre).</li>
-        <li><strong>Enviar</strong> el JSON (mail, Drive, pendrive).</li>
-        <li>En la otra máquina: <strong>Importar</strong>, revisar el resumen y confirmar.</li>
+        <li><strong>Hoy</strong> — KPIs y foco de riesgos/vencidos.</li>
+        <li><strong>Módulos</strong> — ABM en SQLite.</li>
+        <li><strong>Gerencia</strong> — tablero filtrable para dirección.</li>
+        <li><strong>Reportes</strong> — CSV de módulos u operación.</li>
       </ol>
-      <p class="text-xs text-on-surface-variant">El import reemplaza todo el tablero (last-write-wins). Hay un deshacer de un nivel.</p>
-      <button type="button" onclick="openDataHub(); toggleHelpModal();" class="mt-2 bg-primary text-white px-4 py-2 rounded-lg text-xs font-bold uppercase">Abrir Centro de Datos</button>
     </section>
   `;
 }
@@ -98,12 +81,11 @@ function syncBlock() {
 function weeklyBlock() {
   return `
     <section class="space-y-3">
-      <h3 class="text-lg font-bold text-primary border-b border-outline-variant pb-2">Checklist del equipo (3 personas)</h3>
+      <h3 class="text-lg font-bold text-primary border-b border-outline-variant pb-2">Checklist semanal</h3>
       <ul class="list-disc pl-5 text-sm space-y-1">
-        <li>Actualizar Operación y Proveedores.</li>
-        <li>Exportar paquete firmado.</li>
-        <li>Enviar al resto del trío.</li>
-        <li>Director: importar y generar Reportes de la semana.</li>
+        <li>Actualizar estados y fechas en Módulos.</li>
+        <li>Revisar Gerencia (riesgos y vencidos).</li>
+        <li>Exportar CSV SIRH si hace falta compartir.</li>
       </ul>
     </section>
   `;

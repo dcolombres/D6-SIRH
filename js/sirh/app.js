@@ -9,7 +9,7 @@ let chartEstado = null;
 let chartAvance = null;
 
 function desktop() {
-  return window.ddsDesktop || null;
+  return window.d6Api || window.ddsDesktop || null;
 }
 
 function esc(s) {
@@ -215,7 +215,7 @@ async function saveSirhForm(event) {
   }
   closeSirhForm();
   await reloadRows();
-  showToast('Módulo guardado en SQLite. Publicá en Helical para verlo en Gerencia.');
+  showToast('Módulo guardado. Revisá Hoy o Gerencia.');
 }
 
 async function deleteSirhRow(id) {
@@ -229,26 +229,6 @@ async function deleteSirhRow(id) {
   }
   await reloadRows();
   showToast('Módulo eliminado.');
-}
-
-async function publishSirh() {
-  const api = desktop();
-  const btn = document.getElementById('btn-publish');
-  if (!api?.sirhPublish) {
-    showToast('Publicar requiere el servidor D6 + Docker Helical.', 'error');
-    return;
-  }
-  if (btn) btn.disabled = true;
-  try {
-    const res = await api.sirhPublish();
-    if (res?.ok && res.published) showToast(res.message || 'Publicado en Helical.');
-    else if (res?.ok === false || res?.published === false) showToast(res.message || res.error || 'No se pudo publicar', 'error');
-    else showToast(res?.message || 'Listo.');
-  } catch (e) {
-    showToast(e.message || String(e), 'error');
-  } finally {
-    if (btn) btn.disabled = false;
-  }
 }
 
 async function init() {
@@ -265,7 +245,6 @@ async function init() {
     closeSirhForm,
     saveSirhForm,
     deleteSirhRow,
-    publishSirh,
   });
 
   const api = desktop();

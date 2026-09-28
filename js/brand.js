@@ -10,7 +10,7 @@ export function applyBrandSettings(state, options = {}) {
         }
 
         // App Identity
-        const appTitle = state.settings.appTitle || 'DDS SYSTEM';
+        const appTitle = state.settings.appTitle || 'D6';
         const appSubtitle = state.settings.appSubtitle || 'Tablero de gestión Interna';
         document.title = (state.settings.appTitle || 'D6');
         
@@ -92,7 +92,7 @@ export function applyBrandForInforme(state) {
         customStyleTag.innerHTML = state.settings.customCSS || '';
     }
 
-    const appTitle = state.settings.appTitle || 'DDS SYSTEM';
+    const appTitle = state.settings.appTitle || 'D6';
     const appSubtitle = state.settings.appSubtitle || 'Tablero de gestión Interna';
     document.title = appTitle + ' - Informe Gerencial';
 
@@ -108,28 +108,4 @@ export function applyBrandForInforme(state) {
 
     const docBrand = document.getElementById('informe-doc-brand');
     if (docBrand) docBrand.textContent = appTitle;
-}
-
-export function applyBrandForHelical(state) {
-    if (!state?.settings) return;
-    document.documentElement.style.setProperty('--primary-color', state.settings.primaryColor || '#000000');
-
-    const customStyleTag = document.getElementById('custom-css');
-    if (customStyleTag) {
-        customStyleTag.innerHTML = state.settings.customCSS || '';
-    }
-
-    const appTitle = state.settings.appTitle || 'DDS SYSTEM';
-    const appSubtitle = state.settings.appSubtitle || 'Tablero de gestión Interna';
-    document.title = appTitle + ' - SIRH · Gerencia';
-
-    const titleEl = document.getElementById('sidebar-app-title');
-    const subtitleEl = document.getElementById('sidebar-app-subtitle');
-    if (titleEl) titleEl.innerText = appTitle;
-    if (subtitleEl) subtitleEl.innerText = appSubtitle;
-
-    const logoContainer = document.getElementById('brand-logo-container');
-    if (logoContainer && state.settings.logoUrl) {
-        logoContainer.innerHTML = `<img src="${state.settings.logoUrl}" alt="Logo"/>`;
-    }
 }

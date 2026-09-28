@@ -1,4 +1,4 @@
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
 export const APP_VERSION = '1.4.0';
 export const STORAGE_KEY = 'dds_state';
 export const PREV_STORAGE_KEY = 'dds_state_prev';
@@ -74,13 +74,6 @@ export const INITIAL_STATE = {
     subtitleProveedores: 'Contratos, vínculos y tareas',
     titleReports: 'Reportes',
     subtitleReports: 'PDF, CSV e informe ejecutivo',
-    helicalBaseUrl: 'https://localhost/hi-ee/',
-    helicalDir: 'SIRH',
-    helicalFile: 'Gerencia_SIRH.efw',
-    helicalAuthMode: 'none',
-    helicalUsername: '',
-    helicalPassword: '',
-    helicalAuthToken: '',
     roles: [
       { code: 'PM', name: 'Project Manager' },
       { code: 'LT', name: 'Líder Técnico' },
@@ -94,6 +87,8 @@ export const INITIAL_STATE = {
   },
 };
 
+export const SIRH_PREV_KEY = 'd6_sirh_prev';
+
 export function getCounts(state) {
   const s = state || {};
   return {
@@ -104,6 +99,7 @@ export function getCounts(state) {
     finishedRequests: Array.isArray(s.finishedRequests) ? s.finishedRequests.length : 0,
     requests: Array.isArray(s.requests) ? s.requests.length : 0,
     proveedores: Array.isArray(s.proveedores) ? s.proveedores.length : 0,
+    sirh_modulos: Array.isArray(s.sirh_modulos) ? s.sirh_modulos.length : 0,
   };
 }
 
@@ -134,19 +130,11 @@ export function migrateState(state) {
     }
   });
 
-  // Instalaciones previas usaban el puerto 8085 (no publicado en el stack nginx+Docker actual).
-  const legacyHelical = String(s.settings.helicalBaseUrl || '');
-  if (
-    !legacyHelical ||
-    /localhost:8085/i.test(legacyHelical) ||
-    /127\.0\.0\.1:8085/i.test(legacyHelical)
-  ) {
-    s.settings.helicalBaseUrl = INITIAL_STATE.settings.helicalBaseUrl;
-  }
-  // Convención actual: tablero EFW (como TableroAlsina), no efwdd del diseñador.
-  if (String(s.settings.helicalFile || '') === 'Gerencia_SIRH.efwdd') {
-    s.settings.helicalFile = INITIAL_STATE.settings.helicalFile;
-  }
+  // Quitar settings legacy de integraciones externas si existían en localStorage
+  [
+    'helicalBaseUrl', 'helicalDir', 'helicalFile',
+    'helicalAuthMode', 'helicalUsername', 'helicalPassword', 'helicalAuthToken',
+  ].forEach((k) => { delete s.settings[k]; });
 
   return s;
 }
@@ -205,35 +193,41 @@ export function setOnboardingDone() {
 }
 
 function slugAuthor(name) {
-  return String(name || 'DDS')
+  return String(name || 'D6')
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-zA-Z0-9]+/g, '_')
     .replace(/^_|_$/g, '')
-    .slice(0, 24) || 'DDS';
+    .slice(0, 24) || 'D6';
 }
 
-export function buildPackage(state, { exportedBy } = {}) {
+export function buildPackage(state, { exportedBy, sirh_modulos = [] } = {}) {
   const migrated = migrateState(JSON.parse(JSON.stringify(state)));
   const now = new Date();
-  const author = exportedBy || migrated.settings.operatorName || getProfile().name || 'DDS';
+  const author = exportedBy || migrated.settings.operatorName || getProfile().name || 'D6';
+  const sirh = Array.isArray(sirh_modulos) ? sirh_modulos : [];
+  const counts = { ...getCounts(migrated), sirh_modulos: sirh.length };
   const meta = {
     schemaVersion: SCHEMA_VERSION,
     appVersion: APP_VERSION,
     exportedAt: now.toISOString(),
     exportedBy: author,
-    counts: getCounts(migrated),
+    counts,
   };
   migrated.settings.lastExportAt = meta.exportedAt;
   migrated.settings.lastPackageMeta = meta;
   migrated.settings.operatorName = author;
 
   const stamp = now.toISOString().slice(0, 16).replace('T', '_').replace(':', '');
-  const filename = `dds_update_${stamp}_${slugAuthor(author)}.json`;
+  const filename = `d6_backup_${stamp}_${slugAuthor(author)}.json`;
+
+  // No guardar sirh_modulos dentro del state de localStorage; solo en el paquete.
+  const { sirh_modulos: _drop, ...stateOnly } = migrated;
 
   return {
     package: {
-      ...migrated,
+      ...stateOnly,
+      sirh_modulos: sirh,
       _meta: meta,
     },
     meta,
@@ -257,10 +251,10 @@ export function validatePackage(raw) {
   if (!raw || typeof raw !== 'object') {
     return { ok: false, error: 'El archivo no es un JSON de objeto válido.' };
   }
-  const knownKeys = [...DATA_KEYS, 'settings'];
+  const knownKeys = [...DATA_KEYS, 'settings', 'sirh_modulos'];
   const hasValidKey = knownKeys.some((k) => k in raw);
   if (!hasValidKey) {
-    return { ok: false, error: 'El archivo no parece un paquete DDS válido.' };
+    return { ok: false, error: 'El archivo no parece un paquete D6 válido.' };
   }
   return { ok: true };
 }
@@ -272,7 +266,7 @@ export function stripMeta(raw) {
 
 export function diffCounts(before, after) {
   const labels = {
-    ranking: 'Personal',
+    sirh_modulos: 'Módulos SIRH',
     sistemas: 'Sistemas',
     unattended: 'Incidencias',
     finishedIncidents: 'Inc. cerradas',
@@ -291,6 +285,29 @@ export function diffCounts(before, after) {
   }));
 }
 
+export function saveSirhPrevious(rows) {
+  try {
+    localStorage.setItem(SIRH_PREV_KEY, JSON.stringify(Array.isArray(rows) ? rows : []));
+  } catch (e) {
+    console.warn('No se pudo guardar backup SIRH previo', e);
+  }
+}
+
+export function loadSirhPrevious() {
+  try {
+    const raw = localStorage.getItem(SIRH_PREV_KEY);
+    if (!raw) return null;
+    const rows = JSON.parse(raw);
+    return Array.isArray(rows) ? rows : null;
+  } catch {
+    return null;
+  }
+}
+
+export function clearSirhPrevious() {
+  localStorage.removeItem(SIRH_PREV_KEY);
+}
+
 export function importDataFromFile(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -303,7 +320,9 @@ export function importDataFromFile(file) {
           return;
         }
         const { state, meta } = stripMeta(imported);
-        resolve({ state: migrateState(state), meta });
+        const sirh_modulos = Array.isArray(state.sirh_modulos) ? state.sirh_modulos : [];
+        delete state.sirh_modulos;
+        resolve({ state: migrateState(state), meta, sirh_modulos });
       } catch (err) {
         reject(err);
       }

@@ -14,8 +14,7 @@
     "start": "node server/index.js",
     "build:css": "tailwindcss -i ./css/input.css -o ./css/app.css --minify",
     "build:vendor": "node scripts/copy-vendor.mjs",
-    "prestart": "npm run build:css && npm run build:vendor",
-    "helical:deploy-sirh": "powershell -ExecutionPolicy Bypass -File scripts/deploy-helical-sirh.ps1"
+    "prestart": "npm run build:css && npm run build:vendor"
   },
   "dependencies": {
     "chart.js": "^4.4.8",

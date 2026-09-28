@@ -21,8 +21,6 @@ function applyBrand() {
         if (el) el.value = getState().settings[key] || '';
     });
 
-    fillHelicalSettings();
-
     const logoCont = document.getElementById('brand-logo-container');
     if (getState().settings.logoUrl) {
         logoCont.innerHTML = `<img src="${getState().settings.logoUrl}" alt="Logo"/>`;
@@ -113,39 +111,6 @@ function updateSetting(key, val) {
     persistAdmin();
 }
 
-function fillHelicalSettings() {
-    const s = getState().settings;
-    const map = {
-        'helical-base-url': s.helicalBaseUrl || '',
-        'helical-dir': s.helicalDir || '',
-        'helical-file': s.helicalFile || '',
-        'helical-username': s.helicalUsername || '',
-        'helical-password': s.helicalPassword || '',
-        'helical-auth-token': s.helicalAuthToken || '',
-    };
-    Object.entries(map).forEach(([id, val]) => {
-        const el = document.getElementById(id);
-        if (el) el.value = val;
-    });
-    const modeEl = document.getElementById('helical-auth-mode');
-    if (modeEl) modeEl.value = s.helicalAuthMode || 'none';
-    syncHelicalAuthFields();
-}
-
-function syncHelicalAuthFields() {
-    const mode = document.getElementById('helical-auth-mode')?.value || getState().settings.helicalAuthMode || 'none';
-    const creds = document.getElementById('helical-auth-creds');
-    const token = document.getElementById('helical-auth-token-wrap');
-    if (creds) creds.classList.toggle('hidden', mode !== 'url_creds');
-    if (token) token.classList.toggle('hidden', mode !== 'token');
-}
-
-function updateHelicalAuthMode(val) {
-    getState().settings.helicalAuthMode = val || 'none';
-    persistAdmin();
-    syncHelicalAuthFields();
-}
-
 function handleLogoUpload(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -203,5 +168,4 @@ export {
     updateBrandColor, updateCustomCSS, saveCustomCSS,
     updateSetting, handleLogoUpload, removeLogo,
     updateSidebarLabels, updateSectionHeaders,
-    fillHelicalSettings, syncHelicalAuthFields, updateHelicalAuthMode,
 };

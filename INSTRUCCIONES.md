@@ -3,28 +3,24 @@
 ## Primer uso
 
 1. `npm install` y `npm start`.
-2. En el navegador: Hoy → revisá KPIs SIRH.
-3. **Módulos**: alta/edición de desarrollos.
-4. Si tenés Helical en Docker: **Publicar en Helical** y abrí **Gerencia**.
+2. **Hoy** → KPIs SIRH.
+3. **Módulos** → alta/edición (se guarda en SQLite).
+4. **Gerencia** → tablero filtrable.
 
-## Atajos de UI
+## Resguardo (JSON) vs trabajo (SQLite)
 
-- Sidebar: bloque SIRH arriba; Operación / Informe / Admin abajo.
-- Ayuda contextual: botón **?** en la barra superior.
-- Reportes: CSV de módulos SIRH + CSV operativos.
+- **Trabajar:** editá en Módulos → queda en `data/sirh.sqlite`.
+- **Exportar:** Centro de Datos → genera `d6_backup_….json` (módulos + operación).
+- **Importar:** elegí el JSON → reemplaza SQLite (módulos) y localStorage (operación).
+- **Deshacer:** un nivel, desde el mismo Centro de Datos.
 
-## Datos
+## Atajos
 
-| Origen | Dónde |
-|--------|-------|
-| Módulos SIRH | `data/sirh.sqlite` |
-| Operación / proveedores | `localStorage` del navegador |
-| Tablero Helical | Repo del contenedor (tras Publicar) |
+- Sidebar: SIRH arriba; Operación / Informe / Admin abajo.
+- Ayuda: botón **?** .
+- Reportes: CSV módulos + CSV operación.
 
 ## Problemas frecuentes
 
-- **No cargan módulos:** confirmá que `npm start` esté corriendo (API en `:3847`).
-- **Helical offline / Access Denied:** login en el iframe; URL base `https://localhost/hi-ee/`.
-- **Publicar falla:** `docker ps` debe listar `helical-hiee-1`.
-
-Ver también [docs/helical-sirh.md](docs/helical-sirh.md).
+- **No cargan módulos:** `npm start` debe estar corriendo (`:3847`).
+- **Import sin módulos:** el JSON debe traer `sirh_modulos` (exportá de nuevo desde esta versión).

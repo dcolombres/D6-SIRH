@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>D6 · Gerencia SIRH</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Hanken+Grotesk:wght@600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/app.css"/>
+    <style id="dynamic-brand">:root { --primary-color: #111111; }</style>
+    <style id="custom-css"></style>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        .nav-item.active { background-color: #111111; color: #fff; font-weight: 700; }
+        .sidebar-collapsed aside { width: 80px; }
+        .sidebar-collapsed header { left: 80px; }
+        .sidebar-collapsed main { margin-left: 80px; }
+        .sidebar-collapsed aside .sidebar-label,
+        .sidebar-collapsed aside #sidebar-app-subtitle,
+        .sidebar-collapsed aside #brand-logo-container h1,
+        .sidebar-collapsed aside #brand-logo-container p { display: none; }
+        .sidebar-collapsed aside #brand-logo-container { justify-content: center; }
+        .sidebar-collapsed aside .nav-item { justify-content: center; padding-left: 0; padding-right: 0; }
+        aside, header, main { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .sirh-badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+        .sirh-badge.ok { background: #d8f3e7; color: #006c4a; }
+        .sirh-badge.warn { background: #fdecc8; color: #b45309; }
+        .sirh-badge.danger { background: #fadada; color: #ba1a1a; }
+        .sirh-badge.info { background: #dce8ff; color: #0b3d91; }
+        .sirh-badge.muted { background: #eef1f5; color: #5c5f66; }
+    </style>
+</head>
+<body class="text-on-surface font-body bg-surface">
+
+<aside class="fixed left-0 top-0 h-screen w-[280px] bg-surface-container-lowest border-r border-outline-variant flex flex-col p-container-padding z-50">
+    <div class="mb-section-gap flex items-center justify-between">
+        <div id="brand-logo-container" class="flex flex-col">
+            <h1 class="text-2xl font-bold tracking-tight text-primary" id="sidebar-app-title">D6</h1>
+            <p class="text-on-surface-variant text-sm opacity-70" id="sidebar-app-subtitle">Gestión y reportería SIRH</p>
+        </div>
+        <button type="button" onclick="toggleSidebar()" class="p-2 hover:bg-surface-container rounded-lg transition-all">
+            <span class="material-symbols-outlined">menu_open</span>
+        </button>
+    </div>
+    <nav class="flex-1 px-2 space-y-1 overflow-y-auto">
+        <p class="px-4 pt-1 pb-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/70 sidebar-label">SIRH</p>
+        <a href="/pages/index.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all">
+            <span class="material-symbols-outlined">today</span><span class="sidebar-label text-sm font-semibold">Hoy</span>
+        </a>
+        <a href="/pages/sirh.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all">
+            <span class="material-symbols-outlined">view_module</span><span class="sidebar-label text-sm font-semibold">Módulos</span>
+        </a>
+        <a href="/pages/gerencia.html" id="nav-gerencia" class="nav-item active w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all">
+            <span class="material-symbols-outlined">analytics</span><span class="sidebar-label text-sm font-semibold">Gerencia</span>
+        </a>
+        <a href="/pages/index.html#reports" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all">
+            <span class="material-symbols-outlined">description</span><span class="sidebar-label text-sm font-semibold">Reportes SIRH</span>
+        </a>
+        <p class="px-4 pt-4 pb-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/70 sidebar-label border-t border-outline-variant/50 mt-3">Secundario</p>
+        <a href="/pages/informe.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all">
+            <span class="material-symbols-outlined">present_to_all</span><span class="sidebar-label text-sm font-semibold">Informe</span>
+        </a>
+        <a href="/pages/admin.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all">
+            <span class="material-symbols-outlined">settings</span><span class="sidebar-label text-sm font-semibold">Admin</span>
+        </a>
+    </nav>
+</aside>
+
+<header class="fixed top-0 right-0 left-[280px] h-touch-target bg-surface-bright flex justify-between items-center px-container-padding z-40 border-b border-outline-variant">
+    <h2 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant truncate">D6 · Gerencia SIRH</h2>
+    <div class="flex items-center gap-2">
+        <a href="/pages/sirh.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all text-[10px] font-bold uppercase">
+            <span class="material-symbols-outlined text-sm">edit</span> Editar módulos
+        </a>
+        <button type="button" onclick="window.print()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-outline-variant text-[10px] font-bold uppercase hover:bg-surface-container">
+            <span class="material-symbols-outlined text-sm">print</span> Imprimir
+        </button>
+        <button type="button" onclick="toggleHelpModal()" class="p-2 text-primary hover:bg-primary/10 rounded-full"><span class="material-symbols-outlined">help</span></button>
+    </div>
+</header>
+
+<div id="help-modal" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-black/50" onclick="toggleHelpModal()"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl max-h-[85vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+        <div class="px-8 py-6 border-b flex justify-between items-center bg-surface-container-low">
+            <h2 class="text-xl font-bold">Guía de Uso</h2>
+            <button type="button" onclick="toggleHelpModal()" class="p-2 rounded-full hover:bg-surface-container-high"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <div class="p-8 overflow-y-auto"><div id="readme-content" class="space-y-6"></div></div>
+    </div>
+</div>
+
+<main class="ml-[280px] pt-touch-target min-h-screen p-6">
+    <div class="max-w-[1400px] mx-auto space-y-6">
+        <div class="flex flex-wrap items-end justify-between gap-4">
+            <div>
+                <p class="text-[10px] font-bold uppercase tracking-widest text-primary">Tablero gerencial</p>
+                <h1 class="text-2xl font-bold tracking-tight">Estado de módulos SIRH</h1>
+                <p class="text-sm text-on-surface-variant mt-1">Misma lectura que el dashboard clásico: avance, riesgos y plazos — en vivo desde SQLite.</p>
+                <p class="text-[10px] font-data text-on-surface-variant mt-1" id="gerencia-count">—</p>
+            </div>
+            <button type="button" id="g-reset" class="px-4 py-2 rounded-xl border border-outline-variant text-xs font-bold uppercase hover:bg-surface-container">Restablecer filtros</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+            <input id="g-q" type="search" placeholder="Buscar módulo, responsable, proveedor…" class="md:col-span-1 px-4 py-3 bg-surface-container rounded-xl border-none text-sm"/>
+            <select id="g-estado" class="px-4 py-3 bg-surface-container rounded-xl border-none text-sm"><option value="">Todos los estados</option></select>
+            <select id="g-prioridad" class="px-4 py-3 bg-surface-container rounded-xl border-none text-sm"><option value="">Todas las prioridades</option></select>
+            <select id="g-fase" class="px-4 py-3 bg-surface-container rounded-xl border-none text-sm"><option value="">Todas las fases</option></select>
+            <select id="g-riesgo" class="px-4 py-3 bg-surface-container rounded-xl border-none text-sm"><option value="">Todos los riesgos</option></select>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4" id="gerencia-kpis"></div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="gerencia-cards"></div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="bg-white border border-outline-variant rounded-2xl p-5 shadow-sm">
+                <h3 class="text-sm font-bold uppercase tracking-widest mb-3 text-on-surface-variant">Por estado</h3>
+                <canvas id="gerencia-chart-estado" height="220"></canvas>
+            </div>
+            <div class="bg-white border border-outline-variant rounded-2xl p-5 shadow-sm">
+                <h3 class="text-sm font-bold uppercase tracking-widest mb-3 text-on-surface-variant">Avance por módulo</h3>
+                <canvas id="gerencia-chart-avance" height="220"></canvas>
+            </div>
+        </div>
+
+        <div class="bg-white border border-outline-variant rounded-2xl overflow-hidden shadow-sm">
+            <div class="px-5 py-4 border-b border-outline-variant flex items-center justify-between">
+                <h3 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Detalle <span id="gerencia-table-meta" class="font-data normal-case tracking-normal text-on-surface"></span></h3>
+            </div>
+            <div id="gerencia-table"></div>
+        </div>
+    </div>
+</main>
+
+<script src="/js/desktop-bridge.js"></script>
+<script src="/vendor/chart.umd.js"></script>
+<script type="module" src="/js/sirh/gerencia.js"></script>
+</body>
+</html>

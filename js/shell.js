@@ -4,9 +4,6 @@ const TOP_TITLES = {
   sistemas: 'D6 · Sistemas',
   incidents: 'D6 · Incidencias',
   pipeline: 'D6 · Solicitudes',
-  equipo: 'D6 · Equipo',
-  ranking: 'D6 · Ranking',
-  asignacion: 'D6 · Asignaciones',
   proveedores: 'D6 · Proveedores',
   reports: 'D6 · Reportes SIRH',
 };
@@ -16,13 +13,17 @@ let activeGroup = 'overview';
 export function toggleSidebar() {
   document.body.classList.toggle('sidebar-collapsed');
   const isCollapsed = document.body.classList.contains('sidebar-collapsed');
-  localStorage.setItem('dds_sidebar_collapsed', isCollapsed);
+  localStorage.setItem('d6_sidebar_collapsed', isCollapsed);
+  // Migración de clave antigua
+  localStorage.removeItem('dds_sidebar_collapsed');
   const icon = document.querySelector('aside button span');
   if (icon) icon.innerText = isCollapsed ? 'menu' : 'menu_open';
 }
 
 export function initSidebarFromStorage() {
-  if (localStorage.getItem('dds_sidebar_collapsed') === 'true') {
+  const collapsed = localStorage.getItem('d6_sidebar_collapsed') === 'true'
+    || localStorage.getItem('dds_sidebar_collapsed') === 'true';
+  if (collapsed) {
     document.body.classList.add('sidebar-collapsed');
     const icon = document.querySelector('aside button span');
     if (icon) icon.innerText = 'menu';
@@ -48,14 +49,6 @@ function setOpsTab(tab) {
   });
 }
 
-function setTeamTab(tab) {
-  document.querySelectorAll('[data-team-tab]').forEach((btn) => {
-    const on = btn.getAttribute('data-team-tab') === tab;
-    btn.classList.toggle('bg-primary', on);
-    btn.classList.toggle('text-white', on);
-  });
-}
-
 export function switchSection(sectionId, { onSwitch } = {}) {
   let resolved = sectionId;
 
@@ -65,31 +58,15 @@ export function switchSection(sectionId, { onSwitch } = {}) {
     setActiveNav('nav-operacion');
     setOpsTab('sistemas');
     document.getElementById('ops-tabs')?.classList.remove('hidden');
-    document.getElementById('team-tabs')?.classList.add('hidden');
-  } else if (sectionId === 'equipo') {
-    activeGroup = 'equipo';
-    resolved = 'ranking';
-    setActiveNav('nav-equipo');
-    setTeamTab('ranking');
-    document.getElementById('team-tabs')?.classList.remove('hidden');
-    document.getElementById('ops-tabs')?.classList.add('hidden');
   } else if (['sistemas', 'incidents', 'pipeline'].includes(sectionId)) {
     activeGroup = 'operacion';
     setActiveNav('nav-operacion');
     setOpsTab(sectionId);
     document.getElementById('ops-tabs')?.classList.remove('hidden');
-    document.getElementById('team-tabs')?.classList.add('hidden');
-  } else if (['ranking', 'asignacion'].includes(sectionId)) {
-    activeGroup = 'equipo';
-    setActiveNav('nav-equipo');
-    setTeamTab(sectionId);
-    document.getElementById('team-tabs')?.classList.remove('hidden');
-    document.getElementById('ops-tabs')?.classList.add('hidden');
   } else {
     activeGroup = sectionId;
     setActiveNav(`nav-${sectionId}`);
     document.getElementById('ops-tabs')?.classList.add('hidden');
-    document.getElementById('team-tabs')?.classList.add('hidden');
   }
 
   showSection(resolved);

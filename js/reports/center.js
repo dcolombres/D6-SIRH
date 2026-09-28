@@ -116,7 +116,7 @@ export async function exportExecutivePdf() {
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
     pdf.addImage(img, 'PNG', 8, 8, imgWidth, Math.min(imgHeight, pageHeight - 16));
     const stamp = new Date().toISOString().slice(0, 10);
-    pdf.save(`dds_informe_${stamp}.pdf`);
+    pdf.save(`d6_informe_${stamp}.pdf`);
   } catch (e) {
     console.error(e);
     alert('Error al generar PDF. Se abrirá impresión del navegador.');
@@ -131,11 +131,11 @@ export function renderReportsPanel() {
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
       <div class="space-y-4">
         <h3 class="text-sm font-bold uppercase tracking-widest">SIRH</h3>
-        <p class="text-sm text-on-surface-variant">Exportá módulos desde SQLite o abrí el tablero de Gerencia.</p>
+        <p class="text-sm text-on-surface-variant">Misma fuente SQLite que Hoy, Módulos y Gerencia.</p>
         <div class="flex flex-wrap gap-2">
           <button type="button" onclick="exportSirhCsv()" class="px-4 py-2 bg-primary text-white rounded-lg text-xs font-bold uppercase hover:opacity-90 transition-all">CSV módulos SIRH</button>
-          <a href="/pages/sirh.html" class="px-4 py-2 border border-outline-variant rounded-lg text-xs font-bold uppercase hover:bg-surface-container inline-flex items-center">ABM Módulos</a>
-          <a href="/pages/helical.html" class="px-4 py-2 border border-outline-variant rounded-lg text-xs font-bold uppercase hover:bg-surface-container inline-flex items-center">Gerencia Helical</a>
+          <a href="/pages/sirh.html" class="px-4 py-2 border border-outline-variant rounded-lg text-xs font-bold uppercase hover:bg-surface-container inline-flex items-center">Módulos</a>
+          <a href="/pages/gerencia.html" class="px-4 py-2 border border-outline-variant rounded-lg text-xs font-bold uppercase hover:bg-surface-container inline-flex items-center">Gerencia</a>
         </div>
       </div>
       <div class="space-y-4">
@@ -152,7 +152,7 @@ export function renderReportsPanel() {
           `).join('')}
           <button type="button" onclick="openExecutivePreview()" class="px-4 py-2 border border-outline-variant rounded-lg text-xs font-bold uppercase hover:bg-surface-container">Vista previa PDF</button>
           <button type="button" onclick="exportExecutivePdf()" class="px-4 py-2 border border-outline-variant rounded-lg text-xs font-bold uppercase hover:bg-surface-container">Exportar PDF</button>
-          <a href="/pages/informe.html" class="px-4 py-2 border border-outline-variant rounded-lg text-xs font-bold uppercase hover:bg-surface-container inline-flex items-center">Informe Gerencial</a>
+          <a href="/pages/informe.html" class="px-4 py-2 border border-outline-variant rounded-lg text-xs font-bold uppercase hover:bg-surface-container inline-flex items-center">Informe</a>
         </div>
       </div>
     </div>
@@ -162,8 +162,9 @@ export function renderReportsPanel() {
 
 async function exportSirhCsv() {
   try {
-    const rows = window.ddsDesktop?.sirhList
-      ? await window.ddsDesktop.sirhList()
+    const api = window.d6Api || window.ddsDesktop;
+    const rows = api?.sirhList
+      ? await api.sirhList()
       : (await (await fetch('/api/sirh/modulos')).json()).rows || [];
     const headers = ['id', 'modulo', 'fase', 'estado', 'prioridad', 'avance', 'riesgo', 'fecha_inicio', 'fecha_fin_prevista', 'fecha_fin_real', 'responsable', 'proveedor', 'hito', 'bloqueo'];
     const lines = [headers.join(';')];

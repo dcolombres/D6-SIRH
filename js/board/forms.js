@@ -11,18 +11,8 @@ import { closeProviderModal, cancelEditProviderTask } from './proveedores.js';
 function prepareEdit(type, index) {
     editIndices[type] = index;
     const data = getState()[type][index];
-    
-    if (type === 'ranking') {
-        document.getElementById('rank-name').value = data.name;
-        document.getElementById('rank-dept').value = data.dept;
-        document.getElementById('rank-compromiso').value = data.compromiso || 0;
-        document.getElementById('rank-respuesta').value = data.respuesta || 0;
-        document.getElementById('rank-capacidad').value = data.capacidad || 0;
-        document.getElementById('rank-conocimiento').value = data.conocimiento || 0;
-        document.getElementById('rank-submit').innerText = "Actualizar Entrada";
-        document.getElementById('rank-cancel').classList.remove('hidden');
-        document.getElementById('rank-name').focus();
-    } else if (type === 'sistemas') {
+
+    if (type === 'sistemas') {
         document.getElementById('sys-name').value = data.name;
         document.getElementById('sys-priority').value = data.priority;
         document.getElementById('sys-desc').value = data.desc || "";
@@ -71,11 +61,7 @@ function prepareEdit(type, index) {
 
 function cancelEdit(type) {
     editIndices[type] = null;
-    if (type === 'ranking') {
-        document.getElementById('form-ranking').reset();
-        document.getElementById('rank-submit').innerText = "Agregar Entrada";
-        document.getElementById('rank-cancel').classList.add('hidden');
-    } else if (type === 'sistemas') {
+    if (type === 'sistemas') {
         document.getElementById('form-sistemas').reset();
         selectedTeam.length = 0;
         renderSelectedTeam();
@@ -98,25 +84,6 @@ function cancelEdit(type) {
 }
 
 function initForms() {
-    document.getElementById('form-ranking')?.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('rank-name').value;
-        const dept = document.getElementById('rank-dept').value;
-        const compromiso = parseInt(document.getElementById('rank-compromiso').value);
-        const respuesta = parseInt(document.getElementById('rank-respuesta').value);
-        const capacidad = parseInt(document.getElementById('rank-capacidad').value);
-        const conocimiento = parseInt(document.getElementById('rank-conocimiento').value);
-        const entry = { name, dept, compromiso, respuesta, capacidad, conocimiento };
-        if (editIndices.ranking !== null) {
-            getState().ranking[editIndices.ranking] = entry;
-            cancelEdit('ranking');
-        } else {
-            getState().ranking.push(entry);
-            e.target.reset();
-        }
-        refreshUI();
-    });
-
     document.getElementById('form-unattended')?.addEventListener('submit', (e) => {
         e.preventDefault();
         const title = document.getElementById('unat-title').value;

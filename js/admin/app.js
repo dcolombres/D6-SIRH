@@ -6,7 +6,6 @@ import {
     addRole, deleteRole, updateBrandColor, updateCustomCSS, saveCustomCSS,
     updateSetting, handleLogoUpload, removeLogo,
     updateSidebarLabels, updateSectionHeaders,
-    updateHelicalAuthMode,
 } from './config.js';
 import {
     renderStats, processMassLoad, renderEditList,
@@ -58,7 +57,6 @@ function init() {
             openDataHub,
             addRole, deleteRole, updateBrandColor, updateCustomCSS, saveCustomCSS,
             updateSetting, handleLogoUpload, removeLogo,
-            updateHelicalAuthMode,
             processMassLoad, openEdit, closeEditModal, saveExtraInfo,
             exportToPDF, loadDDSDataIntoReport,
             toggleHelpModal: toggleHelpModalAdmin,

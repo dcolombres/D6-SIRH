@@ -42,7 +42,7 @@ function renderSirhCharts(stats) {
 
   const estadoLabels = Object.keys(stats.byEstado || {});
   const estadoValues = estadoLabels.map((k) => stats.byEstado[k]);
-  const palette = ['#004ac6', '#1a2744', '#006c4a', '#b45309', '#ba1a1a', '#5c5f66', '#008cc7'];
+  const palette = ['#0b3d91', '#0f1c33', '#0d6b4c', '#9a5b00', '#a11919', '#5a6170', '#008cc7'];
 
   chartEstado = new Chart(estadoCanvas, {
     type: 'doughnut',
@@ -70,7 +70,7 @@ function renderSirhCharts(stats) {
       datasets: [{
         label: 'Avance %',
         data: avanceRows.map((r) => r.avance),
-        backgroundColor: '#004ac6',
+        backgroundColor: '#0b3d91',
         borderRadius: 4,
       }],
     },
@@ -121,7 +121,9 @@ async function renderOverview() {
 
   let stats = null;
   try {
-    if (window.ddsDesktop?.sirhStats) {
+    if (window.d6Api?.sirhStats) {
+      stats = await window.d6Api.sirhStats();
+    } else if (window.ddsDesktop?.sirhStats) {
       stats = await window.ddsDesktop.sirhStats();
     } else {
       const res = await fetch('/api/sirh/stats');
@@ -149,12 +151,6 @@ async function renderOverview() {
   renderFocusFromStats(stats);
   renderSirhCharts(stats);
 
-  // Secciones legacy de ranking: vaciar si existen
-  setHTML('overview-max-workload', '<p class="text-[10px] italic opacity-50">Vista de carga personal deshabilitada en D6. Usá Módulos SIRH.</p>');
-  setHTML('overview-min-workload', '');
-  setHTML('overview-top-performers', '<p class="text-[10px] italic opacity-50">Sin ranking de personal.</p>');
-  setHTML('overview-low-performers', '');
-
   const estadoEntries = Object.entries(stats.byEstado || {});
   const distHTML = estadoEntries.map(([label, count]) => {
     const pct = stats.total > 0 ? (count / stats.total) * 100 : 0;
@@ -170,11 +166,9 @@ async function renderOverview() {
       </div>
     `;
   }).join('') || '<p class="text-[10px] italic opacity-50">Sin módulos…</p>';
-
   const healthHost = document.getElementById('overview-system-health');
   if (healthHost) healthHost.innerHTML = distHTML;
 
-  // silence unused getState for lint if any
   void getState;
 }
 

@@ -1,9 +1,9 @@
 /**
- * Bridge web: mismo shape que Electron preload (window.ddsDesktop).
- * Usa la API local del servidor Node.
+ * Bridge web: API local del servidor Node (window.d6Api).
+ * Alias window.ddsDesktop por compatibilidad con código previo.
  */
-(function initDdsDesktopBridge() {
-  if (window.ddsDesktop) return;
+(function initD6ApiBridge() {
+  if (window.d6Api) return;
 
   async function api(path, options = {}) {
     const res = await fetch(path, {
@@ -17,7 +17,7 @@
     return data;
   }
 
-  window.ddsDesktop = {
+  const bridge = {
     openExternal: (url) => {
       if (typeof url === 'string' && /^https?:\/\//i.test(url)) {
         window.open(url, '_blank', 'noopener,noreferrer');
@@ -25,7 +25,6 @@
       }
       return Promise.reject(new Error('URL inválida'));
     },
-    pingHelical: (url) => api(`/api/helical/ping?url=${encodeURIComponent(url || '')}`),
     sirhList: async () => {
       const data = await api('/api/sirh/modulos');
       return data.rows || [];
@@ -35,7 +34,6 @@
       body: JSON.stringify(payload || {}),
     }),
     sirhDelete: (id) => api(`/api/sirh/modulos/${encodeURIComponent(id)}`, { method: 'DELETE' }),
-    sirhPublish: () => api('/api/sirh/publish', { method: 'POST', body: '{}' }),
     sirhCatalogos: () => api('/api/sirh/catalogos'),
     sirhDbPath: async () => {
       const data = await api('/api/sirh/db-path');
@@ -45,5 +43,16 @@
       const data = await api('/api/sirh/stats');
       return data.stats || null;
     },
+    sirhExport: async () => {
+      const data = await api('/api/sirh/export');
+      return data.sirh_modulos || [];
+    },
+    sirhImport: (sirh_modulos) => api('/api/sirh/import', {
+      method: 'POST',
+      body: JSON.stringify({ sirh_modulos: sirh_modulos || [] }),
+    }),
   };
+
+  window.d6Api = bridge;
+  window.ddsDesktop = bridge;
 })();

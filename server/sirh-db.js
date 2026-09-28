@@ -237,6 +237,73 @@ function deleteModulo(id) {
   return { ok: true, id: num };
 }
 
+/**
+ * Reemplaza todos los módulos (import JSON). No re-siembra si la lista viene vacía.
+ * @param {Array<object>} rows
+ */
+function replaceAllModulos(rows) {
+  if (!Array.isArray(rows)) throw new Error('sirh_modulos debe ser un array.');
+  db.run('DELETE FROM sirh_modulos');
+  const insert = db.prepare(`
+    INSERT INTO sirh_modulos
+    (modulo, fase, estado, prioridad, avance, riesgo, responsable, proveedor,
+     fecha_inicio, fecha_fin_prevista, fecha_fin_real, bloqueo, hito, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `);
+  const ts = nowIso();
+  rows.forEach((payload) => {
+    const modulo = String(payload.modulo || '').trim();
+    if (!modulo) return;
+    const fields = {
+      modulo,
+      fase: String(payload.fase || '').trim(),
+      estado: normalizeEstado(payload.estado),
+      prioridad: PRIORIDADES.includes(String(payload.prioridad || '').trim())
+        ? String(payload.prioridad).trim()
+        : 'Media',
+      avance: Math.max(0, Math.min(100, Number(payload.avance) || 0)),
+      riesgo: RIESGOS.includes(String(payload.riesgo || '').trim())
+        ? String(payload.riesgo).trim()
+        : 'Medio',
+      responsable: String(payload.responsable || '').trim(),
+      proveedor: String(payload.proveedor || '').trim(),
+      fecha_inicio: String(payload.fecha_inicio || '').trim(),
+      fecha_fin_prevista: String(payload.fecha_fin_prevista || '').trim(),
+      fecha_fin_real: String(payload.fecha_fin_real || '').trim(),
+      bloqueo: String(payload.bloqueo || '').trim(),
+      hito: String(payload.hito || '').trim(),
+      updated_at: String(payload.updated_at || ts),
+    };
+    insert.run([
+      fields.modulo, fields.fase, fields.estado, fields.prioridad, fields.avance, fields.riesgo,
+      fields.responsable, fields.proveedor, fields.fecha_inicio, fields.fecha_fin_prevista,
+      fields.fecha_fin_real, fields.bloqueo, fields.hito, fields.updated_at,
+    ]);
+  });
+  insert.free();
+  persist();
+  return { ok: true, rows: listModulos().length };
+}
+
+function exportModulosPayload() {
+  return listModulos().map((r) => ({
+    modulo: r.modulo,
+    fase: r.fase,
+    estado: r.estado,
+    prioridad: r.prioridad,
+    avance: Number(r.avance) || 0,
+    riesgo: r.riesgo,
+    responsable: r.responsable || '',
+    proveedor: r.proveedor || '',
+    fecha_inicio: r.fecha_inicio || '',
+    fecha_fin_prevista: r.fecha_fin_prevista || '',
+    fecha_fin_real: r.fecha_fin_real || '',
+    bloqueo: r.bloqueo || '',
+    hito: r.hito || '',
+    updated_at: r.updated_at || '',
+  }));
+}
+
 function getCatalogos() {
   return {
     estados: ESTADOS_CLASICOS,
@@ -303,6 +370,8 @@ module.exports = {
   listModulos,
   upsertModulo,
   deleteModulo,
+  replaceAllModulos,
+  exportModulosPayload,
   getDbPath,
   getCatalogos,
   getStats,

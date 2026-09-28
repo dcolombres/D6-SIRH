@@ -1,5 +1,4 @@
 const http = require('http');
-const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
@@ -8,11 +7,12 @@ const {
   listModulos,
   upsertModulo,
   deleteModulo,
+  replaceAllModulos,
+  exportModulosPayload,
   getCatalogos,
   getDbPath,
   getStats,
 } = require('./sirh-db');
-const { publishSirhToHelical } = require('./sirh-publish');
 
 const APP_ROOT = path.join(__dirname, '..');
 const DATA_DIR = path.join(APP_ROOT, 'data');
@@ -63,47 +63,6 @@ function readJsonBody(req) {
       }
     });
     req.on('error', reject);
-  });
-}
-
-function pingHelicalUrl(rawUrl) {
-  return new Promise((resolve) => {
-    let settled = false;
-    const done = (ok) => {
-      if (settled) return;
-      settled = true;
-      resolve({ ok: !!ok });
-    };
-
-    try {
-      const u = new URL(String(rawUrl || '').trim());
-      if (u.protocol !== 'http:' && u.protocol !== 'https:') {
-        done(false);
-        return;
-      }
-      const lib = u.protocol === 'https:' ? https : http;
-      const port = u.port ? Number(u.port) : (u.protocol === 'https:' ? 443 : 80);
-      const req = lib.request({
-        hostname: u.hostname,
-        port,
-        path: `${u.pathname || '/'}${u.search || ''}`,
-        method: 'GET',
-        timeout: 5000,
-        rejectUnauthorized: false,
-        headers: { Accept: 'text/html,*/*' },
-      }, (res) => {
-        res.resume();
-        done(res.statusCode > 0 && res.statusCode < 500);
-      });
-      req.on('error', () => done(false));
-      req.on('timeout', () => {
-        req.destroy();
-        done(false);
-      });
-      req.end();
-    } catch (_) {
-      done(false);
-    }
   });
 }
 
@@ -180,20 +139,30 @@ async function handleApi(req, res, pathname, searchParams) {
     return;
   }
 
-  if (req.method === 'POST' && pathname === '/api/sirh/publish') {
-    try {
-      const result = await publishSirhToHelical(APP_ROOT);
-      sendJson(res, 200, result);
-    } catch (err) {
-      sendJson(res, 500, { ok: false, published: false, error: err.message || String(err) });
-    }
+  if (req.method === 'GET' && pathname === '/api/sirh/export') {
+    sendJson(res, 200, {
+      ok: true,
+      sirh_modulos: exportModulosPayload(),
+      exportedAt: new Date().toISOString(),
+    });
     return;
   }
 
-  if (req.method === 'GET' && pathname === '/api/helical/ping') {
-    const url = searchParams.get('url') || '';
-    const result = await pingHelicalUrl(url);
-    sendJson(res, 200, result);
+  if (req.method === 'POST' && pathname === '/api/sirh/import') {
+    try {
+      const payload = await readJsonBody(req);
+      const rows = Array.isArray(payload.sirh_modulos)
+        ? payload.sirh_modulos
+        : (Array.isArray(payload.rows) ? payload.rows : null);
+      if (!rows) {
+        sendJson(res, 400, { ok: false, error: 'Falta sirh_modulos (array) en el JSON.' });
+        return;
+      }
+      const result = replaceAllModulos(rows);
+      sendJson(res, 200, { ok: true, ...result, stats: getStats() });
+    } catch (err) {
+      sendJson(res, 400, { ok: false, error: err.message || String(err) });
+    }
     return;
   }
 

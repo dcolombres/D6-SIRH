@@ -51,7 +51,7 @@
         <a href="/pages/sirh.html" id="nav-sirh" class="nav-item active w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all">
             <span class="material-symbols-outlined">view_module</span><span class="sidebar-label text-sm font-semibold">Módulos</span>
         </a>
-        <a href="/pages/helical.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all">
+        <a href="/pages/gerencia.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all">
             <span class="material-symbols-outlined">analytics</span><span class="sidebar-label text-sm font-semibold">Gerencia</span>
         </a>
         <a href="/pages/index.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" onclick="sessionStorage.setItem('dds_goto','reports')">
@@ -70,12 +70,9 @@
 <header class="fixed top-0 right-0 left-[280px] h-touch-target bg-surface-bright flex justify-between items-center px-container-padding z-40 border-b border-outline-variant">
     <h2 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant truncate">D6 · Módulos SIRH</h2>
     <div class="flex items-center gap-2">
-        <a href="/pages/helical.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all text-[10px] font-bold uppercase">
-            <span class="material-symbols-outlined text-sm">analytics</span> Ver Helical
+        <a href="/pages/gerencia.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary text-white hover:opacity-90 transition-all text-[10px] font-bold uppercase">
+            <span class="material-symbols-outlined text-sm">analytics</span> Ver Gerencia
         </a>
-        <button type="button" onclick="publishSirh()" id="btn-publish" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary text-white hover:opacity-90 transition-all text-[10px] font-bold uppercase">
-            <span class="material-symbols-outlined text-sm">cloud_upload</span> Publicar en Helical
-        </button>
         <button type="button" onclick="toggleHelpModal()" class="p-2 text-primary hover:bg-primary/10 rounded-full"><span class="material-symbols-outlined">help</span></button>
     </div>
 </header>
@@ -97,7 +94,7 @@
             <div>
                 <p class="text-[10px] font-bold uppercase tracking-widest text-primary">Sistema Integrado de Recursos Humanos</p>
                 <h1 class="text-2xl font-bold tracking-tight">ABM de módulos</h1>
-                <p class="text-sm text-on-surface-variant mt-1">Fuente de verdad en SQLite. Publicá para actualizar el tablero Helical de Gerencia.</p>
+                <p class="text-sm text-on-surface-variant mt-1">Fuente de verdad en SQLite. Los cambios se ven al instante en Hoy y Gerencia.</p>
                 <p class="text-[10px] font-data text-on-surface-variant mt-1" id="sirh-db-path">—</p>
             </div>
             <button type="button" onclick="openSirhForm()" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold uppercase">
