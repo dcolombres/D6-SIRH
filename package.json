@@ -1,31 +1,23 @@
 {
-  "name": "d6-sirh",
-  "version": "1.4.0",
-  "description": "D6-SIRH — Sistema Integral de RH (app web local)",
-  "main": "server/index.js",
-  "author": "Diego Colombres",
-  "license": "UNLICENSED",
-  "private": true,
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/dcolombres/D6-SIRH.git"
-  },
-  "scripts": {
-    "start": "node server/index.js",
-    "build:css": "tailwindcss -i ./css/input.css -o ./css/app.css --minify",
-    "build:vendor": "node scripts/copy-vendor.mjs",
-    "build:doc": "node scripts/build-doc-funcional.mjs",
-    "prestart": "npm run build:css && npm run build:vendor"
-  },
-  "dependencies": {
-    "chart.js": "^4.4.8",
-    "html2canvas": "^1.4.1",
-    "jspdf": "^2.5.2",
-    "sql.js": "^1.14.2"
-  },
-  "devDependencies": {
-    "@tailwindcss/container-queries": "^0.1.1",
-    "@tailwindcss/forms": "^0.5.10",
-    "tailwindcss": "^3.4.17"
-  }
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vite build",
+        "dev": "vite"
+    },
+    "devDependencies": {
+        "autoprefixer": "^10.6.1",
+        "axios": "^1.7.4",
+        "concurrently": "^9.0.1",
+        "laravel-vite-plugin": "^1.2.0",
+        "postcss": "^8.5.28",
+        "tailwindcss": "^3.4.19",
+        "vite": "^6.0.11"
+    },
+    "dependencies": {
+        "@tailwindcss/container-queries": "^0.1.1",
+        "@tailwindcss/forms": "^0.5.11",
+        "alpinejs": "^3.17.4",
+        "chart.js": "^4.5.1"
+    }
 }

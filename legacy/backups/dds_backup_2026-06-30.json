@@ -1,0 +1,1288 @@
+{
+  "ranking": [
+    {
+      "name": "Diego Otero",
+      "dept": "LT",
+      "compromiso": 85,
+      "respuesta": 88,
+      "capacidad": 98,
+      "conocimiento": 98
+    },
+    {
+      "name": "Moira Morel Penco",
+      "dept": "C",
+      "compromiso": 98,
+      "respuesta": 95,
+      "capacidad": 93,
+      "conocimiento": 90
+    },
+    {
+      "name": "Gisela Casco",
+      "dept": "C",
+      "compromiso": 95,
+      "respuesta": 95,
+      "capacidad": 92,
+      "conocimiento": 92
+    },
+    {
+      "name": "Sebastian Zylberberg",
+      "dept": "D",
+      "compromiso": 90,
+      "respuesta": 88,
+      "capacidad": 90,
+      "conocimiento": 92
+    },
+    {
+      "name": "Juan Ignacio Floridia",
+      "dept": "D",
+      "compromiso": 86,
+      "respuesta": 84,
+      "capacidad": 92,
+      "conocimiento": 90
+    },
+    {
+      "name": "Andres Concheso",
+      "dept": "LT",
+      "compromiso": 92,
+      "respuesta": 86,
+      "capacidad": 87,
+      "conocimiento": 87
+    },
+    {
+      "name": "Enrique Farre",
+      "dept": "PM",
+      "compromiso": 88,
+      "respuesta": 86,
+      "capacidad": 89,
+      "conocimiento": 89
+    },
+    {
+      "name": "Hernan Cumbraos",
+      "dept": "D",
+      "compromiso": 78,
+      "respuesta": 83,
+      "capacidad": 85,
+      "conocimiento": 82
+    },
+    {
+      "name": "Sebastian Garbi",
+      "dept": "D",
+      "compromiso": 78,
+      "respuesta": 83,
+      "capacidad": 85,
+      "conocimiento": 82
+    },
+    {
+      "name": "Natalia Holzer",
+      "dept": "UX",
+      "compromiso": 80,
+      "respuesta": 76,
+      "capacidad": 80,
+      "conocimiento": 76
+    },
+    {
+      "name": "Lucas Duran",
+      "dept": "D",
+      "compromiso": 87,
+      "respuesta": 85,
+      "capacidad": 79,
+      "conocimiento": 78
+    },
+    {
+      "name": "Pablo Ovejero",
+      "dept": "D",
+      "compromiso": 71,
+      "respuesta": 69,
+      "capacidad": 74,
+      "conocimiento": 74
+    },
+    {
+      "name": "Andres Ruffolo",
+      "dept": "D",
+      "compromiso": 86,
+      "respuesta": 82,
+      "capacidad": 76,
+      "conocimiento": 76
+    },
+    {
+      "name": "Pedro Tofful",
+      "dept": "D",
+      "compromiso": 66,
+      "respuesta": 62,
+      "capacidad": 82,
+      "conocimiento": 86
+    },
+    {
+      "name": "Gustavo Recalde",
+      "dept": "AD",
+      "compromiso": 73,
+      "respuesta": 66,
+      "capacidad": 75,
+      "conocimiento": 66
+    },
+    {
+      "name": "Branco Castia",
+      "dept": "AS",
+      "compromiso": 77,
+      "respuesta": 77,
+      "capacidad": 70,
+      "conocimiento": 72
+    },
+    {
+      "name": "Mariano Medina",
+      "dept": "AS",
+      "compromiso": 75,
+      "respuesta": 70,
+      "capacidad": 72,
+      "conocimiento": 72
+    },
+    {
+      "name": "Guillermo Barret",
+      "dept": "D",
+      "compromiso": 65,
+      "respuesta": 64,
+      "capacidad": 72,
+      "conocimiento": 71
+    },
+    {
+      "name": "Misael Vita",
+      "dept": "D",
+      "compromiso": 45,
+      "respuesta": 56,
+      "capacidad": 65,
+      "conocimiento": 68
+    },
+    {
+      "name": "Martin Muñoz",
+      "dept": "D",
+      "compromiso": 45,
+      "respuesta": 56,
+      "capacidad": 65,
+      "conocimiento": 68
+    },
+    {
+      "name": "Viviana Tosorino",
+      "dept": "AS",
+      "compromiso": 51,
+      "respuesta": 59,
+      "capacidad": 59,
+      "conocimiento": 58
+    },
+    {
+      "name": "Denise Friednbach",
+      "dept": "UX",
+      "compromiso": 69,
+      "respuesta": 62,
+      "capacidad": 61,
+      "conocimiento": 60
+    },
+    {
+      "name": "Guido Farbiarz",
+      "dept": "PM",
+      "compromiso": 61,
+      "respuesta": 62,
+      "capacidad": 65,
+      "conocimiento": 68
+    },
+    {
+      "name": "Gustavo Carrena",
+      "dept": "PM",
+      "compromiso": 68,
+      "respuesta": 72,
+      "capacidad": 69,
+      "conocimiento": 69
+    },
+    {
+      "name": "Pepe Santorsola",
+      "dept": "D",
+      "compromiso": 75,
+      "respuesta": 56,
+      "capacidad": 58,
+      "conocimiento": 62
+    },
+    {
+      "name": "Martin Dasso",
+      "dept": "AF",
+      "compromiso": 70,
+      "respuesta": 68,
+      "capacidad": 62,
+      "conocimiento": 65
+    },
+    {
+      "name": "Gisela Romagnolo",
+      "dept": "PM",
+      "compromiso": 72,
+      "respuesta": 68,
+      "capacidad": 60,
+      "conocimiento": 51
+    },
+    {
+      "name": "Susana Zavaletta",
+      "dept": "AD",
+      "compromiso": 69,
+      "respuesta": 65,
+      "capacidad": 69,
+      "conocimiento": 70
+    },
+    {
+      "name": "Gustavo Coronel",
+      "dept": "AD",
+      "compromiso": 62,
+      "respuesta": 65,
+      "capacidad": 62,
+      "conocimiento": 63
+    },
+    {
+      "name": "Julio Nuñez",
+      "dept": "AF",
+      "compromiso": 78,
+      "respuesta": 75,
+      "capacidad": 62,
+      "conocimiento": 59
+    },
+    {
+      "name": "Guillermo Ochoa",
+      "dept": "D",
+      "compromiso": 65,
+      "respuesta": 58,
+      "capacidad": 52,
+      "conocimiento": 55
+    },
+    {
+      "name": "Martin Feijoo",
+      "dept": "PM",
+      "compromiso": 62,
+      "respuesta": 58,
+      "capacidad": 60,
+      "conocimiento": 53
+    },
+    {
+      "name": "Juan Carlos Maqui",
+      "dept": "PM",
+      "compromiso": 65,
+      "respuesta": 59,
+      "capacidad": 60,
+      "conocimiento": 60
+    },
+    {
+      "name": "Marcelo Lucini",
+      "dept": "D",
+      "compromiso": 68,
+      "respuesta": 61,
+      "capacidad": 50,
+      "conocimiento": 50
+    },
+    {
+      "name": "Maxi Villanueva",
+      "dept": "D",
+      "compromiso": 63,
+      "respuesta": 52,
+      "capacidad": 58,
+      "conocimiento": 62
+    },
+    {
+      "name": "Karen Guardia",
+      "dept": "UX",
+      "compromiso": 68,
+      "respuesta": 63,
+      "capacidad": 59,
+      "conocimiento": 62
+    },
+    {
+      "name": "Hugo del Valle",
+      "dept": "PM",
+      "compromiso": 62,
+      "respuesta": 66,
+      "capacidad": 63,
+      "conocimiento": 64
+    },
+    {
+      "name": "Martin dell Oro",
+      "dept": "D",
+      "compromiso": 28,
+      "respuesta": 36,
+      "capacidad": 71,
+      "conocimiento": 78
+    },
+    {
+      "name": "Agustina Otero",
+      "dept": "AF",
+      "compromiso": 43,
+      "respuesta": 43,
+      "capacidad": 58,
+      "conocimiento": 58
+    },
+    {
+      "name": "Carolina Frutos",
+      "dept": "UX",
+      "compromiso": 56,
+      "respuesta": 57,
+      "capacidad": 62,
+      "conocimiento": 58
+    },
+    {
+      "name": "Juan Pablo Alarcon",
+      "dept": "D",
+      "compromiso": 40,
+      "respuesta": 45,
+      "capacidad": 60,
+      "conocimiento": 65
+    },
+    {
+      "name": "Clara Lascano",
+      "dept": "PM",
+      "compromiso": 63,
+      "respuesta": 62,
+      "capacidad": 48,
+      "conocimiento": 47
+    },
+    {
+      "name": "Natalia Herrera",
+      "dept": "UX",
+      "compromiso": 41,
+      "respuesta": 49,
+      "capacidad": 58,
+      "conocimiento": 56
+    },
+    {
+      "name": "Mauro Matteo",
+      "dept": "D",
+      "compromiso": 29,
+      "respuesta": 32,
+      "capacidad": 44,
+      "conocimiento": 64
+    },
+    {
+      "name": "Wilfredo Zarate",
+      "dept": "D",
+      "compromiso": 35,
+      "respuesta": 35,
+      "capacidad": 45,
+      "conocimiento": 45
+    },
+    {
+      "name": "Esteban Garbers",
+      "dept": "D",
+      "compromiso": 28,
+      "respuesta": 35,
+      "capacidad": 58,
+      "conocimiento": 68
+    },
+    {
+      "name": "Juan Jose Duran",
+      "dept": "PM",
+      "compromiso": 40,
+      "respuesta": 40,
+      "capacidad": 46,
+      "conocimiento": 50
+    }
+  ],
+  "sistemas": [
+    {
+      "name": "Registro Pyme",
+      "priority": "Alta",
+      "team": "Diego Otero, Enrique Farre, Hernan Cumbraos, Mariano Medina, Guido Farbiarz, Mauro Matteo",
+      "desc": "Upgrade de versiones de Lenguajes y framework - Previsto para Pliego DEv pack 2\nSe contesto nota por fix de cooperativas"
+    },
+    {
+      "name": "LUFE",
+      "priority": "Alta",
+      "team": "Diego Otero, Juan Ignacio Floridia, Enrique Farre, Hernan Cumbraos, Pedro Tofful, Mauro Matteo, Guido Farbiarz",
+      "desc": "Upgrade de versiones de Lenguajes y framework - Previsto para Pliego DEv pack 2"
+    },
+    {
+      "name": "Portal Interno RRHH",
+      "priority": "Media",
+      "team": "Guillermo Ochoa, Carolina Frutos, Martin Feijoo",
+      "desc": "Sistema de Intranet administrado para RRHH. Pendiente de mejoras visuales."
+    },
+    {
+      "name": "BK 4.0",
+      "priority": "Alta",
+      "team": "Moira Morel Penco, Sebastian Garbi, Mariano Medina, Juan Carlos Maqui, Juan Pablo Alarcon",
+      "desc": "Se incorporo el AD para accesos seguros y controlados."
+    },
+    {
+      "name": "SIACE",
+      "priority": "Alta",
+      "team": "Pablo Ovejero",
+      "desc": "En fase critica por cambios en UE y Mercosur. Politica Interbna de gestion de CUatos y ademas esta indicado para un refactor completo (pliego Pack 1 desarrollo)"
+    },
+    {
+      "name": "SIFIPA",
+      "priority": "Alta",
+      "team": "Viviana Tosorino, Juan Carlos Maqui, Misael Vita, Martin Muñoz, Wilfredo Zarate",
+      "desc": "Sistema principal de Pesca. Se hizo una migracion de infraestructura"
+    },
+    {
+      "name": "CRM Oro",
+      "priority": "Alta",
+      "team": "Guillermo Barret, Moira Morel Penco, Gisela Casco, Mauro Matteo",
+      "desc": "Se logro la migracion a Infraestructura local. Quedan pendientes a atender y estabilizacion en curso. Hay un backlog de tickets. Queda pendiente definición para gestion de archivos anteriores a 6 meses. Aun se reciben reclamos por esto mismo."
+    },
+    {
+      "name": "Autogestion (MAGYP)",
+      "priority": "Media",
+      "team": "Pepe Santorsola, Sebastian Garbi, Martin Dasso",
+      "desc": "Middleware de autenticacion con AFIP patra sistemas de Magyp. "
+    },
+    {
+      "name": "E-Ventanilla (Magyp)",
+      "priority": "Alta",
+      "team": "Martin Dasso, Pablo Ovejero, Sebastian Zylberberg",
+      "desc": "Consumo de datos de ARCA para disponibilizar a Sistemas de Magyp"
+    },
+    {
+      "name": "SIGLEA",
+      "priority": "Media",
+      "team": "Juan Ignacio Floridia, Pedro Tofful",
+      "desc": "Sistema Lecheria"
+    },
+    {
+      "name": "SGA Autopartes",
+      "priority": "Alta",
+      "team": "Julio Nuñez",
+      "desc": "Sistema deprecado, sin mantenimineto ni recursos con el know how. Esta indicado para su refactor urgente. Uso de Terminales automotrices con alto peso politico. Se habilito para que la terminales puedan operar bajo declaracion de IPS. Esta en Pliego Pack 1."
+    },
+    {
+      "name": "CTIT / MIP 2026",
+      "priority": "Alta",
+      "team": "Maxi Villanueva, Moira Morel Penco, Diego Otero, Guillermo Barret, Gisela Casco",
+      "desc": "Esta en su fase final para ser reemplazado por el sistema MIP desarrollado por MIP (en Recepcion y tranfer actualmente)"
+    },
+    {
+      "name": "ARCON",
+      "priority": "Alta",
+      "team": "Diego Otero, Andres Concheso, Susana Zavaletta, Gustavo Recalde",
+      "desc": "En proceso de armado, fase BETA ok - Sistema indicado para su reingenieria con pliego PAck 1 desarrollo\n"
+    },
+    {
+      "name": "Tableros T1",
+      "priority": "Alta",
+      "team": "Andres Concheso, Susana Zavaletta, Gustavo Recalde, Gustavo Coronel",
+      "desc": "Tablertos criticos T1 gestionados por el area de Datos y analistica y BI"
+    },
+    {
+      "name": "SIG 2026",
+      "priority": "Alta",
+      "team": "Gisela Casco, Pedro Tofful, Juan Ignacio Floridia, Karen Guardia, Denise Friednbach",
+      "desc": "Desarrollo de Sistema Interno de Gestion que involucra a los modulos de Compras, Prespuesto, Patrimonio..."
+    },
+    {
+      "name": "WAT (flows)",
+      "priority": "Alta",
+      "team": "Diego Otero, Marcelo Lucini, Mariano Medina, Gisela Casco",
+      "desc": "Sistema de gestion de flujos, automatizaciones con GDE e incorporacion de forms basados en odoo par sistemas simples, medios y complejos"
+    },
+    {
+      "name": "SISA ",
+      "priority": "Alta",
+      "team": "Pepe Santorsola, Sebastian Garbi, Pedro Tofful, Juan Ignacio Floridia, Pablo Ovejero, Enrique Farre",
+      "desc": "Sistema de gestion de data de Magyp EN ESTADO CRITICO para refactor. Previsto pliego Pack desarrollo 3"
+    },
+    {
+      "name": "SIMA",
+      "priority": "Alta",
+      "team": "Pepe Santorsola, Enrique Farre",
+      "desc": "Sistema web que disponibiliza datos consumidos de ARCA y de sistemas para el posterior filytrado y export en csv de datos. \nEs necesario una evaluacion y analisis del modelos ya que es poco performatico y suele tener fallas. Esta en Analisis."
+    },
+    {
+      "name": "SIOCAL (exRUCA)",
+      "priority": "Alta",
+      "team": "Sebastian Garbi",
+      "desc": "Getsion del registro que antes gestionaba RUCA, fundamental para dar continuidad a otros sistemas de magyp"
+    },
+    {
+      "name": "ADUANA (umce)",
+      "priority": "Alta",
+      "team": "Diego Otero, Andres Concheso, Susana Zavaletta, Gustavo Recalde, Gisela Casco",
+      "desc": "Relevamiento en progreso con criticidad por continuidad para el equipo de UMCE - del sistema deprecado de FOx PLAN 2026 iniciado"
+    },
+    {
+      "name": "Visor Traza",
+      "priority": "Media",
+      "team": "Andres Ruffolo",
+      "desc": "Vistor de las CP para trazabilidad animal"
+    },
+    {
+      "name": "SEPA",
+      "priority": "Alta",
+      "team": "Diego Otero, Gisela Casco, Gustavo Recalde",
+      "desc": "Sistema de Precios Argentinos. Ya migrado a la infra del datacenter (antes estaba en AWS)"
+    },
+    {
+      "name": "EXPORTA SIMPLE",
+      "priority": "Media",
+      "team": "Mariano Medina",
+      "desc": "Solicitaron eliminar topes - Actualmente en mantenimiento pasivo."
+    },
+    {
+      "name": "Gestion Tabaco",
+      "priority": "Media",
+      "team": "Julio Nuñez, Gisela Casco, Natalia Herrera",
+      "desc": "Actualmente en fase de recepcion, revision de documentacion y codigo y elementos de seguridad."
+    },
+    {
+      "name": "Capacitar",
+      "priority": "Media",
+      "team": "Guillermo Ochoa, Carolina Frutos, Martin Feijoo",
+      "desc": "Campus 2 - Se adecuo a las politicas de seguridad. Se incorporo el MFA y se eliminaron usuarios sin actividad."
+    },
+    {
+      "name": "Nomina RH",
+      "priority": "Media",
+      "team": "Moira Morel Penco, Lucas Duran, Andres Ruffolo, Diego Otero, Agustina Otero",
+      "desc": "Sistema de gestion de Recursos Humanos con la base en la nomina de personal. Inclyye diversos modulos y se trabaja en cascada. Proximo despliegue \"Dependendcias\""
+    },
+    {
+      "name": "Medico",
+      "priority": "Media",
+      "team": "Moira Morel Penco, Lucas Duran, Andres Ruffolo, Karen Guardia, Denise Friednbach",
+      "desc": "Submodulo independiente que gestiona las solicitudes de licencias medicas. Integrado a Nomina RH y a Bandas Horarias."
+    },
+    {
+      "name": "Bandas Horarias",
+      "priority": "Media",
+      "team": "Andres Ruffolo, Guillermo Barret",
+      "desc": "Sistema que registra las bbandas horarias del control de accesos y Novedades Sarha"
+    },
+    {
+      "name": "Tableros T2",
+      "priority": "Media",
+      "team": "Andres Concheso, Susana Zavaletta, Gustavo Recalde, Gustavo Coronel",
+      "desc": "Tablertos criticos T1 gestionados por el area de Datos y analistica y BI"
+    },
+    {
+      "name": "Estimaciones Agricolas",
+      "priority": "Media",
+      "team": "Enrique Farre, Juan Ignacio Floridia, Pedro Tofful",
+      "desc": "Sistema que registra datos y efectua estimaciones - Equipo Cecilia Castelli - En destino de Pliego por especificidad R2 para refacor por upgrade tecnologico"
+    },
+    {
+      "name": "Forestal",
+      "priority": "Media",
+      "team": "Martin dell Oro",
+      "desc": "Sistema forestal de Sabina Vetter. En Mantenimiento activo"
+    },
+    {
+      "name": "Precios Porcinos",
+      "priority": "Media",
+      "team": "Pepe Santorsola, Enrique Farre, Natalia Holzer",
+      "desc": "Sistema de Precios Porcinos critico por obsolecencia. Se refactorizo por completo con nueva tecnologia. Se agregaron mejoras funcionales. Se aprobo el UAT. Actualmente en revision por escaneos de seguridad."
+    },
+    {
+      "name": "SIO Granos (Forms)",
+      "priority": "Media",
+      "team": "Juan Jose Duran, Pepe Santorsola, Enrique Farre",
+      "desc": "Sistema basado en w32 - con alto risego. Se esta trabajando con elequipo de accion point para incluirlo dentro de Genexus. Aun sin exito"
+    },
+    {
+      "name": "GENEXUS (Pol de mercados)",
+      "priority": "Media",
+      "team": "Juan Jose Duran, Pepe Santorsola, Guillermo Barret, Andres Ruffolo, Sebastian Zylberberg, Gisela Romagnolo",
+      "desc": "Sistemas que incluye DINEM, SSMA, Monitor de SIOS y Forms 15, 16, 17 y 18 de DNCCA"
+    },
+    {
+      "name": "Fisca Facil",
+      "priority": "Media",
+      "team": "Pablo Ovejero, Andres Ruffolo, Gisela Casco",
+      "desc": "App mobil con su correalato en backoffice. Sin recursos mobile"
+    },
+    {
+      "name": "RENAI (DNA2)",
+      "priority": "Media",
+      "team": "Marcelo Lucini, Moira Morel Penco, Mariano Medina",
+      "desc": "Funcional - Datos publicados en argentina.gob.ar"
+    },
+    {
+      "name": "RENAPA",
+      "priority": "Media",
+      "team": "Gustavo Carrena, Pepe Santorsola, Natalia Holzer",
+      "desc": "En proceso de refactor con Cuantic"
+    },
+    {
+      "name": "RENAVI",
+      "priority": "Media",
+      "team": "Gustavo Carrena, Pepe Santorsola, Sebastian Zylberberg",
+      "desc": "Sistema critico con necesidad de actualizacion de Stack. Previsto para Cuantic"
+    },
+    {
+      "name": "RENACUA",
+      "priority": "Media",
+      "team": "Gustavo Carrena, Pepe Santorsola, Sebastian Zylberberg",
+      "desc": "Sistema critico con necesidad de actualizacion de Stack. Previsto para Cuantic"
+    },
+    {
+      "name": "EMA",
+      "priority": "Media",
+      "team": "Enrique Farre, Juan Ignacio Floridia",
+      "desc": "Sistema Ceciclia Castelli en proceso de contratacion. Mantenimiento minimo."
+    },
+    {
+      "name": "KIT 4.0",
+      "priority": "Media",
+      "team": "Gustavo Carrena, Juan Ignacio Floridia, Lucas Duran",
+      "desc": "Solicitado por Sandra Panes - para entragas de kits tecnologoicos - En produccion integrado a arg.gob.ar"
+    },
+    {
+      "name": "SIGO",
+      "priority": "Media",
+      "team": "Enrique Farre, Sebastian Garbi, Natalia Holzer, Gisela Romagnolo",
+      "desc": "Por Nota de impulso se desarrollo el sistema de gestion de operaciones que fiscaliza a los productores Magyp"
+    },
+    {
+      "name": "CEF (BID)",
+      "priority": "Media",
+      "team": "Enrique Farre, Juan Ignacio Floridia, Gisela Romagnolo",
+      "desc": "Se esta recibibiendo el software que reemplaza el actual CEF "
+    },
+    {
+      "name": "CEMT",
+      "priority": "Media",
+      "team": "Enrique Farre, Sebastian Zylberberg, Martin Dasso, Pepe Santorsola, Sebastian Garbi",
+      "desc": "Controladores de Molienda. Se esta analizando los procesos e infra"
+    },
+    {
+      "name": "Integraciones (Prod)",
+      "priority": "Media",
+      "team": "Diego Otero, Agustina Otero",
+      "desc": "Proceso que integra sistemas"
+    },
+    {
+      "name": "LinkGDE (magyp)",
+      "priority": "Media",
+      "team": "Sebastian Zylberberg",
+      "desc": "Proceso que vincula GDE con sistemas"
+    },
+    {
+      "name": "Intranet",
+      "priority": "Baja",
+      "team": "Guillermo Ochoa, Carolina Frutos, Martin Feijoo",
+      "desc": "Intranet MECON - primera pantalla antes de la intra de produccion - \nEs colaboracion por el know how de nuestro equipo."
+    },
+    {
+      "name": "Tableros T3",
+      "priority": "Baja",
+      "team": "Andres Concheso, Susana Zavaletta, Gustavo Recalde, Gustavo Coronel",
+      "desc": "Tablertos criticos T3 gestionados por el area de Datos y analistica y BI"
+    },
+    {
+      "name": "Autos Oficiales",
+      "priority": "Baja",
+      "team": "Sebastian Zylberberg, Gisela Casco",
+      "desc": "Ap para gestion de autos oficiales"
+    },
+    {
+      "name": "Sistema Integrado (PNUD)",
+      "priority": "Baja",
+      "team": "Enrique Farre, Hernan Cumbraos",
+      "desc": "Sistema recuperado para la gestion de financiamiento externo conectado con GDE para consumo de data"
+    },
+    {
+      "name": "CRM Pyme (DNA2)",
+      "priority": "Baja",
+      "team": "Mariano Medina, Marcelo Lucini",
+      "desc": "Crm para los Puntos Pyme - se debe migrar a CRM Oro (backlog)"
+    },
+    {
+      "name": "RENAF",
+      "priority": "Baja",
+      "team": "Gisela Romagnolo",
+      "desc": "Sistema en relevamiento actualmente en uso por Agricultura Familiar"
+    },
+    {
+      "name": "Proyectos Magyp",
+      "priority": "Baja",
+      "team": "Gisela Romagnolo, Pedro Tofful",
+      "desc": "Sistema en relavamiento"
+    },
+    {
+      "name": "Presentaciones",
+      "priority": "Baja",
+      "team": "Gisela Romagnolo",
+      "desc": "Sistema en relevamiento"
+    },
+    {
+      "name": "Stock Ganadero (Prendas)",
+      "priority": "Baja",
+      "team": "Branco Castia, Sebastian Zylberberg, Gustavo Carrena",
+      "desc": "En analisis para continuidad o ensabmble con warrants o prendas - ver avance con Justicia"
+    },
+    {
+      "name": "Warrants",
+      "priority": "Baja",
+      "team": "Sebastian Zylberberg, Gustavo Carrena, Branco Castia",
+      "desc": "Se avanzo en el segundo endoso, se envio para UAT y posterior pase a productivo"
+    },
+    {
+      "name": "ORA",
+      "priority": "Baja",
+      "team": "Martin Feijoo, Guillermo Ochoa, Carolina Frutos, Natalia Herrera",
+      "desc": "Refactor completo. Se solicito un cms Wordpress - en fase embrionaria de infra y desarrollo del tema"
+    },
+    {
+      "name": "Textiles",
+      "priority": "Baja",
+      "team": "Mariano Medina",
+      "desc": "Convenio Textiles ( ARCA )"
+    },
+    {
+      "name": "RAD.AR",
+      "priority": "Baja",
+      "team": "Julio Nuñez, Andres Concheso, Natalia Herrera",
+      "desc": "Recepcio de desarrollo - "
+    },
+    {
+      "name": "Emprendedores",
+      "priority": "Baja",
+      "team": "Gustavo Carrena, Juan Ignacio Floridia",
+      "desc": "Desarrollo en Paus sobre evaluacion para emprendedores"
+    },
+    {
+      "name": "Sisgral",
+      "priority": "Baja",
+      "team": "Wilfredo Zarate, Viviana Tosorino, Misael Vita, Martin Muñoz, Juan Carlos Maqui",
+      "desc": "Sistema legacy de pesca"
+    },
+    {
+      "name": "HS Extras",
+      "priority": "Baja",
+      "team": "Moira Morel Penco, Lucas Duran",
+      "desc": "Modulo para calculo de HHEE"
+    },
+    {
+      "name": "CTZF",
+      "priority": "Baja",
+      "team": "Moira Morel Penco",
+      "desc": "CT para zona franca  vinculado al CTIT y al proximo MIP - debe estar cotenplada la funcionalidad en MIP antes de dar de baja el sist"
+    },
+    {
+      "name": "Saldo Tecnico IVA",
+      "priority": "Baja",
+      "team": "Gisela Casco",
+      "desc": "Sistema deprecadso. Se solicito analisis para documentar un alcance y buscar financiamiento para un nuevo desarrollo"
+    },
+    {
+      "name": "Valor Normal (scrapping)",
+      "priority": "Baja",
+      "team": "Juan Carlos Maqui, Mariano Medina",
+      "desc": "EN relevamiento / Desarrollo por CUantic"
+    },
+    {
+      "name": "Emblue / Listmonk",
+      "priority": "Baja",
+      "team": "Moira Morel Penco, Denise Friednbach, Martin Feijoo, Carolina Frutos, Guillermo Ochoa",
+      "desc": "Envio masivo de correo electronico  - gestion y administracion"
+    },
+    {
+      "name": "Reintegro Sello Alimentos",
+      "priority": "Baja",
+      "team": "Esteban Garbers, Clara Lascano",
+      "desc": ""
+    },
+    {
+      "name": "Alimentos argentinos",
+      "priority": "Baja",
+      "team": "Esteban Garbers, Clara Lascano",
+      "desc": ""
+    },
+    {
+      "name": "BK3",
+      "priority": "Baja",
+      "team": "Moira Morel Penco, Mariano Medina",
+      "desc": ""
+    },
+    {
+      "name": "Alsina ",
+      "priority": "Media",
+      "team": "Hugo del Valle, Clara Lascano, Lucas Duran, Gustavo Carrena, Juan Ignacio Floridia",
+      "desc": "Sistema de inventario de activos digitales. Actualmente se le va a incorporar el MFA y tienen un backlog de mejoras activo que incluye scoring, proveedores y KPIs"
+    },
+    {
+      "name": "Redmine 6",
+      "priority": "Baja",
+      "team": "Moira Morel Penco, Juan Pablo Alarcon, Juan Carlos Maqui",
+      "desc": ""
+    },
+    {
+      "name": "Automatizaciones",
+      "priority": "Baja",
+      "team": "Agustina Otero, Branco Castia",
+      "desc": ""
+    },
+    {
+      "name": "SIIP",
+      "priority": "Media",
+      "team": "Viviana Tosorino, Misael Vita, Martin Muñoz, Juan Carlos Maqui, Wilfredo Zarate",
+      "desc": "pesca"
+    },
+    {
+      "name": "Carta de Porte",
+      "priority": "Baja",
+      "team": "Martin Dasso, Gisela Casco",
+      "desc": "validacion de cartas de Porte"
+    },
+    {
+      "name": "LEC",
+      "priority": "Media",
+      "team": "Moira Morel Penco, Maxi Villanueva",
+      "desc": "En proceso de implemetancion de AD para mejoras de seguridad. Modulo generación de bonos en Homologación. Pendiente UAT"
+    },
+    {
+      "name": "ORA",
+      "priority": "Baja",
+      "team": "Natalia Herrera, Hugo del Valle, Guillermo Ochoa, Carolina Frutos",
+      "desc": "Oficina de Riesgo - Va x wordpress"
+    },
+    {
+      "name": "Documentacion + Procesos",
+      "priority": "Baja",
+      "team": "Clara Lascano, Hugo del Valle, Natalia Holzer, Natalia Herrera",
+      "desc": "Gestion de documentacion de Sistemas ante la falta de la misma. Bajo estandarses de documentacion / Disponibilizacion en Inventario ALsina y Nube. Checklist de Proyectos."
+    },
+    {
+      "name": "Auth MFA",
+      "priority": "Media",
+      "team": "Juan Pablo Alarcon, Moira Morel Penco, Juan Carlos Maqui, Branco Castia, Martin Dasso",
+      "desc": "En analisis para incorporara a sistemeas criticos como medida de seguridad adicional."
+    },
+    {
+      "name": "GIT.Prod",
+      "priority": "Baja",
+      "team": "Branco Castia, Clara Lascano",
+      "desc": ""
+    },
+    {
+      "name": "Paneles Autogestionados Magyp",
+      "priority": "Baja",
+      "team": "Branco Castia",
+      "desc": ""
+    },
+    {
+      "name": "TeamPass (Vault)",
+      "priority": "Baja",
+      "team": "Moira Morel Penco, Diego Otero, Agustina Otero, Clara Lascano",
+      "desc": "Implementacion de Refusgio de claves para los sistemas y aplicactivos administrados y gestionados por DDS bajo alcance de desarrollo"
+    },
+    {
+      "name": "Publicaciones PRENSA Magyp",
+      "priority": "Baja",
+      "team": "Martin Feijoo, Guillermo Ochoa, Carolina Frutos",
+      "desc": ""
+    }
+  ],
+  "unattended": [
+    {
+      "title": "BPA en Frutas y Hortalizas (M)",
+      "status": "Sin Atención",
+      "priority": "Alta",
+      "desc": "Solicitaron accion (Covernton) .- No contamos con el codigo solo la APK - 29/6 nuevo pedido por nota solicitaron Status"
+    },
+    {
+      "title": "Cambio Rural (M)",
+      "status": "Sin Atención",
+      "priority": "Baja",
+      "desc": "Desconocimiento - Sin código - Solo APK - Sin Recursos Mobile "
+    },
+    {
+      "title": "EMA (M)",
+      "status": "En fase de Armado de Pliego",
+      "desc": "Avances con empresa R2 quienes originalmente desarrollaron la app y el sistema web"
+    },
+    {
+      "title": "MIRA - Monitor integral de riesgo (M)",
+      "status": "Sin Atención",
+      "priority": "Baja",
+      "desc": "Desconocimiento global / solo APK"
+    },
+    {
+      "title": "Monitor SIO granos (M)",
+      "status": "Sin Atención",
+      "priority": "Media",
+      "desc": "Desconocimiento - Sin código - Solo APK - Sin Recursos Mobile "
+    },
+    {
+      "title": "Precios MAGYP (M)",
+      "status": "Sin Atención",
+      "priority": "Media",
+      "desc": "Desconocimiento - Sin código - Solo APK - Sin Recursos Mobile "
+    },
+    {
+      "title": "SIF mobile (M)",
+      "status": "Sin Atención",
+      "priority": "Baja",
+      "desc": "Se hizo responsive VISOR Traza.\nDesconocimiento - Sin código - Solo APK - Sin Recursos Mobile "
+    },
+    {
+      "title": "SIO Carnes (M)",
+      "status": "Sin Atención",
+      "priority": "Media",
+      "desc": "Desconocimiento - Sin código - Solo APK - Sin Recursos Mobile "
+    },
+    {
+      "title": "SIGLEA (M)",
+      "status": "Sin Atención",
+      "priority": "Baja",
+      "desc": "Desconocimiento - Sin código - Solo APK - Sin Recursos Mobile "
+    },
+    {
+      "title": "FiscFacil (M)",
+      "status": "Atención minima",
+      "priority": "Media",
+      "desc": "Sin Recursos Mobile  - Atencion con recursos de emergencia no especializados"
+    },
+    {
+      "title": "Mi Romaneo (M)",
+      "status": "Solicitaron Recepcion",
+      "priority": "Media",
+      "desc": "Hubo una solicitud de recepcion de la app - Sin codigo - 12/6 reclamo Marcheti y le dijimos que el tema esta como recepcion de soft, ya se le habia idicado los paso a seguir y el protocolo y se les habia enviado el contacto de Escalada hostear."
+    },
+    {
+      "title": "SEFIP (M)",
+      "status": "Sin Atención",
+      "priority": "Baja",
+      "desc": "Desconocimiento - Sin código - Solo APK - Sin Recursos Mobile "
+    },
+    {
+      "title": "Forestal (M)",
+      "status": "Desconocimiento",
+      "priority": "Baja",
+      "desc": "Desconocimiento - Sin código - Solo APK - Sin Recursos Mobile - Martin dell Oro puede tomarlo??"
+    },
+    {
+      "title": "Saldo Tecnico IVA",
+      "status": "Pedido de Refactor",
+      "priority": "Media",
+      "desc": "Se informo al area que en base a la contratacion de analistas se podra obtener un alcance que servira para buscar financiamiento para el Refactor"
+    },
+    {
+      "title": "SGA",
+      "status": "REFACTOR",
+      "priority": "Alta",
+      "desc": "Pliego PACK 1 de Desarrollo para SIsts Criticos - Se da la atencion minima sin tocar una linea de codigo. Se solicitaron Ips a las terminales para acceso identificado a los ambientes SGA"
+    },
+    {
+      "title": "TRAZA",
+      "status": "Sin Atención",
+      "desc": "Discontinuado?"
+    },
+    {
+      "title": "SINIE",
+      "status": "Sin Atención",
+      "priority": "Baja",
+      "desc": "Desconocimiento global del Proyecto"
+    },
+    {
+      "title": "DNA2 Core",
+      "status": "Sin Atención",
+      "priority": "Media",
+      "desc": "Sistema deprecado - EN vias de reemplazo con Oddo / WAT y sistematizacion de flows"
+    },
+    {
+      "title": "Odoo Core",
+      "status": "Sin Atención",
+      "priority": "Baja",
+      "desc": "Deprecado en version 17- "
+    },
+    {
+      "title": "BKSur",
+      "status": "Sin Atención",
+      "priority": "Baja",
+      "desc": "Sistemas deprecado aun en uso por db consultas."
+    },
+    {
+      "title": "Suministros",
+      "status": "Sin Atención",
+      "priority": "Baja",
+      "desc": "Sistema antiguo sin recursos "
+    },
+    {
+      "title": "Patrimonio",
+      "status": "Sin Atención",
+      "priority": "Baja",
+      "desc": "Sistema sin recursos asignados"
+    },
+    {
+      "title": "FATURI",
+      "status": "Sin Atención",
+      "priority": "Baja",
+      "desc": "Sin recursos"
+    },
+    {
+      "title": "Bono Fomento",
+      "status": "Inactivo",
+      "priority": "Baja",
+      "desc": "Discontinuado por el area."
+    },
+    {
+      "title": "Control de Accesos",
+      "status": "Obsoleto",
+      "priority": "Baja",
+      "desc": "sistema zkteco antiguo. "
+    },
+    {
+      "title": "Ecosistema 2",
+      "status": "Pausado",
+      "priority": "Baja",
+      "desc": "Discontinuado por area emprendedores"
+    },
+    {
+      "title": "ListMonk",
+      "status": "En analisis para implementar",
+      "priority": "Media",
+      "desc": "La idea es reemplazar Emblue (contrato hasta sept 2026) se esta preparando todo para hacer pruebas en Junio"
+    },
+    {
+      "title": "Plan Lanar (compensación para productores Lana Ovina)",
+      "status": "Desconocimiento",
+      "priority": "Media",
+      "desc": "No se tienen mas datos- Hubo un reclamo de Silvio Marchetti (poco claro)"
+    },
+    {
+      "title": "Samla",
+      "status": "sin relevar",
+      "priority": "Baja",
+      "desc": "Solo hubo una reunion donde comentaron que tienen la data en PC locales y un sistema de escritorio obsoleto"
+    }
+  ],
+  "finishedIncidents": [
+    {
+      "title": "FOB/FAS y otros",
+      "status": "Entregado",
+      "priority": "Media",
+      "desc": "Desarrollos del area de Agustin Larralde a regularizar. Se entrego Analisis Funcional a Mercedes Nimo (para financiamiento BID)"
+    },
+    {
+      "title": "COPREC",
+      "status": "solo interno",
+      "priority": "Baja",
+      "desc": "Se plancharon las pass y se levanto localmente (solo interno) para finalizar los tramites iniciados."
+    },
+    {
+      "title": "CTZF",
+      "status": "Despublicado",
+      "desc": "Hay que ajustar bd de users expuestos bajo metodologia de planchado de pass y forzar recuperacion de contraseñas. se advirtio que con e nuevo Suistema MIP en productivo de \"apagara\" y bajara este sistema y sus bases (al igual que CTIT y toolbox)"
+    }
+  ],
+  "finishedRequests": [
+    {
+      "feature": "RENAI",
+      "expte": "NO-2025-03535305-APN-DCAI#MEC",
+      "priority": "Estándar",
+      "progress": 100,
+      "status": "En Productivo",
+      "note": "En productivo con DNA -se migragra a WAT en 2026",
+      "closedAt": "2026-06-29T19:47:04.448Z"
+    },
+    {
+      "feature": "EXPORTA SIMPLE",
+      "expte": "NO-2026-44757662-APN-DNGCE#MEC",
+      "priority": "Estándar",
+      "progress": 95,
+      "status": "Finalizado",
+      "note": "hecho",
+      "closedAt": "2026-06-11T15:22:22.478Z"
+    }
+  ],
+  "requests": [
+    {
+      "feature": "ARICCAME ( CANABIS )",
+      "expte": "NO-2026-43748531-APN-ARICCAME#MEC",
+      "priority": "Estándar",
+      "progress": 10,
+      "status": "En relevamiento"
+    },
+    {
+      "feature": "CARTA DE PORTE",
+      "expte": "NO-2026-44407623-APN-SSMAEII#MEC",
+      "priority": "Baja",
+      "progress": 10,
+      "status": "En relevamiento"
+    },
+    {
+      "feature": "ORA",
+      "expte": "NO-2026-56153135-APN-DRSAEIIFYF%MEC",
+      "priority": "Baja",
+      "progress": 15,
+      "status": "En Análisis "
+    },
+    {
+      "feature": "CEF/BID",
+      "expte": "NO-2025-74429043-APN-DNCCA#MEC",
+      "priority": "Estándar",
+      "progress": 70,
+      "status": "En Desarrollo"
+    },
+    {
+      "feature": "KIT4.0",
+      "expte": "NO-2026-07192665-APN-SSPI#MEC",
+      "priority": "Estándar",
+      "progress": 95,
+      "status": "En Productivo"
+    },
+    {
+      "feature": "ESTIMACIONES AGRICOLAS ( R2)",
+      "expte": "NO-2026-28659609-APN-SSPAYF#MEC",
+      "priority": "Estándar",
+      "progress": 10,
+      "status": "A Contratar"
+    },
+    {
+      "feature": "RENAPA",
+      "expte": "NO-2026-16054303-APN-DERE#MEC",
+      "priority": "Estándar",
+      "progress": 25,
+      "status": "En Progreso"
+    },
+    {
+      "feature": "RENACUA",
+      "expte": "NOTA SOLICITADA",
+      "priority": "Estándar",
+      "progress": 0,
+      "status": "Backlog"
+    },
+    {
+      "feature": "GESTION TABACO",
+      "expte": "NO-2026-22965956-APN-SSERYPYMP#MEC",
+      "priority": "Estándar",
+      "progress": 65,
+      "status": "En recepcion"
+    },
+    {
+      "feature": "RIMI",
+      "expte": "NO-2026-49904054-APN-SSPYME#MEC",
+      "priority": "Alta",
+      "progress": 5,
+      "status": "En Análisis "
+    },
+    {
+      "feature": "RAD.AR",
+      "expte": "NO-2026-42705332-APN-SSMAEII#MEC",
+      "priority": "Estándar",
+      "progress": 30,
+      "status": "En recepcion"
+    },
+    {
+      "feature": "MIP",
+      "expte": "NO-2025-94557291-APN-DNGCE#MEC",
+      "priority": "Alta",
+      "progress": 85,
+      "status": "En recepcion"
+    },
+    {
+      "feature": "FAO",
+      "expte": "NO-2025-125516206-APN-SSMAEII#MEC",
+      "priority": "Estándar",
+      "progress": 35,
+      "status": "En relevamiento"
+    },
+    {
+      "feature": "SIGO",
+      "expte": "NO-2025-89653176-APN-DNCCA#MEC",
+      "priority": "Alta",
+      "progress": 80,
+      "status": "En Productivo"
+    },
+    {
+      "feature": "REGLAMENTOS TECNICOS",
+      "expte": "NO-2025-135782153-APN-SSCE#MEC",
+      "priority": "Baja",
+      "progress": 0,
+      "status": "A evaluar"
+    },
+    {
+      "feature": "SIACE",
+      "expte": "NO-2025-111409018-APN-SSMAEII#MEC",
+      "priority": "Alta",
+      "progress": 0,
+      "status": "A Contratar"
+    },
+    {
+      "feature": "Biotecnología.",
+      "expte": "NO-2025-85493306-APN-SSPAYF#MEC",
+      "priority": "Estándar",
+      "progress": 0,
+      "status": "Backlog"
+    },
+    {
+      "feature": "Internas DDS (Alsina+Teampass-Redmine6-MFA-FlujoBajasBomina)",
+      "expte": "",
+      "priority": "Estándar",
+      "progress": 40,
+      "status": "En Progreso"
+    },
+    {
+      "feature": "BPA app solicita recepcion",
+      "expte": "",
+      "priority": "Estándar",
+      "progress": 5,
+      "status": "se remitio Status"
+    },
+    {
+      "feature": "SGR Idoneos",
+      "expte": "",
+      "priority": "Estándar",
+      "progress": 5,
+      "status": "Solicitar reunion inicial"
+    }
+  ],
+  "settings": {
+    "primaryColor": "#202d55",
+    "logoUrl": "data:image/png;base64,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",
+    "appTitle": "DDS SYSTEM",
+    "appSubtitle": "Tablero de gestión Interna",
+    "customCSS": "/* ============================================================\n   ESTILO ACTUAL CON BORDES CUADRADOS\n   Mantiene la esencia visual pero con bordes rectos\n   Solo conserva círculos donde es funcionalmente necesario\n   ============================================================ */\n\n/* ============================================================\n   1. ELIMINAR BORDES REDONDEADOS (EXCEPTO CÍRCULOS ESENCIALES)\n   ============================================================ */\n\n/* Eliminar bordes redondeados de TODOS los elementos por defecto */\n* {\n    border-radius: 0 !important;\n}\n\n/* EXCEPCIONES: Elementos que DEBEN ser circulares por función */\n/* Avatares, indicadores de estado, botones circulares específicos */\n\n/* Avatares de perfil (fotos de persona) */\n.w-8.h-8.rounded-full,\n.w-10.h-10.rounded-full,\n.w-12.h-12.rounded-full,\n.w-14.h-14.rounded-full,\n.w-16.h-16.rounded-full,\n.avatar,\n[class*=\"rounded-full\"]:has(img),\n[class*=\"rounded-full\"]:has(svg[data-avatar]) {\n    border-radius: 9999px !important;\n}\n\n/* Indicadores de estado circulares (puntos de estado) */\n.w-2.h-2.rounded-full,\n.w-3.h-3.rounded-full,\n.w-1.5.h-1.5.rounded-full,\n[class*=\"rounded-full\"]:has(.w-2),\n[class*=\"rounded-full\"]:has(.w-1\\\\.5) {\n    border-radius: 9999px !important;\n}\n\n/* Círculos de progreso (circular-progress) */\n.circular-progress,\n[class*=\"circular-progress\"] {\n    border-radius: 9999px !important;\n}\n\n/* Botones circulares de acción (FAB) */\n.w-8.h-8.rounded-full:has(.material-symbols-outlined),\n.w-10.h-10.rounded-full:has(.material-symbols-outlined),\n.w-12.h-12.rounded-full:has(.material-symbols-outlined),\nbutton.w-8.h-8.rounded-full,\nbutton.w-10.h-10.rounded-full,\nbutton.w-12.h-12.rounded-full {\n    border-radius: 9999px !important;\n}\n\n/* Botones de ayuda y acciones flotantes */\n[class*=\"rounded-full\"]:has(.material-symbols-outlined),\n[class*=\"rounded-full\"]:has(span.material-symbols-outlined) {\n    border-radius: 9999px !important;\n}\n\n/* Badges con forma circular (contadores) */\n[class*=\"rounded-full\"]:has(.text-[10px]),\n[class*=\"rounded-full\"]:has(.text-xs),\n[class*=\"rounded-full\"]:has(span.font-bold) {\n    border-radius: 9999px !important;\n}\n\n/* ============================================================\n   2. RESTAURAR EL ESTILO ORIGINAL (SIN BORDES REDONDEADOS)\n   ============================================================ */\n\n/* Restaurar colores y estilos originales */\n:root {\n    --dds-primary: #000000;\n    --dds-accent: #d4a853;\n    --dds-surface: #f7f9fb;\n    --dds-surface-card: #ffffff;\n    --dds-border: #c6c6cd;\n    --dds-border-light: #e0e3e5;\n    --dds-text: #191c1e;\n    --dds-text-secondary: #45464d;\n}\n\n/* ============================================================\n   3. TARJETAS Y CONTENEDORES (SIN REDONDEO)\n   ============================================================ */\n\n.bg-white,\n.bg-surface-container-lowest,\n.bg-surface-container-low,\n.bg-surface-container,\n.bg-surface-container-high,\n.bg-surface-container-highest,\n.border,\n.border-outline-variant {\n    border-radius: 0 !important;\n}\n\n/* Tarjetas con sombra */\n.shadow-sm,\n.shadow-md,\n.shadow-lg,\n.shadow-xl {\n    border-radius: 0 !important;\n}\n\n/* ============================================================\n   4. BOTONES (SIN REDONDEO)\n   ============================================================ */\n\nbutton,\n.btn,\n[role=\"button\"],\ninput[type=\"submit\"],\ninput[type=\"button\"] {\n    border-radius: 0 !important;\n}\n\n/* Botones con iconos - mantener circulares SOLO si son FAB */\nbutton.w-8.h-8:has(.material-symbols-outlined):not(.btn-primary):not(.btn-secondary),\nbutton.w-10.h-10:has(.material-symbols-outlined):not(.btn-primary):not(.btn-secondary),\nbutton.p-2:has(.material-symbols-outlined):not(.btn-primary):not(.btn-secondary) {\n    border-radius: 9999px !important;\n}\n\n/* ============================================================\n   5. INPUTS Y FORMULARIOS (SIN REDONDEO)\n   ============================================================ */\n\ninput,\nselect,\ntextarea,\n[contenteditable=\"true\"] {\n    border-radius: 0 !important;\n}\n\n/* ============================================================\n   6. TABLAS (SIN REDONDEO)\n   ============================================================ */\n\ntable,\ntable * {\n    border-radius: 0 !important;\n}\n\n/* ============================================================\n   7. MODALES Y OVERLAYS (SIN REDONDEO)\n   ============================================================ */\n\n.bg-black\\/50,\n.bg-white.rounded-3xl,\n.bg-white.rounded-2xl,\n.bg-white.rounded-xl,\n.modal,\n.popup {\n    border-radius: 0 !important;\n}\n\n/* ============================================================\n   8. KANBAN Y TABLEROS (SIN REDONDEO)\n   ============================================================ */\n\n.kanban-column,\n.kanban-column * {\n    border-radius: 0 !important;\n}\n\n/* ============================================================\n   9. BADGES Y ETIQUETAS (SIN REDONDEO EXCEPTO CONTADORES)\n   ============================================================ */\n\n/* Badges normales - sin redondeo */\n.px-2.py-0\\.5,\n.px-3.py-1,\n.px-2.py-1,\n.badge,\n.tag {\n    border-radius: 0 !important;\n}\n\n/* Badges que son contadores numéricos - mantener circulares */\n.px-2.py-0\\.5.rounded-full:has(.text-[10px]),\n.px-2.py-0\\.5.rounded-full:has(.text-xs),\n.bg-error.text-white.px-2.py-0\\.5.rounded-full,\n.bg-emerald-100.text-emerald-800.px-2.py-0\\.5.rounded-full,\n.bg-amber-100.text-amber-800.px-2.py-0\\.5.rounded-full {\n    border-radius: 9999px !important;\n}\n\n/* ============================================================\n   10. PROGRESS BARS (SIN REDONDEO)\n   ============================================================ */\n\n.h-1\\.5,\n.h-1,\n.h-2,\n.progress,\n[class*=\"h-\"]:has([class*=\"bg-\"]) {\n    border-radius: 0 !important;\n}\n\n[class*=\"bg-\"]:has(.h-full) {\n    border-radius: 0 !important;\n}\n\n/* ============================================================\n   11. SIDEBAR (SIN REDONDEO)\n   ============================================================ */\n\naside,\naside * {\n    border-radius: 0 !important;\n}\n\n.nav-item {\n    border-radius: 0 !important;\n}\n\n/* ============================================================\n   12. HEADER (SIN REDONDEO)\n   ============================================================ */\n\nheader,\nheader * {\n    border-radius: 0 !important;\n}\n\n/* ============================================================\n   13. SCROLLBAR (SIN REDONDEO)\n   ============================================================ */\n\n::-webkit-scrollbar {\n    border-radius: 0 !important;\n}\n\n::-webkit-scrollbar-thumb {\n    border-radius: 0 !important;\n}\n\n::-webkit-scrollbar-track {\n    border-radius: 0 !important;\n}\n\n/* ============================================================\n   14. IMÁGENES Y LOGOS (SIN REDONDEO)\n   ============================================================ */\n\nimg,\nsvg {\n    border-radius: 0 !important;\n}\n\n/* Mantener circular SOLO si es un avatar de persona */\nimg[class*=\"rounded-full\"],\nsvg[class*=\"rounded-full\"] {\n    border-radius: 9999px !important;\n}\n\n/* ============================================================\n   15. SELECTORES ESPECÍFICOS DE TU APP\n   ============================================================ */\n\n/* Tarjetas de estadísticas */\n.bg-white.border.border-outline-variant.rounded-2xl {\n    border-radius: 0 !important;\n}\n\n/* Tarjetas de personal */\n.bg-white.border.border-outline-variant.p-4.rounded-lg {\n    border-radius: 0 !important;\n}\n\n/* Contenedores de kanban */\n.bg-surface-container-low.p-4.border-b-4 {\n    border-radius: 0 !important;\n}\n\n/* Tablas */\n.bg-white.border.border-outline-variant.rounded-xl {\n    border-radius: 0 !important;\n}\n\n/* Formularios */\n.bg-surface-container-low.p-8.rounded-3xl {\n    border-radius: 0 !important;\n}\n\n/* Modales */\n.bg-white.rounded-3xl {\n    border-radius: 0 !important;\n}\n\n/* ============================================================\n   16. EXCEPCIONES ESPECIALES - ELEMENTOS QUE DEBEN SER CÍRCULOS\n   ============================================================ */\n\n/* Avatares en el ranking */\n.w-8.h-8.rounded-full.bg-primary.text-white {\n    border-radius: 9999px !important;\n}\n\n/* Indicadores de estado en la barra lateral */\n.w-2.h-2.rounded-full {\n    border-radius: 9999px !important;\n}\n\n/* Botones de ayuda flotantes */\nbutton.p-2.text-primary.hover\\:bg-primary\\/10.rounded-full {\n    border-radius: 9999px !important;\n}\n\n/* Botones de toggle en la barra lateral */\nbutton.p-2.hover\\:bg-surface-container.rounded-lg {\n    border-radius: 0 !important;\n}\n\n/* ============================================================\n   17. MANTENER EL ESTILO ORIGINAL DE TU APP\n   ============================================================ */\n\n/* Colores originales */\n.bg-primary {\n    background-color: var(--dds-primary) !important;\n}\n\n.text-primary {\n    color: var(--dds-primary) !important;\n}\n\n.border-primary {\n    border-color: var(--dds-primary) !important;\n}\n\n/* Sombras originales */\n.shadow-sm {\n    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05) !important;\n}\n\n.shadow-md {\n    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;\n}\n\n.shadow-lg {\n    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1) !important;\n}\n\n.shadow-xl {\n    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1) !important;\n}\n\n/* Transiciones suaves */\n* {\n    transition: all 0.15s ease !important;\n}\n\n/* ============================================================\n   18. MEDIA QUERIES - MANTENER CONSISTENCIA\n   ============================================================ */\n\n@media print {\n    * {\n        border-radius: 0 !important;\n    }\n    \n    .w-8.h-8.rounded-full,\n    .w-10.h-10.rounded-full,\n    .w-12.h-12.rounded-full {\n        border-radius: 9999px !important;\n    }\n}",
+    "sidebarOverview": "Visión General",
+    "sidebarSistemas": "Sistemas",
+    "sidebarIncidents": "Incidencias",
+    "sidebarRequests": "Solicitudes",
+    "sidebarRanking": "Ranking",
+    "sidebarAsignacion": "Asignaciones",
+    "titleOverview": "Sintesis",
+    "subtitleOverview": "Resumen Ejecutivo de Gestión de la DDS",
+    "titleSistemas": "Prioridad de Sistemas",
+    "subtitleSistemas": "Matriz de priorización de Proyectos",
+    "titleIncidents": "Hub",
+    "subtitleIncidents": "Control y monitoreo de incidentes críticos y proyectos desatendidos.",
+    "titleRequests": "Notas de Impulso",
+    "subtitleRequests": "Gestión de expedientes y flujo de requerimientos de desarrollo.",
+    "titleRanking": "Ranking",
+    "subtitleRanking": "Gestión de desempeño y eficiencia según roles estratégicos.",
+    "titleAsignacion": "Asignaciones",
+    "subtitleAsignacion": "Vista detallada de carga y responsabilidades.",
+    "roles": [
+      {
+        "code": "PM",
+        "name": "Project Manager"
+      },
+      {
+        "code": "LT",
+        "name": "Líder Técnico"
+      },
+      {
+        "code": "D",
+        "name": "Desarrollador"
+      },
+      {
+        "code": "AS",
+        "name": "Analista"
+      },
+      {
+        "code": "AD",
+        "name": "Analista de Datos"
+      },
+      {
+        "code": "AF",
+        "name": "Analista Funcional"
+      },
+      {
+        "code": "UX",
+        "name": "UX/UI y Diseño"
+      },
+      {
+        "code": "C",
+        "name": "Coordinación"
+      }
+    ]
+  }
+}

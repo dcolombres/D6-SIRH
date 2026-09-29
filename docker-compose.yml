@@ -1,0 +1,97 @@
+# =============================================================================
+# D6-SIRH — stack de TEST / staging (para DevOps)
+# =============================================================================
+# 1) cp .env.test.example .env
+# 2) Completar APP_KEY (ver docs/DEPLOY-TEST.md)
+# 3) docker compose up -d --build
+# 4) curl -f http://localhost:${HTTP_PORT:-3848}/api/health
+# =============================================================================
+
+name: d6-sirh-test
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: app
+    image: ${IMAGE_NAME:-d6-sirh-app}:${IMAGE_TAG:-test}
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      APP_ENV: ${APP_ENV:-testing}
+      APP_DEBUG: ${APP_DEBUG:-true}
+      APP_URL: ${APP_URL:-http://localhost:3848}
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_DATABASE: ${DB_DATABASE:-d6_sirh}
+      DB_USERNAME: ${DB_USERNAME:-d6}
+      DB_PASSWORD: ${DB_PASSWORD:-secret}
+      RUN_MIGRATIONS: ${RUN_MIGRATIONS:-true}
+      RUN_SEEDERS: ${RUN_SEEDERS:-true}
+      CACHE_CONFIG: ${CACHE_CONFIG:-true}
+      LOG_CHANNEL: stderr
+      SESSION_DRIVER: file
+      CACHE_STORE: file
+      QUEUE_CONNECTION: sync
+    volumes:
+      - d6_storage:/var/www/html/storage
+      - d6_public:/shared/public
+    depends_on:
+      mysql:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "php -r \"exit(@fsockopen('127.0.0.1',9000)?0:1);\""]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 60s
+    networks:
+      - d6
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    ports:
+      - "${HTTP_PORT:-3848}:80"
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - d6_public:/var/www/html/public:ro
+    depends_on:
+      app:
+        condition: service_healthy
+    networks:
+      - d6
+
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-d6_sirh}
+      MYSQL_USER: ${DB_USERNAME:-d6}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootsecret}
+    ports:
+      # Solo para debug desde el host; en cluster interno se puede omitir
+      - "${MYSQL_PUBLISH_PORT:-3307}:3306"
+    volumes:
+      - d6_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${MYSQL_ROOT_PASSWORD:-rootsecret}"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+    networks:
+      - d6
+
+networks:
+  d6:
+    driver: bridge
+
+volumes:
+  d6_storage:
+  d6_public:
+  d6_mysql_data:

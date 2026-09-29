@@ -1,7 +1,12 @@
+import defaultTheme from 'tailwindcss/defaultTheme';
+import forms from '@tailwindcss/forms';
+
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: ['./pages/**/*.html', './js/**/*.js'],
-  darkMode: 'class',
+export default {
+  content: [
+    './resources/views/**/*.blade.php',
+    './resources/js/**/*.js',
+  ],
   theme: {
     extend: {
       colors: {
@@ -17,47 +22,24 @@ module.exports = {
         'on-surface-variant': '#45464d',
         outline: '#76777d',
         'outline-variant': '#c6c6cd',
-        primary: 'var(--primary-color, #000000)',
+        primary: 'var(--primary-color, #111111)',
         'on-primary': '#ffffff',
-        'primary-container': '#131b2e',
-        'on-primary-container': '#7c839b',
         secondary: '#515f74',
-        'on-secondary': '#ffffff',
-        'secondary-container': '#d5e3fd',
-        'on-secondary-container': '#57657b',
-        tertiary: 'var(--tertiary-color, #000000)',
-        'tertiary-container': '#001e2f',
-        'on-tertiary-container': '#008cc7',
         error: '#ba1a1a',
-        'error-container': '#ffdad6',
-        'on-error-container': '#93000a',
         background: '#f7f9fb',
-        'category-c-blue': '#0000FF',
-        'category-r-orange': '#FFA500',
-        'category-ca-green': '#008000',
-        'category-co-violet': '#EE82EE',
-      },
-      borderRadius: {
-        DEFAULT: '0.25rem',
-        sm: '0.125rem',
-        md: '0.375rem',
-        lg: '0.5rem',
-        xl: '0.75rem',
-        full: '9999px',
       },
       spacing: {
         'touch-target': '44px',
-        base: '8px',
         'container-padding': '24px',
         'section-gap': '32px',
         gutter: '16px',
       },
       fontFamily: {
-        body: ['Inter', 'sans-serif'],
-        headline: ['Hanken Grotesk', 'sans-serif'],
-        data: ['JetBrains Mono', 'monospace'],
+        body: ['Inter', ...defaultTheme.fontFamily.sans],
+        headline: ['Hanken Grotesk', ...defaultTheme.fontFamily.sans],
+        data: ['JetBrains Mono', ...defaultTheme.fontFamily.mono],
       },
     },
   },
-  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/container-queries')],
+  plugins: [forms],
 };

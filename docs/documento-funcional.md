@@ -60,6 +60,8 @@ Orden de la barra lateral:
 
 En el header (derecha), con íconos: **Informe** y **Administración**.
 
+Runtime: **Laravel 11** (Blade + Alpine) + **Docker** (nginx, PHP-FPM, MySQL). Ver [README.md](../README.md).
+
 ## 6. Funciones por pantalla
 
 ### 6.1 Hoy
