@@ -79,11 +79,12 @@ services:
     volumes:
       - d6_mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${MYSQL_ROOT_PASSWORD:-rootsecret}"]
+      # $$ → expands MYSQL_ROOT_PASSWORD inside the container (not at compose parse time).
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" || exit 1"]
       interval: 5s
       timeout: 5s
       retries: 30
-      start_period: 20s
+      start_period: 40s
     networks:
       - d6
 

@@ -99,9 +99,21 @@ services:
 
 | Check | Endpoint / puerto |
 |-------|-------------------|
+| MySQL | `mysqladmin ping` con `$MYSQL_ROOT_PASSWORD` del contenedor |
 | App PHP-FPM | TCP 9000 (Docker healthcheck) |
 | HTTP | `GET /api/health` vía nginx |
 | Laravel up | `GET /up` |
+
+### MySQL unhealthy al arrancar
+
+Si `docker compose up` falla con `container …-mysql-1 is unhealthy`:
+
+1. Ver logs: `docker compose logs mysql`
+2. **Volumen con password viejo:** si ya existía `d6_mysql_data` y cambiaste `MYSQL_ROOT_PASSWORD` / `DB_PASSWORD` en `.env`, MySQL ignora las vars nuevas. Opciones:
+   - Restaurar las passwords originales en `.env`, o
+   - Reset destructivo: `docker compose down -v && docker compose up -d --build`
+3. Primera inicialización lenta: el `start_period` es 40s; en hosts lentos esperar y reintentar `docker compose up -d`.
+4. Puerto host ocupado: si `3307` está en uso, cambiar `MYSQL_PUBLISH_PORT` en `.env`.
 
 ## Secretos
 
