@@ -66,12 +66,14 @@ export function computeKpis(rows) {
 export function filterRows(rows, filters = {}) {
   const q = fold(filters.q);
   return rows.filter((r) => {
+    if (!filters.includeInactive && Number(r.activo) === 0) return false;
     if (filters.estado && r.estado !== filters.estado) return false;
     if (filters.prioridad && r.prioridad !== filters.prioridad) return false;
     if (filters.fase && r.fase !== filters.fase) return false;
+    if (filters.area && r.area !== filters.area) return false;
     if (filters.riesgo && r.riesgo !== filters.riesgo) return false;
     if (!q) return true;
-    const blob = fold([r.modulo, r.responsable, r.proveedor, r.bloqueo, r.hito, r.fase].join(' '));
+    const blob = fold([r.modulo, r.descripcion, r.responsable, r.proveedor, r.equipo, r.bloqueo, r.hito, r.fase, r.area].join(' '));
     return blob.includes(q);
   });
 }
@@ -115,9 +117,13 @@ export function renderModuleCards(host, rows) {
     return;
   }
   host.innerHTML = rows.slice(0, 6).map((r) => {
-    const who = r.proveedor
-      ? `${esc(r.responsable || '—')} · Prov: ${esc(r.proveedor)}`
-      : esc(r.responsable || '—');
+    const team = String(r.equipo || '').split(/[\n,;]+/).map((s) => s.trim()).filter(Boolean);
+    const parts = [
+      r.responsable ? `Resp: ${esc(r.responsable)}` : null,
+      r.proveedor ? `Prov: ${esc(r.proveedor)}` : null,
+      team.length ? `Equipo: ${esc(team.slice(0, 3).join(', '))}${team.length > 3 ? ` +${team.length - 3}` : ''}` : null,
+    ].filter(Boolean);
+    const who = parts.length ? parts.join(' · ') : 'Sin personas asignadas';
     const fechas = `${esc(r.fecha_inicio || '—')} → ${esc(r.fecha_fin_prevista || '—')}`;
     return `
       <article class="bg-white border border-outline-variant rounded-2xl p-5 shadow-sm flex flex-col gap-2 min-h-[160px]">
@@ -126,7 +132,7 @@ export function renderModuleCards(host, rows) {
           <span class="sirh-badge ${riskClass(r.riesgo)}">${esc(r.riesgo)}</span>
         </div>
         <h4 class="font-bold text-base">${esc(r.modulo)}</h4>
-        <p class="text-xs text-on-surface-variant">${esc(r.fase)} · ${who}</p>
+        <p class="text-xs text-on-surface-variant">${esc(r.fase || '—')} · ${who}</p>
         <div class="h-2 bg-surface-container rounded-full overflow-hidden">
           <div class="h-full bg-emerald-600" style="width:${Number(r.avance) || 0}%"></div>
         </div>
@@ -159,6 +165,7 @@ export function renderDetailTable(host, metaEl, rows) {
             <th class="text-left px-3 py-3">Fin prev.</th>
             <th class="text-left px-3 py-3">Responsable</th>
             <th class="text-left px-3 py-3">Proveedor</th>
+            <th class="text-left px-3 py-3">Equipo</th>
             <th class="text-left px-3 py-3">Bloqueo</th>
           </tr>
         </thead>
@@ -175,6 +182,7 @@ export function renderDetailTable(host, metaEl, rows) {
               <td class="px-3 py-3 font-data text-xs">${esc(r.fecha_fin_prevista || '—')}</td>
               <td class="px-3 py-3 text-xs">${esc(r.responsable || '—')}</td>
               <td class="px-3 py-3 text-xs">${esc(r.proveedor || '—')}</td>
+              <td class="px-3 py-3 text-xs">${esc(String(r.equipo || '').split(/[\n]+/).filter(Boolean).join(', ') || '—')}</td>
               <td class="px-3 py-3 text-xs max-w-[220px]">${esc(r.bloqueo || '—')}</td>
             </tr>
           `).join('')}

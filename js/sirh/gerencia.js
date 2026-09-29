@@ -2,6 +2,8 @@ import { initStore, getState } from '../store.js';
 import { applyBrandSettings } from '../brand.js';
 import { toggleSidebar, initSidebarFromStorage } from '../shell.js';
 import { wireHelpGlobals, setHelpSection } from '../help/guide.js';
+import { mountSidebarNav, mountTopUtilities } from './shell-nav.js';
+import { AREA_OPTIONS, areaLabel } from './areas.js';
 import {
   apiBridge,
   computeKpis,
@@ -16,7 +18,7 @@ import {
 } from './board-view.js';
 
 let rows = [];
-let filters = { q: '', estado: '', prioridad: '', fase: '', riesgo: '' };
+let filters = { q: '', estado: '', prioridad: '', area: '', riesgo: '' };
 let chartEstado = null;
 let chartAvance = null;
 
@@ -24,7 +26,11 @@ function fillSelect(el, options, emptyLabel) {
   if (!el) return;
   const cur = el.value;
   el.innerHTML = `<option value="">${esc(emptyLabel)}</option>${
-    options.map((o) => `<option value="${esc(o)}">${esc(o)}</option>`).join('')
+    options.map((o) => {
+      const value = typeof o === 'object' ? o.id : o;
+      const label = typeof o === 'object' ? o.label : o;
+      return `<option value="${esc(value)}">${esc(label)}</option>`;
+    }).join('')
   }`;
   if (cur) el.value = cur;
 }
@@ -42,14 +48,17 @@ function renderAll() {
   chartEstado = renderEstadoChart(document.getElementById('gerencia-chart-estado'), kpis.byEstado, chartEstado);
   chartAvance = renderAvanceChart(document.getElementById('gerencia-chart-avance'), list, chartAvance);
   const count = document.getElementById('gerencia-count');
-  if (count) count.textContent = `${list.length} de ${rows.length} módulos`;
+  if (count) {
+    const activos = rows.filter((r) => Number(r.activo) !== 0).length;
+    count.textContent = `${list.length} en vista · ${activos} activos · ${rows.length} en catálogo`;
+  }
 }
 
 function resetFilters() {
-  filters = { q: '', estado: '', prioridad: '', fase: '', riesgo: '' };
+  filters = { q: '', estado: '', prioridad: '', area: '', riesgo: '' };
   const q = document.getElementById('g-q');
   if (q) q.value = '';
-  ['g-estado', 'g-prioridad', 'g-fase', 'g-riesgo'].forEach((id) => {
+  ['g-estado', 'g-prioridad', 'g-area', 'g-riesgo'].forEach((id) => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
@@ -65,7 +74,7 @@ async function load() {
   rows = await api.sirhList();
   fillSelect(document.getElementById('g-estado'), uniqueValues(rows, 'estado'), 'Todos los estados');
   fillSelect(document.getElementById('g-prioridad'), uniqueValues(rows, 'prioridad'), 'Todas las prioridades');
-  fillSelect(document.getElementById('g-fase'), uniqueValues(rows, 'fase'), 'Todas las fases');
+  fillSelect(document.getElementById('g-area'), AREA_OPTIONS, 'Todas las áreas');
   fillSelect(document.getElementById('g-riesgo'), uniqueValues(rows, 'riesgo'), 'Todos los riesgos');
   renderAll();
 }
@@ -83,8 +92,8 @@ function wireFilters() {
     filters.prioridad = e.target.value || '';
     renderAll();
   });
-  document.getElementById('g-fase')?.addEventListener('change', (e) => {
-    filters.fase = e.target.value || '';
+  document.getElementById('g-area')?.addEventListener('change', (e) => {
+    filters.area = e.target.value || '';
     renderAll();
   });
   document.getElementById('g-riesgo')?.addEventListener('change', (e) => {
@@ -100,7 +109,9 @@ async function init() {
   wireHelpGlobals();
   setHelpSection('gerencia');
   applyBrandSettings(getState());
-  Object.assign(window, { toggleSidebar, resetFilters });
+  mountSidebarNav({ active: 'gerencia' });
+  mountTopUtilities({ active: '' });
+  Object.assign(window, { toggleSidebar, resetFilters, areaLabel });
   wireFilters();
   await load();
 }

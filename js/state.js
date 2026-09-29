@@ -136,6 +136,15 @@ export function migrateState(state) {
     'helicalAuthMode', 'helicalUsername', 'helicalPassword', 'helicalAuthToken',
   ].forEach((k) => { delete s.settings[k]; });
 
+  // Forzar etiqueta fija: nunca "Visión General" ni similares del sistema anterior
+  const legacyHoy = /visi[oó]n\s*(gral\.?|general)|overview|dashboard/i;
+  if (!s.settings.sidebarOverview || legacyHoy.test(s.settings.sidebarOverview)) {
+    s.settings.sidebarOverview = 'Hoy';
+  }
+  if (!s.settings.titleOverview || legacyHoy.test(s.settings.titleOverview)) {
+    s.settings.titleOverview = 'Hoy';
+  }
+
   return s;
 }
 

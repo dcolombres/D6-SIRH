@@ -3,13 +3,8 @@ import { getProfile } from '../state.js';
 import { applyBrandForInforme } from '../brand.js';
 import { toggleSidebar, initSidebarFromStorage } from '../shell.js';
 import { wireHelpGlobals, setHelpSection } from '../help/guide.js';
-import {
-  getAverageScore,
-  getCriticalSystemsCount,
-  getPipelineProgress,
-  getTeamCapacity,
-  calculateWorkload,
-} from '../metrics.js';
+import { mountSidebarNav, mountTopUtilities } from '../sirh/shell-nav.js';
+import { aggregateTeam, aggregateProviders } from '../sirh/people.js';
 
 const CHART_COLORS = {
   alta: '#ba1a1a',
@@ -19,14 +14,10 @@ const CHART_COLORS = {
   muted: '#5c5f66',
   line: '#d8dadd',
   stages: ['#111111', '#404040', '#737686', '#004ac6', '#006c4a'],
-  incidents: {
-    Pendiente: '#ba1a1a',
-    'En Revisión': '#d97706',
-    Resuelto: '#059669',
-  },
 };
 
 let charts = {};
+let sirhRows = [];
 
 function setText(id, value) {
   const el = document.getElementById(id);
@@ -38,29 +29,44 @@ function setHtml(id, html) {
   if (el) el.innerHTML = html;
 }
 
-function coverage(state) {
-  const total = state.sistemas.length;
-  const assigned = state.sistemas.filter((s) => (s.team || '').trim()).length;
+function escapeHtml(text) {
+  return String(text ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function activeSirh() {
+  return sirhRows.filter((r) => Number(r.activo) !== 0);
+}
+
+function sirhCoverage() {
+  const rows = activeSirh();
+  const total = rows.length;
+  const assigned = rows.filter((r) => String(r.responsable || '').trim() || String(r.equipo || '').trim()).length;
   const percent = total > 0 ? Math.round((assigned / total) * 100) : 100;
   return { total, assigned, percent };
 }
 
-function attentionItems(state) {
+function attentionItems() {
   const items = [];
-  const highInc = state.unattended.filter((i) => (i.priority || '') === 'Alta' && i.status !== 'Resuelto');
-  const pending = state.unattended.filter((i) => i.status === 'Pendiente');
-  const critical = getCriticalSystemsCount(state);
-  const cov = coverage(state);
-  const stalled = state.requests.filter((r) => (r.progress || 0) < 30 && r.priority === 'Alta');
-  const noTeamProv = state.proveedores.filter((p) => !(p.team || '').trim()).length;
+  const cov = sirhCoverage();
+  const riskHigh = activeSirh().filter((r) => String(r.riesgo || '').toLowerCase() === 'alto').length;
+  const noProv = activeSirh().filter((r) => !String(r.proveedor || '').trim()).length;
+  const team = aggregateTeam(sirhRows);
+  const today = new Date().toISOString().slice(0, 10);
+  const vencidos = activeSirh().filter((r) => {
+    const fin = String(r.fecha_fin_prevista || '').trim();
+    const cerrado = ['Operativo', 'Cancelado'].includes(r.estado);
+    return fin && fin < today && !cerrado;
+  }).length;
 
-  if (highInc.length) items.push(`${highInc.length} incidencia(s) de alta prioridad activas.`);
-  else if (pending.length) items.push(`${pending.length} incidencia(s) pendientes.`);
-  if (critical) items.push(`${critical} sistema(s) críticos en el inventario.`);
-  if (cov.percent < 85) items.push(`Cobertura de asignación en ${cov.percent}% — hay activos sin equipo.`);
-  if (stalled.length) items.push(`${stalled.length} solicitud(es) Alta con avance bajo (<30%).`);
-  if (noTeamProv) items.push(`${noTeamProv} proveedor(es) sin responsable asignado.`);
-  if (!items.length) items.push('Sin alertas críticas: operación dentro de parámetros esperados.');
+  if (riskHigh) items.push(`${riskHigh} módulo(s) con riesgo alto.`);
+  if (vencidos) items.push(`${vencidos} módulo(s) con fin previsto vencido.`);
+  if (cov.percent < 85) items.push(`Cobertura de equipo: ${cov.percent}% (${cov.assigned}/${cov.total}).`);
+  if (noProv > Math.ceil(cov.total / 2)) items.push(`${noProv} módulo(s) sin proveedor.`);
+  if (!team.length) items.push('Ninguna persona vinculada — cargá responsable/equipo en Módulos.');
+  if (!items.length) items.push('Sin alertas críticas en el catálogo SIRH.');
   return items.slice(0, 5);
 }
 
@@ -79,265 +85,197 @@ function destroyCharts() {
   charts = {};
 }
 
-function renderKpis(state) {
-  const highInc = state.unattended.filter((i) => (i.priority || '') === 'Alta').length;
-  const pipeline = getPipelineProgress(state);
-  const capacity = getTeamCapacity(state);
-  const cov = coverage(state);
-  const providers = state.proveedores || [];
-  const activeProv = providers.filter((p) => (p.status || 'Activo') === 'Activo').length;
+function renderKpis() {
+  const rows = activeSirh();
+  const cov = sirhCoverage();
+  const providers = aggregateProviders(sirhRows);
+  const team = aggregateTeam(sirhRows);
+  const riskHigh = rows.filter((r) => String(r.riesgo || '').toLowerCase() === 'alto').length;
+  const avanceMedio = rows.length
+    ? Math.round(rows.reduce((s, r) => s + (Number(r.avance) || 0), 0) / rows.length)
+    : 0;
 
-  setText('stat-critical', String(getCriticalSystemsCount(state)));
-  setText('stat-critical-hint', `de ${state.sistemas.length} sistemas`);
-  setText('stat-incidents-high', String(highInc));
-  setText('stat-incidents-hint', `${state.unattended.length} activas en total`);
-  setText('stat-pipeline', `${pipeline}%`);
-  setText('stat-pipeline-hint', `${state.requests.length} solicitudes`);
-  setText('stat-capacity', `${capacity}%`);
-  setText('stat-capacity-hint', `${state.ranking.length} personas`);
+  setText('stat-critical', String(riskHigh));
+  setText('stat-critical-hint', `de ${rows.length} módulos activos`);
+  setText('stat-incidents-high', String(rows.filter((r) => String(r.prioridad || '').toLowerCase() === 'alta').length));
+  setText('stat-incidents-hint', 'prioridad alta');
+  setText('stat-pipeline', `${avanceMedio}%`);
+  setText('stat-pipeline-hint', 'avance medio del catálogo');
+  setText('stat-capacity', `${team.length}`);
+  setText('stat-capacity-hint', 'personas en módulos');
   setText('stat-coverage', `${cov.percent}%`);
-  setText('stat-coverage-hint', `${cov.assigned}/${cov.total} con equipo`);
+  setText('stat-coverage-hint', `${cov.assigned}/${cov.total} con responsable/equipo`);
   setText('stat-providers', String(providers.length));
-  setText('stat-providers-hint', `${activeProv} con estado Activo`);
+  setText('stat-providers-hint', 'proveedores vinculados');
 }
 
-function renderAttention(state) {
-  const items = attentionItems(state);
-  setHtml(
-    'list-attention',
-    items.map((t) => `<li>${t}</li>`).join(''),
-  );
+function renderAttention() {
+  setHtml('list-attention', attentionItems().map((t) => `<li>${t}</li>`).join(''));
 }
 
-function renderFocus(state) {
-  const incidents = state.unattended
-    .filter((i) => i.priority === 'Alta' || i.status === 'Pendiente')
-    .slice(0, 4);
-  const requests = [...state.requests]
-    .filter((r) => r.priority === 'Alta' || (r.progress || 0) < 40)
-    .sort((a, b) => (a.progress || 0) - (b.progress || 0))
-    .slice(0, 4);
-
-  const cards = [];
-  incidents.forEach((u) => {
-    cards.push(`
-      <div class="informe-focus-card informe-focus-card--inc">
-        <span class="informe-focus-tag">Incidencia</span>
-        <h4>${escapeHtml(u.title)}</h4>
-        <p>${escapeHtml(u.status)} · ${escapeHtml(u.priority || '—')}</p>
-      </div>
-    `);
-  });
-  requests.forEach((r) => {
-    cards.push(`
-      <div class="informe-focus-card informe-focus-card--req">
-        <span class="informe-focus-tag">Solicitud</span>
-        <h4>${escapeHtml(r.feature)}</h4>
-        <p>${escapeHtml(r.status)} · ${r.progress || 0}% · ${escapeHtml(r.expte || '—')}</p>
-      </div>
-    `);
-  });
-
+function renderFocus() {
+  const modules = [...activeSirh()]
+    .filter((r) => String(r.riesgo || '').toLowerCase() === 'alto' || String(r.prioridad || '').toLowerCase() === 'alta')
+    .slice(0, 6);
   setHtml(
     'list-focus',
-    cards.join('') || '<p class="informe-empty">Sin ítems críticos en el radar.</p>',
+    modules.map((m) => `
+      <div class="informe-focus-card informe-focus-card--req">
+        <span class="informe-focus-tag">Módulo</span>
+        <h4>${escapeHtml(m.modulo)}</h4>
+        <p>${escapeHtml(m.estado)} · ${escapeHtml(m.riesgo || '—')} · ${Number(m.avance) || 0}%</p>
+      </div>
+    `).join('') || '<p class="informe-empty">Sin ítems críticos.</p>',
   );
 }
 
-function renderTeam(state) {
-  const top = [...state.ranking]
-    .sort((a, b) => getAverageScore(b) - getAverageScore(a))
-    .slice(0, 8);
-
+function renderTeam() {
+  const top = aggregateTeam(sirhRows).slice(0, 8);
   setHtml(
     'table-top-team',
-    top
-      .map(
-        (p, i) => `
+    top.map((p, i) => `
       <tr>
         <td class="font-data">${i + 1}</td>
         <td class="font-semibold">${escapeHtml(p.name)}</td>
-        <td>${escapeHtml(p.dept || '—')}</td>
-        <td class="text-right font-data font-semibold">${getAverageScore(p)}</td>
-      </tr>`,
-      )
-      .join('') || '<tr><td colspan="4" class="informe-empty">Sin datos de equipo</td></tr>',
+        <td>${escapeHtml(p.roles.join(', '))}</td>
+        <td class="text-right font-data font-semibold">${p.moduleCount}</td>
+      </tr>`).join('')
+      || '<tr><td colspan="4" class="informe-empty">Sin personas. <a href="/pages/sirh.html#equipo">Cargar en Equipo</a></td></tr>',
   );
 }
 
-function renderCriticalSystems(state) {
-  const list = state.sistemas.filter((s) => s.priority === 'Alta').slice(0, 6);
+function renderCriticalSystems() {
+  const list = activeSirh()
+    .filter((r) => String(r.prioridad || '').toLowerCase() === 'alta' || String(r.riesgo || '').toLowerCase() === 'alto')
+    .slice(0, 6);
   setHtml(
     'list-critical-systems',
-    list
-      .map(
-        (s) => `
+    list.map((s) => `
       <div class="informe-row">
         <div>
-          <p class="informe-row-title">${escapeHtml(s.name)}</p>
-          <p class="informe-row-meta">${escapeHtml(s.team || 'Sin equipo')} · ${escapeHtml(s.desc || '')}</p>
+          <p class="informe-row-title">${escapeHtml(s.modulo)}</p>
+          <p class="informe-row-meta">${escapeHtml(s.responsable || 'Sin responsable')} · ${escapeHtml(s.proveedor || 'sin proveedor')}</p>
         </div>
-        <span class="informe-pill informe-pill--danger">Alta</span>
-      </div>`,
-      )
-      .join('') || '<p class="informe-empty">Sin sistemas críticos.</p>',
+        <span class="informe-pill informe-pill--danger">${escapeHtml(s.riesgo || s.prioridad || 'Alta')}</span>
+      </div>`).join('') || '<p class="informe-empty">Sin módulos críticos.</p>',
   );
 }
 
-function renderProviders(state) {
-  const list = state.proveedores || [];
-  const gaps = list.filter((p) => !(p.team || '').trim());
-  const rows = (gaps.length ? gaps : list).slice(0, 6);
-
+function renderProviders() {
+  const list = aggregateProviders(sirhRows);
+  if (!list.length) {
+    setHtml('list-providers', '<p class="informe-empty">Sin proveedores. <a href="/pages/sirh.html#proveedores">Cargar desde Módulos</a></p>');
+    return;
+  }
   setHtml(
     'list-providers',
-    rows
-      .map((p) => {
-        const gap = !(p.team || '').trim();
-        return `
-        <div class="informe-row">
-          <div>
-            <p class="informe-row-title">${escapeHtml(p.name)}</p>
-            <p class="informe-row-meta">${escapeHtml(p.rubro || '—')} · ${escapeHtml(p.status || '—')}${gap ? ' · sin equipo' : ` · ${escapeHtml(p.team)}`}</p>
-          </div>
-          <span class="informe-pill ${gap ? 'informe-pill--warn' : ''}">${gap ? 'Gap' : 'OK'}</span>
-        </div>`;
-      })
-      .join('') || '<p class="informe-empty">Sin proveedores registrados.</p>',
+    list.slice(0, 6).map((p) => `
+      <div class="informe-row">
+        <div>
+          <p class="informe-row-title">${escapeHtml(p.name)}</p>
+          <p class="informe-row-meta">${p.moduleCount} módulo(s)</p>
+        </div>
+        <a href="/pages/sirh.html#proveedores" class="informe-pill">Ver</a>
+      </div>`).join(''),
   );
 }
 
-function escapeHtml(text) {
-  return String(text ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
-
-function initCharts(state) {
+function initCharts() {
   if (typeof Chart === 'undefined') return;
   chartDefaults();
   destroyCharts();
 
   const pCounts = { Alta: 0, Media: 0, Baja: 0 };
-  state.sistemas.forEach((s) => {
-    const key = s.priority in pCounts ? s.priority : 'Baja';
+  activeSirh().forEach((s) => {
+    const key = s.prioridad in pCounts ? s.prioridad : 'Baja';
     pCounts[key] += 1;
   });
 
-  charts.systems = new Chart(document.getElementById('chart-systems'), {
-    type: 'doughnut',
-    data: {
-      labels: ['Alta', 'Media', 'Baja'],
-      datasets: [{
-        data: [pCounts.Alta, pCounts.Media, pCounts.Baja],
-        backgroundColor: [CHART_COLORS.alta, CHART_COLORS.media, CHART_COLORS.baja],
-        borderWidth: 0,
-        hoverOffset: 4,
-      }],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      cutout: '62%',
-      plugins: {
-        legend: { position: 'bottom' },
-        tooltip: {
-          callbacks: {
-            label: (ctx) => ` ${ctx.label}: ${ctx.raw}`,
-          },
-        },
+  const elSys = document.getElementById('chart-systems');
+  if (elSys) {
+    charts.systems = new Chart(elSys, {
+      type: 'doughnut',
+      data: {
+        labels: ['Alta', 'Media', 'Baja'],
+        datasets: [{
+          data: [pCounts.Alta, pCounts.Media, pCounts.Baja],
+          backgroundColor: [CHART_COLORS.alta, CHART_COLORS.media, CHART_COLORS.baja],
+          borderWidth: 0,
+        }],
       },
-    },
-  });
-
-  const stages = ['Backlog', 'Alcance', 'Desarrollo', 'Testing', 'Deploy'];
-  const stageCounts = stages.map((s) => state.requests.filter((r) => r.status === s).length);
-
-  charts.pipeline = new Chart(document.getElementById('chart-pipeline'), {
-    type: 'bar',
-    data: {
-      labels: stages,
-      datasets: [{
-        data: stageCounts,
-        backgroundColor: CHART_COLORS.stages,
-        borderRadius: 6,
-        barThickness: 22,
-      }],
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: {
-          beginAtZero: true,
-          ticks: { precision: 0 },
-          grid: { color: CHART_COLORS.line },
-        },
-        y: { grid: { display: false } },
-      },
-    },
-  });
-
-  const incLabels = ['Pendiente', 'En Revisión', 'Resuelto'];
-  const incData = incLabels.map((s) => state.unattended.filter((i) => i.status === s).length);
-  const otherInc = state.unattended.filter((i) => !incLabels.includes(i.status)).length;
-  if (otherInc) {
-    incLabels.push('Otros');
-    incData.push(otherInc);
+      options: { responsive: true, maintainAspectRatio: false, cutout: '62%', plugins: { legend: { position: 'bottom' } } },
+    });
   }
 
-  charts.incidents = new Chart(document.getElementById('chart-incidents'), {
-    type: 'doughnut',
-    data: {
-      labels: incLabels,
-      datasets: [{
-        data: incData,
-        backgroundColor: incLabels.map((l) => CHART_COLORS.incidents[l] || '#737686'),
-        borderWidth: 0,
-        hoverOffset: 4,
-      }],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      cutout: '62%',
-      plugins: { legend: { position: 'bottom' } },
-    },
+  const byEstado = {};
+  activeSirh().forEach((r) => {
+    const k = r.estado || 'Sin estado';
+    byEstado[k] = (byEstado[k] || 0) + 1;
   });
-
-  const workloadTop = [...state.ranking]
-    .map((p) => ({ name: p.name, load: calculateWorkload(state, p.name).total }))
-    .sort((a, b) => b.load - a.load)
-    .slice(0, 6);
-
-  charts.workload = new Chart(document.getElementById('chart-workload'), {
-    type: 'bar',
-    data: {
-      labels: workloadTop.map((w) => w.name.split(' ')[0]),
-      datasets: [{
-        data: workloadTop.map((w) => w.load),
-        backgroundColor: CHART_COLORS.ink,
-        borderRadius: 4,
-        barThickness: 16,
-      }],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        y: {
-          beginAtZero: true,
-          grid: { color: CHART_COLORS.line },
-          ticks: { precision: 0 },
-        },
-        x: { grid: { display: false } },
+  const estadoLabels = Object.keys(byEstado);
+  const elPipe = document.getElementById('chart-pipeline');
+  if (elPipe) {
+    charts.pipeline = new Chart(elPipe, {
+      type: 'bar',
+      data: {
+        labels: estadoLabels,
+        datasets: [{ data: estadoLabels.map((k) => byEstado[k]), backgroundColor: CHART_COLORS.stages, borderRadius: 6, barThickness: 22 }],
       },
-    },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: CHART_COLORS.line } },
+          y: { grid: { display: false } },
+        },
+      },
+    });
+  }
+
+  const byRiesgo = {};
+  activeSirh().forEach((r) => {
+    const k = r.riesgo || 'Medio';
+    byRiesgo[k] = (byRiesgo[k] || 0) + 1;
   });
+  const riesgoLabels = Object.keys(byRiesgo);
+  const elInc = document.getElementById('chart-incidents');
+  if (elInc) {
+    charts.incidents = new Chart(elInc, {
+      type: 'doughnut',
+      data: {
+        labels: riesgoLabels,
+        datasets: [{
+          data: riesgoLabels.map((k) => byRiesgo[k]),
+          backgroundColor: [CHART_COLORS.alta, CHART_COLORS.media, CHART_COLORS.baja, '#737686'],
+          borderWidth: 0,
+        }],
+      },
+      options: { responsive: true, maintainAspectRatio: false, cutout: '62%', plugins: { legend: { position: 'bottom' } } },
+    });
+  }
+
+  const workloadTop = aggregateTeam(sirhRows).slice(0, 6);
+  const elWork = document.getElementById('chart-workload');
+  if (elWork) {
+    charts.workload = new Chart(elWork, {
+      type: 'bar',
+      data: {
+        labels: workloadTop.map((w) => w.name.split(' ')[0]),
+        datasets: [{ data: workloadTop.map((w) => w.moduleCount), backgroundColor: CHART_COLORS.ink, borderRadius: 4, barThickness: 16 }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, grid: { color: CHART_COLORS.line }, ticks: { precision: 0 } },
+          x: { grid: { display: false } },
+        },
+      },
+    });
+  }
 }
 
 function renderMeta(state) {
@@ -345,39 +283,48 @@ function renderMeta(state) {
   if (dateEl) {
     dateEl.textContent = new Intl.DateTimeFormat('es-AR', { dateStyle: 'full' }).format(new Date());
   }
-  const author =
-    state.settings?.operatorName?.trim() ||
-    getProfile()?.name?.trim() ||
-    '';
+  const author = state.settings?.operatorName?.trim() || getProfile()?.name?.trim() || '';
   setText('report-author', author ? `Exportado por ${author}` : 'Documento de carácter reservado');
-
-  const title = state.settings?.appTitle
-    ? `Informe Gerencial · ${state.settings.appTitle}`
-    : 'Informe Gerencial';
-  setText('informe-title', title);
-
+  setText('informe-title', state.settings?.appTitle ? `Informe Gerencial · ${state.settings.appTitle}` : 'Informe Gerencial SIRH');
   const footer = document.getElementById('footer-brand-text');
-  if (footer) {
-    footer.textContent = `${state.settings?.appTitle || 'D6'} · Documento interno · Gerencia General`;
+  if (footer) footer.textContent = `${state.settings?.appTitle || 'D6'} · Documento interno · SIRH`;
+}
+
+async function loadSirh() {
+  const api = window.d6Api || window.ddsDesktop;
+  if (api?.sirhList) {
+    sirhRows = await api.sirhList();
+    return;
+  }
+  try {
+    const res = await fetch('/api/sirh/modulos');
+    const data = await res.json();
+    sirhRows = data.rows || [];
+  } catch {
+    sirhRows = [];
   }
 }
 
-function init() {
+async function init() {
   initStore();
   const state = getState();
   applyBrandForInforme(state);
   initSidebarFromStorage();
   wireHelpGlobals();
   setHelpSection('informe');
+  mountSidebarNav({ active: 'informe' });
+  mountTopUtilities({ active: 'informe' });
   Object.assign(window, { toggleSidebar });
+
+  await loadSirh();
   renderMeta(state);
-  renderKpis(state);
-  renderAttention(state);
-  renderFocus(state);
-  renderTeam(state);
-  renderCriticalSystems(state);
-  renderProviders(state);
-  initCharts(state);
+  renderKpis();
+  renderAttention();
+  renderFocus();
+  renderTeam();
+  renderCriticalSystems();
+  renderProviders();
+  initCharts();
 }
 
 function handlePrint() {

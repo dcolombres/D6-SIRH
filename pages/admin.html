@@ -199,10 +199,6 @@
                 <span class="material-symbols-outlined">storage</span>
                 <span id="label-nav-data">Gestión de Datos</span>
             </button>
-            <button onclick="switchAdminSection('report')" id="nav-report" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all active:scale-95" title="Reporte Status">
-                <span class="material-symbols-outlined">description</span>
-                <span id="label-nav-report">Reporte Status</span>
-            </button>
         </nav>
     </aside>
 
@@ -212,42 +208,14 @@
             <h2 id="top-bar-title" class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">D6 · Admin</h2>
         </div>
         <div class="flex items-center gap-2">
-            <!-- Navigation Links -->
-            <div class="flex items-center gap-1 border-r border-outline-variant pr-4 mr-2">
-                <a href="https://alsina.magyp.gob.ar/" target="_blank" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all active:scale-95 group" title="Alsina">
-                    <span class="material-symbols-outlined text-sm">inventory_2</span>
-                    <span class="text-[10px] font-bold uppercase tracking-wider hidden md:inline">Alsina</span>
-                </a>
-                <a href="/pages/index.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all active:scale-95 group" title="Tablero">
-                    <span class="material-symbols-outlined text-sm">dashboard</span>
-                    <span class="text-[10px] font-bold uppercase tracking-wider hidden md:inline">Tablero</span>
-                </a>
-                <a href="/pages/informe.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all active:scale-95 group" title="Informe Gerencial">
-                    <span class="material-symbols-outlined text-sm">present_to_all</span>
-                    <span class="text-[10px] font-bold uppercase tracking-wider hidden md:inline">Informe Gerencial</span>
-                </a>
-                <a href="/pages/gerencia.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all active:scale-95 group" title="Gerencia SIRH">
-                    <span class="material-symbols-outlined text-sm">analytics</span>
-                    <span class="text-[10px] font-bold uppercase tracking-wider hidden md:inline">Gerencia</span>
-                </a>
-            </div>
-
-            <!-- DB Management -->
-            <div class="flex items-center gap-1">
-                <button type="button" onclick="openDataHub()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary text-white hover:opacity-90 transition-all" title="Centro de Datos"><span class="material-symbols-outlined text-sm">sync</span><span class="text-[10px] font-bold uppercase tracking-wider hidden md:inline">Datos</span></button><!--legacy-export--><button onclick="exportData()" style="display:none" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all active:scale-95 group" title="Exportar DB">
-                    <span class="material-symbols-outlined text-sm">download</span>
-                    <span class="text-[10px] font-bold uppercase tracking-wider hidden lg:inline">Exportar</span>
-                </button>
-                <label class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all cursor-pointer active:scale-95 group" title="Importar DB">
-                    <span class="material-symbols-outlined text-sm">upload</span>
-                    <span class="text-[10px] font-bold uppercase tracking-wider hidden lg:inline">Importar</span>
-                    <input type="file" id="import-file" class="hidden" accept=".json" onchange="importData(event)"/>
-                </label>
-                <button onclick="clearAllData()" class="p-1.5 text-error hover:bg-error/10 rounded-lg transition-all" title="Limpiar Todo">
-                    <span class="material-symbols-outlined text-sm">delete_sweep</span>
-                </button>
-            </div>
-            <button onclick="toggleHelpModal()" class="p-2 text-primary hover:bg-primary/10 rounded-full transition-all no-print" title="Ayuda y Lógica">
+            <a href="/pages/index.html" class="p-2 rounded-lg text-secondary hover:bg-surface-container-high transition-all" title="Hoy" aria-label="Hoy">
+                <span class="material-symbols-outlined">today</span>
+            </a>
+            <button type="button" onclick="openDataHub()" class="p-2 rounded-lg bg-primary text-white hover:opacity-90 transition-all" title="Centro de Datos" aria-label="Datos">
+                <span class="material-symbols-outlined text-sm">sync</span>
+            </button>
+            <span id="d6-top-utils" class="inline-flex items-center gap-1"></span>
+            <button type="button" onclick="toggleHelpModal()" class="p-2 text-primary hover:bg-primary/10 rounded-full transition-all no-print" title="Ayuda">
                 <span class="material-symbols-outlined">help</span>
             </button>
         </div>
@@ -323,7 +291,7 @@
                             <p class="text-[9px] font-bold text-blue-700 uppercase mb-3 border-b border-blue-100 pb-1">Barra Lateral (Menu)</p>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-[9px] text-on-surface-variant uppercase mb-1">Visión Gral.</label>
+                                    <label class="block text-[9px] text-on-surface-variant uppercase mb-1">Hoy</label>
                                     <input type="text" id="sidebarOverview-input" class="w-full px-3 py-2 bg-surface-container border-none rounded-lg text-xs" onchange="updateSetting('sidebarOverview', this.value)"/>
                                 </div>
                                 <div>
@@ -358,7 +326,7 @@
                             <p class="text-[9px] font-bold text-blue-700 uppercase mb-1 border-b border-blue-100 pb-1">Encabezados de Secciones</p>
 
                             <div class="bg-surface-container-low p-4 rounded-xl space-y-3">
-                                <label class="block text-[10px] font-bold uppercase">Sección: Visión General</label>
+                                <label class="block text-[10px] font-bold uppercase">Sección: Hoy</label>
                                 <input type="text" id="titleOverview-input" class="w-full px-3 py-2 bg-white border border-outline-variant rounded-lg text-xs font-bold" placeholder="Título" onchange="updateSetting('titleOverview', this.value)"/>
                                 <input type="text" id="subtitleOverview-input" class="w-full px-3 py-2 bg-white border border-outline-variant rounded-lg text-[10px]" placeholder="Subtítulo" onchange="updateSetting('subtitleOverview', this.value)"/>
                             </div>
@@ -402,18 +370,18 @@
                     </div>
                 </section>
 
-                <!-- Gerencia SIRH nativa -->
+                <!-- Tablero SIRH nativa -->
                 <section class="admin-card border-l-4 border-primary p-6">
                     <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
                         <span class="material-symbols-outlined">analytics</span>
-                        Gerencia SIRH
+                        Tablero SIRH
                     </h3>
                     <p class="text-[11px] text-on-surface-variant mb-4 bg-surface-container p-3 rounded-lg">
-                        El tablero de Gerencia es nativo en D6 (misma data SQLite que Módulos y Hoy). Misma data SQLite que M�dulos y Hoy.
+                        El Tablero es nativo en D6 (misma data SQLite que Módulos y Hoy).
                     </p>
                     <a href="/pages/gerencia.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white text-xs font-bold uppercase hover:opacity-90 transition-all">
                         <span class="material-symbols-outlined text-sm">open_in_new</span>
-                        Abrir Gerencia
+                        Abrir Tablero
                     </a>
                 </section>
 
@@ -572,92 +540,7 @@
             </div>
         </div>
 
-        <!-- SECTION: REPORTE STATUS -->
-        <div id="section-report" class="hidden bg-surface-container-low text-on-background font-body-md">
-            <!-- Report Action Bar -->
-            <div class="flex flex-wrap items-center gap-4 px-6 py-4 bg-surface-container-lowest border-b border-outline-variant">
-                <div class="flex items-center gap-3">
-                    <button onclick="saveState()" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-on-primary hover:bg-primary-container transition-all active:scale-95" title="Guardar cambios">
-                        <span class="material-symbols-outlined text-sm">save</span>
-                        <span class="text-sm font-medium">Guardar</span>
-                    </button>
-                    <button type="button" id="magic-report-button" onclick="loadDDSDataIntoReport()" class="flex items-center gap-2 px-4 py-2 rounded-lg text-primary hover:bg-primary-container transition-all active:scale-95" title="Generar informe de status con datos del tablero">
-                        <span class="material-symbols-outlined text-sm">magic</span>
-                        <span class="text-sm font-medium" id="magic-report-text">Magic Report</span>
-                    </button>
-                    <button onclick="addItem()" class="flex items-center gap-2 px-4 py-2 rounded-lg text-primary hover:bg-surface-container transition-all active:scale-95" title="Añadir nuevo ítem">
-                        <span class="material-symbols-outlined text-sm">add</span>
-                        <span class="text-sm font-medium">Añadir Ítem</span>
-                    </button>
-                    <button onclick="togglePreview()" id="preview-toggle" class="flex items-center gap-2 px-4 py-2 rounded-lg text-on-surface hover:bg-surface-container transition-all active:scale-95" title="Alternar modo de vista previa">
-                        <span class="material-symbols-outlined text-sm">visibility</span>
-                        <span class="text-sm font-medium" id="preview-text">Vista Previa</span>
-                    </button>
-                    <button onclick="clearReport()" class="flex items-center gap-2 px-4 py-2 rounded-lg text-error hover:bg-surface-container transition-all active:scale-95" title="Limpiar y comenzar nuevo reporte">
-                        <span class="material-symbols-outlined text-sm">refresh</span>
-                        <span class="text-sm font-medium">Limpiar</span>
-                    </button>
-                </div>
-                <div class="flex items-center gap-3 ml-auto">
-                    <button onclick="exportToPDF()" id="export-pdf-button" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-on-primary hover:bg-primary-container transition-all active:scale-95 shadow-sm" title="Exportar a PDF">
-                        <span class="material-symbols-outlined text-sm" id="export-pdf-icon">picture_as_pdf</span>
-                        <span class="text-sm font-medium" id="export-pdf-text">Exportar PDF</span>
-                        <span id="export-pdf-spinner" class="hidden material-symbols-outlined animate-spin">progress_activity</span>
-                    </button>
-                </div>
-            </div>
-            <!-- Main Canvas -->
-            <div class="mx-auto max-w-[1200px] px-6 py-6">
-                <div class="canvas-area" id="capture-target">
-                    <!-- Professional Header Section -->
-                    <header class="mb-8 border-b-2 border-primary/20 pb-6">
-                        <div class="flex flex-col gap-2">
-                            <input class="w-full bg-transparent border-none p-0 font-headline-lg text-headline-lg text-on-surface focus:ring-0 placeholder:text-on-surface-variant/20" id="report-title" oninput="autoSave()" placeholder="Título del Reporte Corporativo" type="text"/>
-                            <div class="flex items-center justify-between mt-2">
-                                <div class="flex items-center gap-2 text-on-surface-variant">
-                                    <span class="material-symbols-outlined" style="font-size: 16px;">calendar_today</span>
-                                    <span class="text-label-sm uppercase tracking-wider font-semibold" id="current-date"></span>
-                                </div>
-                                <div class="text-[10px] font-bold text-primary/60 uppercase tracking-[0.2em] border border-primary/20 px-2 py-0.5 rounded">
-                                    Documento Clasificado
-                                </div>
-                            </div>
-                        </div>
-                    </header>
-                    <!-- Items List -->
-                    <div class="flex flex-col gap-6" id="items-container">
-                        <!-- Items dynamically injected here -->
-                    </div>
-                    <!-- Footer Section -->
-                    <footer class="mt-12 pt-8 border-t border-outline-variant">
-                        <div class="grid grid-cols-2 gap-8 mb-8">
-                            <div class="flex flex-col gap-1 border-l-2 border-primary/10 pl-4">
-                                <span class="text-[10px] uppercase tracking-widest text-outline font-bold">Elaborado por</span>
-                                <input class="bg-transparent border-none p-0 w-full text-body-md font-semibold text-on-surface focus:ring-0 placeholder:text-on-surface-variant/30" id="author-name" oninput="autoSave()" placeholder="Nombre del Responsable" type="text"/>
-                                <span class="text-[10px] text-outline italic">Firma Digital Registrada</span>
-                            </div>
-                            <div class="flex flex-col gap-1 border-l-2 border-primary/10 pl-4">
-                                <span class="text-[10px] uppercase tracking-widest text-outline font-bold">Dirigido a</span>
-                                <input class="bg-transparent border-none p-0 w-full text-body-md font-semibold text-on-surface focus:ring-0 placeholder:text-on-surface-variant/30" id="authority-name" oninput="autoSave()" placeholder="Nombre de la Autoridad" type="text"/>
-                                <span class="text-[10px] text-outline italic">Copia Controlada</span>
-                            </div>
-                        </div>
-                        <div class="text-center pt-4">
-                            <p class="text-[9px] text-outline uppercase tracking-tighter opacity-50">© 2026 D6-SIRH</p>
-                            <div class="flex justify-center gap-4 mt-1 opacity-30">
-                                <div class="h-1 w-12 bg-outline-variant"></div>
-                                <div class="h-1 w-12 bg-outline-variant"></div>
-                                <div class="h-1 w-12 bg-outline-variant"></div>
-                            </div>
-                        </div>
-                    </footer>
-                </div>
-            </div>
-            </div>
-    </main>
-</main>
-    
-    <!-- Help Modal -->
+        <!-- Help Modal -->
     <div id="help-modal" class="fixed inset-0 z-[100] hidden">
         <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="toggleHelpModal()"></div>
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl max-h-[85vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col">
@@ -676,12 +559,11 @@
                     <ul class="list-disc pl-5 text-sm space-y-1">
                         <li><strong>Configuración Global:</strong> marca, colores, títulos, roles y CSS.</li>
                         <li><strong>Gestión de Datos:</strong> resumen, carga masiva y edición rápida.</li>
-                        <li><strong>Reporte Status:</strong> Magic Report y exportación PDF.</li>
-                    </ul>
+                        </ul>
                 </section>
                 <section class="space-y-3">
                     <h3 class="text-lg font-bold text-primary border-b border-outline-variant pb-2">Atajos</h3>
-                    <p class="text-sm">Ctrl+1 Tablero · Ctrl+2 Admin · Ctrl+3 Informe · Ctrl+4 Reporte Status</p>
+                    <p class="text-sm">Ctrl+1 Hoy · Ctrl+2 Admin · Ctrl+3 Informe
                 </section>
             </div>
             <div class="px-8 py-4 border-t border-outline-variant bg-surface-container-lowest text-right">
@@ -742,7 +624,7 @@
             <h2 class="text-2xl font-bold tracking-tight">D6</h2>
             <p class="text-sm text-on-surface-variant">App para el Director y 2 Coordinadores. Misma herramienta: editar, exportar el JSON y pasarlo a las otras máquinas.</p>
             <ol class="text-sm list-decimal pl-5 space-y-1">
-                <li>Trabajá en <strong>Hoy / Operación / Equipo</strong>.</li>
+                <li>Trabajá en <strong>Hoy / Módulos / Tablero</strong>.</li>
                 <li>Usá <strong>Datos</strong> para exportar o importar el paquete.</li>
                 <li>El botón <strong>?</strong> explica cada sección.</li>
             </ol>

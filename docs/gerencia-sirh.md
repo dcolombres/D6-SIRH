@@ -1,10 +1,9 @@
-# Gerencia SIRH
+# Tablero SIRH
 
-Tablero nativo en `/pages/gerencia.html`.
+Tablero en `/pages/gerencia.html` sobre el **catálogo unificado** (módulos activos).
 
 - Datos: SQLite vía `/api/sirh/modulos`
-- Vista: KPIs, filtros, tarjetas, Chart.js y tabla
+- Filtros: área, estado, prioridad, riesgo
+- Edición: en **Módulos** (activar/desactivar o ABM completo)
 
-Flujo: editá en **Módulos** → abrí **Gerencia** o **Hoy**.
-
-Resguardo: Centro de Datos (JSON). El trabajo sigue en SQLite.
+Resguardo: Centro de Datos (JSON).

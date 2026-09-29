@@ -1,61 +1,42 @@
+/** Help SIRH-only. */
 import { runSystemDiagnostics } from '../board/diagnostics.js';
 
 let currentSection = 'overview';
 
 const SECTION_HELP = {
   overview: {
-    title: 'Hoy (D6 · SIRH)',
-    see: 'KPIs de módulos SIRH: total, riesgo alto, avance medio y vencidos, con gráficos.',
-    do: 'Saltá a Módulos para editar o a Gerencia para el tablero.',
-  },
-  operacion: {
-    title: 'Operación',
-    see: 'Sistemas, incidencias y solicitudes (secundario).',
-    do: 'Usá las pestañas para cargar y priorizar ítems operativos.',
-  },
-  sistemas: {
-    title: 'Sistemas',
-    see: 'Matriz por prioridad Alta / Media / Baja.',
-    do: 'Agregá o editá sistemas y asigná responsables.',
-  },
-  incidents: {
-    title: 'Incidencias',
-    see: 'Incidentes abiertos y cerrados.',
-    do: 'Registrá, priorizá y cerrá cuando estén resueltos.',
-  },
-  pipeline: {
-    title: 'Solicitudes',
-    see: 'Expedientes con progreso y estado.',
-    do: 'Actualizá avance y cerrá cuando corresponda.',
-  },
-  proveedores: {
-    title: 'Proveedores',
-    see: 'Fichas, vínculos y tareas (secundario).',
-    do: 'Mantené contactos y seguimiento de pendientes.',
-  },
-  reports: {
-    title: 'Reportes SIRH',
-    see: 'CSV de módulos SQLite y exportes de operación.',
-    do: 'Exportá módulos o abrí Gerencia / Informe.',
+    title: 'Hoy',
+    see: 'KPIs de módulos activos: total, riesgo, avance y vencidos.',
+    do: 'Editá el catálogo en Módulos; desactivá lo que no deba verse aquí.',
   },
   informe: {
     title: 'Informe Gerencial',
-    see: 'Pantallazo global con KPIs para Gerencia General.',
+    see: 'Resumen del catálogo SIRH para dirección.',
     do: 'Exportá PDF desde la barra superior.',
   },
   gerencia: {
-    title: 'Gerencia SIRH',
-    see: 'Tablero nativo con KPIs, filtros, gráficos y detalle de módulos (misma data SQLite).',
-    do: 'Filtrá por estado/riesgo; editá en Módulos si hace falta actualizar un dato.',
+    title: 'Tablero',
+    see: 'Tablero del catálogo activo: filtros por área/estado/riesgo, gráficos y detalle.',
+    do: 'Filtrá por área; editá o activá/desactivá en Módulos.',
+  },
+  equipo: {
+    title: 'Equipo (por módulos)',
+    see: 'Personas que figuran como responsable o equipo en módulos activos.',
+    do: 'Usá el formulario para agregar persona a un módulo, o abrí el módulo para editar.',
+  },
+  proveedores: {
+    title: 'Proveedores (por módulos)',
+    see: 'Proveedores del campo Proveedor de cada módulo.',
+    do: 'Asigná un proveedor a un módulo con el formulario, o abrí el módulo para editar.',
   },
   sirh: {
-    title: 'Módulos SIRH (ABM)',
-    see: 'Alta/edición de módulos en SQLite: estados, fechas, responsable y proveedor.',
-    do: 'Guardá cambios y abrí Gerencia o Hoy para ver el impacto.',
+    title: 'Módulos (catálogo unificado)',
+    see: 'Catálogo SIRH con ABM en SQLite.',
+    do: 'Alta, edición, desactivar o eliminar. Opcional: responsable, proveedor y equipo.',
   },
   admin: {
     title: 'Administración',
-    see: 'Marca, etiquetas y preferencias locales.',
+    see: 'Marca y preferencias locales.',
     do: 'Ajustá identidad visual; los módulos viven en SQLite.',
   },
 };
@@ -69,10 +50,9 @@ function syncBlock() {
     <section class="space-y-3">
       <h3 class="text-lg font-bold text-primary border-b border-outline-variant pb-2">Flujo SIRH</h3>
       <ol class="list-decimal pl-5 text-sm space-y-2">
-        <li><strong>Hoy</strong> — KPIs y foco de riesgos/vencidos.</li>
-        <li><strong>Módulos</strong> — ABM en SQLite.</li>
-        <li><strong>Gerencia</strong> — tablero filtrable para dirección.</li>
-        <li><strong>Reportes</strong> — CSV de módulos u operación.</li>
+        <li><strong>Hoy</strong> — foco diario (riesgos, vencidos, avance).</li>
+        <li><strong>Módulos SIRH</strong> — catálogo y personas (Equipo / Proveedores en pestañas).</li>
+        <li><strong>Tablero</strong> — vista filtrable del mismo catálogo.</li>
       </ol>
     </section>
   `;
@@ -84,7 +64,7 @@ function weeklyBlock() {
       <h3 class="text-lg font-bold text-primary border-b border-outline-variant pb-2">Checklist semanal</h3>
       <ul class="list-disc pl-5 text-sm space-y-1">
         <li>Actualizar estados y fechas en Módulos.</li>
-        <li>Revisar Gerencia (riesgos y vencidos).</li>
+        <li>Revisar Tablero (riesgos y vencidos).</li>
         <li>Exportar CSV SIRH si hace falta compartir.</li>
       </ul>
     </section>
@@ -131,9 +111,10 @@ export function toggleHelpModal() {
 
 export function wireHelpGlobals() {
   Object.assign(window, {
-    toggleHelpModal,
     openHelpModal,
     closeHelpModal,
+    toggleHelpModal,
+    setHelpSection,
     runSystemDiagnostics,
   });
 }

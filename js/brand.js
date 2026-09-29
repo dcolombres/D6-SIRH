@@ -19,35 +19,20 @@ export function applyBrandSettings(state, options = {}) {
         if (titleEl) titleEl.innerText = appTitle;
         if (subtitleEl) subtitleEl.innerText = appSubtitle;
 
-        // Sidebar Navigation Labels
-        const navLabels = {
-            'nav-overview': state.settings.sidebarOverview || 'Hoy',
-            'nav-proveedores': state.settings.sidebarProveedores,
-            'nav-reports': state.settings.sidebarReports || 'Reportes',
-        };
-        for (const [id, label] of Object.entries(navLabels)) {
-            const btn = document.getElementById(id);
-            const span = document.getElementById(`label-${id}`);
-            if (btn && label) btn.title = label;
-            if (span && label) span.innerText = label;
-        }
+        // Etiquetas fijas SIRH — no reescribir con settings legacy (ej. "Visión General")
+        const overviewNav = document.getElementById('nav-overview');
+        const overviewLabel = document.getElementById('label-nav-overview');
+        if (overviewNav) overviewNav.title = 'Hoy';
+        if (overviewLabel) overviewLabel.innerText = 'Hoy';
 
-        // Section Headers
-        const sections = {
-            'overview': { title: 'titleOverview', subtitle: 'subtitleOverview' },
-            'sistemas': { title: 'titleSistemas', subtitle: 'subtitleSistemas' },
-            'incidents': { title: 'titleIncidents', subtitle: 'subtitleIncidents' },
-            'requests': { title: 'titleRequests', subtitle: 'subtitleRequests' },
-            'ranking': { title: 'titleRanking', subtitle: 'subtitleRanking' },
-            'asignacion': { title: 'titleAsignacion', subtitle: 'subtitleAsignacion' },
-            'proveedores': { title: 'titleProveedores', subtitle: 'subtitleProveedores' },
-            'reports': { title: 'titleReports', subtitle: 'subtitleReports' },
-        };
-        for (const [key, fields] of Object.entries(sections)) {
-            const tEl = document.getElementById(`title-${key}`);
-            const sEl = document.getElementById(`subtitle-${key}`);
-            if (tEl) tEl.innerText = state.settings[fields.title];
-            if (sEl) sEl.innerText = state.settings[fields.subtitle];
+        const titleOverview = document.getElementById('title-overview');
+        if (titleOverview) titleOverview.innerText = 'Hoy';
+        const subtitleOverview = document.getElementById('subtitle-overview');
+        if (subtitleOverview) {
+            subtitleOverview.innerText = state.settings.subtitleOverview
+                && !/visi[oó]n\s*general/i.test(state.settings.subtitleOverview)
+                ? state.settings.subtitleOverview
+                : 'Qué requiere atención ahora (módulos activos)';
         }
 
         // Roles Dynamic Rendering

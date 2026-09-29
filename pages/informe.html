@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>D6 � Informe Gerencial</title>
+    <title>D6 ï¿½ Informe Gerencial</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Hanken+Grotesk:wght@600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="/css/app.css"/>
@@ -50,82 +50,25 @@
         <div class="mb-section-gap flex items-center justify-between">
             <div id="brand-logo-container" class="flex flex-col">
                 <h1 class="text-2xl font-bold tracking-tight text-primary" id="sidebar-app-title">D6</h1>
-                <p class="text-on-surface-variant text-sm opacity-70" id="sidebar-app-subtitle">Tablero de gestión Interna</p>
+                <p class="text-on-surface-variant text-sm opacity-70" id="sidebar-app-subtitle">Tablero de gestiÃ³n Interna</p>
             </div>
             <button type="button" onclick="toggleSidebar()" class="p-2 hover:bg-surface-container rounded-lg transition-all active:scale-95">
                 <span class="material-symbols-outlined">menu_open</span>
             </button>
         </div>
 
-        <nav class="flex-1 px-2 space-y-1 overflow-y-auto">
-            <a href="/pages/index.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Hoy">
-                <span class="material-symbols-outlined">today</span>
-                <span class="sidebar-label text-sm font-semibold">Hoy</span>
-            </a>
-            <a href="/pages/index.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Operación">
-                <span class="material-symbols-outlined">hub</span>
-                <span class="sidebar-label text-sm font-semibold">Operación</span>
-            </a>
-            <a href="/pages/index.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Equipo">
-                <span class="material-symbols-outlined">groups</span>
-                <span class="sidebar-label text-sm font-semibold">Equipo</span>
-            </a>
-            <a href="/pages/index.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Proveedores">
-                <span class="material-symbols-outlined">handshake</span>
-                <span class="sidebar-label text-sm font-semibold">Proveedores</span>
-            </a>
-            <a href="/pages/index.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Reportes">
-                <span class="material-symbols-outlined">description</span>
-                <span class="sidebar-label text-sm font-semibold">Reportes</span>
-            </a>
-            <div class="pt-3 mt-3 border-t border-outline-variant/60 space-y-1">
-                <a href="/pages/informe.html" id="nav-informe" class="nav-item active w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Informe Gerencial">
-                    <span class="material-symbols-outlined">present_to_all</span>
-                    <span class="sidebar-label text-sm font-semibold">Informe Gerencial</span>
-                </a>
-                <a href="/pages/sirh.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="SIRH Datos">
-                    <span class="material-symbols-outlined">database</span>
-                    <span class="sidebar-label text-sm font-semibold">SIRH Datos</span>
-                </a>
-                <a href="/pages/gerencia.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="SIRH · Gerencia">
-                    <span class="material-symbols-outlined">analytics</span>
-                    <span class="sidebar-label text-sm font-semibold">SIRH · Gerencia</span>
-                </a>
-                <a href="/pages/admin.html#report" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Magic Report / Admin">
-                    <span class="material-symbols-outlined">magic</span>
-                    <span class="sidebar-label text-sm font-semibold">Magic Report</span>
-                </a>
-                <a href="/pages/admin.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Administración">
-                    <span class="material-symbols-outlined">settings</span>
-                    <span class="sidebar-label text-sm font-semibold">Admin</span>
-                </a>
-            </div>
-        </nav>
+        <nav id="d6-sidebar-nav" class="flex-1 px-2 space-y-1 overflow-y-auto"></nav>
     </aside>
 
     <header class="fixed top-0 right-0 left-[280px] h-touch-target bg-surface-bright flex justify-between items-center px-container-padding z-40 border-b border-outline-variant no-print">
         <div class="flex items-center gap-4 flex-1 min-w-0">
-            <h2 id="top-bar-title" class="text-sm font-bold uppercase tracking-widest text-on-surface-variant truncate">D6 · Informe Gerencial</h2>
+            <h2 id="top-bar-title" class="text-sm font-bold uppercase tracking-widest text-on-surface-variant truncate">D6 Â· Informe Gerencial</h2>
         </div>
         <div class="flex items-center gap-2 shrink-0">
-            <div class="flex items-center gap-1 border-r border-outline-variant pr-3 mr-1">
-                <a href="/pages/index.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all" title="Tablero">
-                    <span class="material-symbols-outlined text-sm">dashboard</span>
-                    <span class="text-[10px] font-bold uppercase tracking-wider hidden md:inline">Tablero</span>
-                </a>
-                <a href="/pages/gerencia.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all" title="Gerencia SIRH">
-                    <span class="material-symbols-outlined text-sm">analytics</span>
-                    <span class="text-[10px] font-bold uppercase tracking-wider hidden lg:inline">SIRH</span>
-                </a>
-                <a href="/pages/admin.html#report" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container-high transition-all" title="Magic Report">
-                    <span class="material-symbols-outlined text-sm">magic</span>
-                    <span class="text-[10px] font-bold uppercase tracking-wider hidden lg:inline">Magic</span>
-                </a>
-            </div>
-            <button type="button" onclick="handlePrint()" id="export-pdf-button" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary text-white hover:opacity-90 transition-all" title="Imprimir / PDF">
+            <button type="button" onclick="handlePrint()" id="export-pdf-button" class="p-2 rounded-lg bg-primary text-white hover:opacity-90 transition-all" title="Imprimir / PDF" aria-label="PDF">
                 <span class="material-symbols-outlined text-sm">picture_as_pdf</span>
-                <span class="text-[10px] font-bold uppercase tracking-wider hidden md:inline">PDF</span>
             </button>
+            <span id="d6-top-utils" class="inline-flex items-center gap-1"></span>
             <button type="button" onclick="toggleHelpModal()" class="p-2 text-primary hover:bg-primary/10 rounded-full transition-all" title="Ayuda">
                 <span class="material-symbols-outlined">help</span>
             </button>
@@ -138,7 +81,7 @@
             <div class="px-8 py-6 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
                 <div class="flex items-center gap-3">
                     <span class="material-symbols-outlined text-primary">help</span>
-                    <h2 class="text-xl font-bold">Guía de Uso</h2>
+                    <h2 class="text-xl font-bold">GuÃ­a de Uso</h2>
                 </div>
                 <button type="button" onclick="toggleHelpModal()" class="p-2 hover:bg-surface-container-high rounded-full transition-all">
                     <span class="material-symbols-outlined">close</span>
@@ -170,41 +113,41 @@
 
             <section class="informe-kpi-grid" aria-label="Indicadores clave">
                 <article class="informe-kpi">
-                    <p class="informe-kpi-label">Activos críticos</p>
+                    <p class="informe-kpi-label">Riesgo alto</p>
                     <p class="informe-kpi-value font-data" id="stat-critical">0</p>
-                    <p class="informe-kpi-hint" id="stat-critical-hint">sistemas prioridad Alta</p>
+                    <p class="informe-kpi-hint" id="stat-critical-hint">módulos activos</p>
                 </article>
                 <article class="informe-kpi informe-kpi--alert">
-                    <p class="informe-kpi-label">Incidencias alta</p>
+                    <p class="informe-kpi-label">Prioridad alta</p>
                     <p class="informe-kpi-value font-data" id="stat-incidents-high">0</p>
-                    <p class="informe-kpi-hint" id="stat-incidents-hint">requieren seguimiento</p>
+                    <p class="informe-kpi-hint" id="stat-incidents-hint">en catálogo</p>
                 </article>
                 <article class="informe-kpi">
-                    <p class="informe-kpi-label">Pipeline</p>
+                    <p class="informe-kpi-label">Avance medio</p>
                     <p class="informe-kpi-value font-data" id="stat-pipeline">0%</p>
-                    <p class="informe-kpi-hint" id="stat-pipeline-hint">progreso promedio</p>
+                    <p class="informe-kpi-hint" id="stat-pipeline-hint">módulos activos</p>
                 </article>
                 <article class="informe-kpi">
-                    <p class="informe-kpi-label">Capacidad equipo</p>
-                    <p class="informe-kpi-value font-data" id="stat-capacity">0%</p>
-                    <p class="informe-kpi-hint" id="stat-capacity-hint">score promedio</p>
+                    <p class="informe-kpi-label">Personas</p>
+                    <p class="informe-kpi-value font-data" id="stat-capacity">0</p>
+                    <p class="informe-kpi-hint" id="stat-capacity-hint">en módulos</p>
                 </article>
                 <article class="informe-kpi">
-                    <p class="informe-kpi-label">Cobertura</p>
+                    <p class="informe-kpi-label">Cobertura equipo</p>
                     <p class="informe-kpi-value font-data" id="stat-coverage">0%</p>
-                    <p class="informe-kpi-hint" id="stat-coverage-hint">sistemas con equipo</p>
+                    <p class="informe-kpi-hint" id="stat-coverage-hint">con responsable/equipo</p>
                 </article>
                 <article class="informe-kpi">
                     <p class="informe-kpi-label">Proveedores</p>
                     <p class="informe-kpi-value font-data" id="stat-providers">0</p>
-                    <p class="informe-kpi-hint" id="stat-providers-hint">activos en cartera</p>
+                    <p class="informe-kpi-hint" id="stat-providers-hint">vinculados a módulos</p>
                 </article>
             </section>
 
             <section class="informe-panel">
                 <div class="informe-panel-head">
-                    <h2>Radar de atención</h2>
-                    <p>Qué requiere mirada de Gerencia esta semana</p>
+                    <h2>Radar de atenciÃ³n</h2>
+                    <p>QuÃ© requiere mirada de Gerencia esta semana</p>
                 </div>
                 <ul class="informe-attention" id="list-attention"></ul>
             </section>
@@ -212,8 +155,8 @@
             <section class="informe-charts">
                 <article class="informe-panel">
                     <div class="informe-panel-head">
-                        <h2>Sistemas por prioridad</h2>
-                        <p>Distribución del inventario</p>
+                        <h2>Módulos por prioridad</h2>
+                        <p>Distribución del catálogo</p>
                     </div>
                     <div class="informe-chart-box">
                         <canvas id="chart-systems"></canvas>
@@ -221,8 +164,8 @@
                 </article>
                 <article class="informe-panel">
                     <div class="informe-panel-head">
-                        <h2>Pipeline por etapa</h2>
-                        <p>Solicitudes en curso</p>
+                        <h2>Por estado</h2>
+                        <p>Ciclo de vida de módulos</p>
                     </div>
                     <div class="informe-chart-box">
                         <canvas id="chart-pipeline"></canvas>
@@ -230,8 +173,8 @@
                 </article>
                 <article class="informe-panel">
                     <div class="informe-panel-head">
-                        <h2>Incidencias por estado</h2>
-                        <p>Carga operativa activa</p>
+                        <h2>Por riesgo</h2>
+                        <p>Exposición del catálogo</p>
                     </div>
                     <div class="informe-chart-box">
                         <canvas id="chart-incidents"></canvas>
@@ -242,15 +185,15 @@
             <section class="informe-split">
                 <article class="informe-panel">
                     <div class="informe-panel-head">
-                        <h2>Foco operativo</h2>
-                        <p>Incidencias alta / pendientes y solicitudes prioritarias</p>
+                        <h2>Foco SIRH</h2>
+                        <p>Módulos con prioridad o riesgo alto</p>
                     </div>
                     <div class="informe-focus-grid" id="list-focus"></div>
                 </article>
                 <article class="informe-panel">
                     <div class="informe-panel-head">
                         <h2>Equipo destacado</h2>
-                        <p>Top rendimiento (score promedio)</p>
+                        <p>Personas vinculadas a módulos SIRH · <a href="/pages/sirh.html#equipo">gestionar</a></p>
                     </div>
                     <table class="informe-table">
                         <thead>
@@ -258,13 +201,13 @@
                                 <th>#</th>
                                 <th>Nombre</th>
                                 <th>Rol</th>
-                                <th class="text-right">Score</th>
+                                <th class="text-right">Módulos</th>
                             </tr>
                         </thead>
                         <tbody id="table-top-team"></tbody>
                     </table>
                     <div class="informe-subblock">
-                        <h3>Carga relativa</h3>
+                        <h3>Carga por módulos</h3>
                         <div class="informe-chart-box informe-chart-box--sm">
                             <canvas id="chart-workload"></canvas>
                         </div>
@@ -275,22 +218,22 @@
             <section class="informe-split informe-split--equal">
                 <article class="informe-panel">
                     <div class="informe-panel-head">
-                        <h2>Activos críticos</h2>
-                        <p>Top sistemas prioridad Alta</p>
+                        <h2>Módulos críticos</h2>
+                        <p>Prioridad o riesgo alto</p>
                     </div>
                     <div class="informe-stack" id="list-critical-systems"></div>
                 </article>
                 <article class="informe-panel">
                     <div class="informe-panel-head">
                         <h2>Proveedores</h2>
-                        <p>Cartera y gaps de asignación</p>
+                        <p>Vinculados a módulos · <a href="/pages/sirh.html#proveedores">gestionar</a></p>
                     </div>
                     <div class="informe-stack" id="list-providers"></div>
                 </article>
             </section>
 
             <footer class="informe-footer">
-                <p id="footer-brand-text">D6-SIRH · Documento interno · Gerencia General</p>
+                <p id="footer-brand-text">D6-SIRH Â· Documento interno Â· Gerencia General</p>
             </footer>
         </div>
     </main>

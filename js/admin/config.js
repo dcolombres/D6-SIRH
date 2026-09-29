@@ -107,7 +107,11 @@ function saveCustomCSS() {
 }
 
 function updateSetting(key, val) {
-    getState().settings[key] = val;
+    if (key === 'sidebarOverview' || key === 'titleOverview') {
+        getState().settings[key] = 'Hoy';
+    } else {
+        getState().settings[key] = val;
+    }
     persistAdmin();
 }
 
@@ -128,21 +132,9 @@ function removeLogo() {
 }
 
 function updateSidebarLabels() {
-    const navLabels = {
-        'nav-overview': getState().settings.sidebarOverview,
-        'nav-sistemas': getState().settings.sidebarSistemas,
-        'nav-incidents': getState().settings.sidebarIncidents,
-        'nav-pipeline': getState().settings.sidebarRequests,
-        'nav-ranking': getState().settings.sidebarRanking,
-        'nav-asignacion': getState().settings.sidebarAsignacion,
-        'nav-proveedores': getState().settings.sidebarProveedores,
-    };
-    for (const [id, label] of Object.entries(navLabels)) {
-        const btn = document.getElementById(id);
-        const span = document.getElementById(`label-${id}`);
-        if (btn) btn.title = label;
-        if (span) span.innerText = label;
-    }
+    // Admin no usa el sidebar de Hoy; no reescribir etiquetas del tablero desde acá.
+    getState().settings.sidebarOverview = 'Hoy';
+    getState().settings.titleOverview = 'Hoy';
 }
 
 function updateSectionHeaders() {

@@ -43,36 +43,16 @@
             <span class="material-symbols-outlined">menu_open</span>
         </button>
     </div>
-    <nav class="flex-1 px-2 space-y-1 overflow-y-auto">
-        <p class="px-4 pt-1 pb-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/70 sidebar-label">SIRH</p>
-        <a href="/pages/index.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" title="Hoy">
-            <span class="material-symbols-outlined">today</span><span class="sidebar-label text-sm font-semibold">Hoy</span>
-        </a>
-        <a href="/pages/sirh.html" id="nav-sirh" class="nav-item active w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all">
-            <span class="material-symbols-outlined">view_module</span><span class="sidebar-label text-sm font-semibold">Módulos</span>
-        </a>
-        <a href="/pages/gerencia.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all">
-            <span class="material-symbols-outlined">analytics</span><span class="sidebar-label text-sm font-semibold">Gerencia</span>
-        </a>
-        <a href="/pages/index.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all" onclick="sessionStorage.setItem('dds_goto','reports')">
-            <span class="material-symbols-outlined">description</span><span class="sidebar-label text-sm font-semibold">Reportes SIRH</span>
-        </a>
-        <p class="px-4 pt-4 pb-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/70 sidebar-label border-t border-outline-variant/50 mt-3">Secundario</p>
-        <a href="/pages/informe.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all">
-            <span class="material-symbols-outlined">present_to_all</span><span class="sidebar-label text-sm font-semibold">Informe</span>
-        </a>
-        <a href="/pages/admin.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded text-secondary hover:bg-surface-container-high transition-all">
-            <span class="material-symbols-outlined">settings</span><span class="sidebar-label text-sm font-semibold">Admin</span>
-        </a>
-    </nav>
+    <nav id="d6-sidebar-nav" class="flex-1 px-2 space-y-1 overflow-y-auto"></nav>
 </aside>
 
 <header class="fixed top-0 right-0 left-[280px] h-touch-target bg-surface-bright flex justify-between items-center px-container-padding z-40 border-b border-outline-variant">
     <h2 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant truncate">D6 · Módulos SIRH</h2>
     <div class="flex items-center gap-2">
         <a href="/pages/gerencia.html" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary text-white hover:opacity-90 transition-all text-[10px] font-bold uppercase">
-            <span class="material-symbols-outlined text-sm">analytics</span> Ver Gerencia
+            <span class="material-symbols-outlined text-sm">analytics</span> Ver Tablero
         </a>
+        <span id="d6-top-utils" class="inline-flex items-center gap-1"></span>
         <button type="button" onclick="toggleHelpModal()" class="p-2 text-primary hover:bg-primary/10 rounded-full"><span class="material-symbols-outlined">help</span></button>
     </div>
 </header>
@@ -92,24 +72,39 @@
     <div class="max-w-[1400px] mx-auto space-y-6">
         <div class="flex flex-wrap items-end justify-between gap-4">
             <div>
-                <p class="text-[10px] font-bold uppercase tracking-widest text-primary">Sistema Integrado de Recursos Humanos</p>
-                <h1 class="text-2xl font-bold tracking-tight">ABM de módulos</h1>
-                <p class="text-sm text-on-surface-variant mt-1">Fuente de verdad en SQLite. Los cambios se ven al instante en Hoy y Gerencia.</p>
+                <p class="text-[10px] font-bold uppercase tracking-widest text-primary">Catálogo unificado</p>
+                <h1 class="text-2xl font-bold tracking-tight">Módulos SIRH</h1>
+                <p class="text-sm text-on-surface-variant mt-1">Agregá, editá o desactivá módulos. Área = Gestión / Tableros / Autogestión. Hoy y Tablero leen esta misma lista.</p>
                 <p class="text-[10px] font-data text-on-surface-variant mt-1" id="sirh-db-path">—</p>
             </div>
-            <button type="button" onclick="openSirhForm()" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold uppercase">
+            <button type="button" onclick="openSirhForm()" id="btn-nuevo-modulo" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold uppercase">
                 <span class="material-symbols-outlined text-sm">add</span> Nuevo módulo
             </button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
-            <input id="filter-q" type="search" placeholder="Buscar módulo, responsable, proveedor…" class="md:col-span-2 px-4 py-3 bg-surface-container rounded-xl border-none text-sm" oninput="renderSirhTable()"/>
+        <div class="flex flex-wrap gap-2" id="sirh-view-tabs">
+            <button type="button" data-sirh-view="modulos" class="sirh-view-tab px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold uppercase">Catálogo</button>
+            <button type="button" data-sirh-view="equipo" class="sirh-view-tab px-4 py-2 rounded-xl border border-outline-variant text-xs font-bold uppercase hover:bg-surface-container">Equipo</button>
+            <button type="button" data-sirh-view="proveedores" class="sirh-view-tab px-4 py-2 rounded-xl border border-outline-variant text-xs font-bold uppercase hover:bg-surface-container">Proveedores</button>
+        </div>
+
+        <div id="view-modulos" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
+            <input id="filter-q" type="search" placeholder="Buscar módulo, descripción…" class="lg:col-span-2 px-4 py-3 bg-surface-container rounded-xl border-none text-sm" oninput="renderSirhTable()"/>
+            <select id="filter-area" class="px-4 py-3 bg-surface-container rounded-xl border-none text-sm" onchange="renderSirhTable()">
+                <option value="">Todas las áreas</option>
+            </select>
             <select id="filter-estado" class="px-4 py-3 bg-surface-container rounded-xl border-none text-sm" onchange="renderSirhTable()">
                 <option value="">Todos los estados</option>
             </select>
-            <select id="filter-prioridad" class="px-4 py-3 bg-surface-container rounded-xl border-none text-sm" onchange="renderSirhTable()">
-                <option value="">Todas las prioridades</option>
+            <select id="filter-activo" class="px-4 py-3 bg-surface-container rounded-xl border-none text-sm" onchange="renderSirhTable()">
+                <option value="">Activos e inactivos</option>
+                <option value="1" selected>Solo activos</option>
+                <option value="0">Solo inactivos</option>
             </select>
+        </div>
+        <div class="hidden">
+            <select id="filter-prioridad" onchange="renderSirhTable()"><option value="">Todas las prioridades</option></select>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -129,11 +124,13 @@
                     <thead class="bg-surface-container-low text-[10px] uppercase tracking-wider text-on-surface-variant">
                         <tr>
                             <th class="text-left px-4 py-3">Módulo</th>
+                            <th class="text-left px-3 py-3">Área</th>
                             <th class="text-left px-3 py-3">Estado</th>
                             <th class="text-left px-3 py-3">Avance</th>
-                            <th class="text-left px-3 py-3">Fechas</th>
                             <th class="text-left px-3 py-3">Responsable</th>
                             <th class="text-left px-3 py-3">Proveedor</th>
+                            <th class="text-left px-3 py-3">Equipo</th>
+                            <th class="text-left px-3 py-3">Activo</th>
                             <th class="text-right px-4 py-3">Acciones</th>
                         </tr>
                     </thead>
@@ -141,6 +138,60 @@
                 </table>
             </div>
             <p class="px-4 py-3 text-xs text-on-surface-variant border-t" id="sirh-count">0 módulos</p>
+        </div>
+        </div>
+
+        <div id="view-equipo" class="hidden space-y-4">
+            <div class="bg-white border border-outline-variant rounded-2xl p-5">
+                <h2 class="text-lg font-bold mb-1">Agregar persona a un módulo</h2>
+                <p class="text-sm text-on-surface-variant mb-4">Asigná responsable o sumá alguien al equipo sin abrir el ABM completo.</p>
+                <form id="form-add-equipo" class="grid grid-cols-1 md:grid-cols-4 gap-3 items-end" onsubmit="addPersonToModule(event)">
+                    <div class="md:col-span-1">
+                        <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Módulo *</label>
+                        <select id="add-equipo-modulo" required class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm"></select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Persona *</label>
+                        <input id="add-equipo-nombre" list="datalist-people" required class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm" placeholder="Nombre y apellido"/>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Rol</label>
+                        <select id="add-equipo-rol" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm">
+                            <option value="equipo">Equipo</option>
+                            <option value="responsable">Responsable</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="px-4 py-3 rounded-xl bg-primary text-white text-xs font-bold uppercase">Agregar</button>
+                </form>
+            </div>
+            <div class="bg-white border border-outline-variant rounded-2xl p-5">
+                <h2 class="text-lg font-bold mb-1">Equipo vinculado a módulos</h2>
+                <p class="text-sm text-on-surface-variant mb-4">Personas que figuran como responsable o en el equipo de algún módulo activo.</p>
+                <div id="sirh-equipo-list" class="space-y-3"></div>
+            </div>
+        </div>
+
+        <div id="view-proveedores" class="hidden space-y-4">
+            <div class="bg-white border border-outline-variant rounded-2xl p-5">
+                <h2 class="text-lg font-bold mb-1">Asignar proveedor a un módulo</h2>
+                <p class="text-sm text-on-surface-variant mb-4">Cada módulo tiene un proveedor principal. Si ya tenía uno, se reemplaza.</p>
+                <form id="form-add-proveedor" class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end" onsubmit="addProviderToModule(event)">
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Módulo *</label>
+                        <select id="add-proveedor-modulo" required class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm"></select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Proveedor *</label>
+                        <input id="add-proveedor-nombre" list="datalist-providers" required class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm" placeholder="Nombre del proveedor"/>
+                    </div>
+                    <button type="submit" class="px-4 py-3 rounded-xl bg-primary text-white text-xs font-bold uppercase">Asignar</button>
+                </form>
+            </div>
+            <div class="bg-white border border-outline-variant rounded-2xl p-5">
+                <h2 class="text-lg font-bold mb-1">Proveedores vinculados a módulos</h2>
+                <p class="text-sm text-on-surface-variant mb-4">Mapa de proveedores del catálogo. Clic en un módulo para editar el resto de campos.</p>
+                <div id="sirh-proveedores-list" class="space-y-3"></div>
+            </div>
         </div>
     </div>
 </main>
@@ -160,9 +211,29 @@
                     <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Nombre del módulo *</label>
                     <input id="f-modulo" required class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm"/>
                 </div>
+                <div class="md:col-span-2">
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Descripción</label>
+                    <input id="f-descripcion" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm" placeholder="Para qué sirve este módulo"/>
+                </div>
                 <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Fase / área</label>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Área *</label>
+                    <select id="f-area" required class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm"></select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Fase</label>
                     <input id="f-fase" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm" placeholder="Core RRHH, Nómina…"/>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Orden</label>
+                    <input id="f-orden" type="number" min="0" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm"/>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Icono (Material)</label>
+                    <input id="f-icono" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm" placeholder="view_module"/>
+                </div>
+                <div class="md:col-span-2 flex items-center gap-3 py-1">
+                    <input id="f-activo" type="checkbox" checked class="rounded border-outline-variant"/>
+                    <label for="f-activo" class="text-sm font-semibold">Activo en el producto (Hoy / Tablero)</label>
                 </div>
                 <div>
                     <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Estado</label>
@@ -192,14 +263,24 @@
                     <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Fin real</label>
                     <input id="f-fecha-fin-real" type="date" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm"/>
                 </div>
+                <div class="md:col-span-2 pt-2 border-t border-outline-variant/60">
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-primary mb-3">Personas (opcional)</p>
+                </div>
                 <div>
                     <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Responsable</label>
-                    <input id="f-responsable" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm"/>
+                    <input id="f-responsable" list="datalist-people" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm" placeholder="Opcional — sugerencias del catálogo"/>
                 </div>
                 <div>
                     <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Proveedor</label>
-                    <input id="f-proveedor" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm" placeholder="Opcional"/>
+                    <input id="f-proveedor" list="datalist-providers" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm" placeholder="Opcional — sugerencias del catálogo"/>
                 </div>
+                <div class="md:col-span-2">
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Equipo de trabajo</label>
+                    <textarea id="f-equipo" rows="3" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm resize-none" placeholder="Una persona por línea (opcional)&#10;Ana López&#10;Juan Pérez"></textarea>
+                    <p class="text-[11px] text-on-surface-variant mt-1">También podés separar con comas. Vacío = sin equipo. Las sugerencias salen de otros módulos.</p>
+                </div>
+                <datalist id="datalist-people"></datalist>
+                <datalist id="datalist-providers"></datalist>
                 <div class="md:col-span-2">
                     <label class="block text-[10px] font-bold uppercase tracking-widest mb-1">Próximo hito</label>
                     <input id="f-hito" class="w-full px-4 py-3 bg-surface-container rounded-xl border-none text-sm"/>

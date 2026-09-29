@@ -1,23 +1,9 @@
 import { persistState } from '../store.js';
-import { getCurrentProviderIndex } from './context.js';
 import { renderOverview } from './overview.js';
-import { renderSistemas, renderTeamSelection } from './sistemas.js';
-import { renderStatus } from './incidencias.js';
-import {
-  renderProveedores, renderProviderTagSelectors, renderProviderTasks,
-} from './proveedores.js';
 
 export function updateUI() {
   try {
     renderOverview();
-    renderSistemas();
-    renderStatus();
-    renderTeamSelection();
-    renderProveedores();
-    if (getCurrentProviderIndex() !== null) {
-      renderProviderTagSelectors();
-      renderProviderTasks();
-    }
   } catch (e) {
     console.error('UI Update Error:', e);
   } finally {
