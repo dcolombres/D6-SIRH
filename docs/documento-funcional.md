@@ -1,8 +1,8 @@
 # Documento funcional — D6-SIRH
 
 **Producto:** D6-SIRH (Sistema Integral de Recursos Humanos)  
-**Tipo:** App web local (Node + navegador)  
-**Versión de referencia:** 1.4  
+**Tipo:** App web (Laravel + Docker)  
+**Versión de referencia:** 2.0.1  
 **Fecha:** 2026-09-29  
 **Clasificación:** Uso interno
 
@@ -140,9 +140,10 @@ Runtime: **Laravel 11** (Blade + Alpine) + **Docker** (nginx, PHP-FPM, MySQL). V
 
 ## 9. Requisitos de uso
 
-- Node.js + `npm install` / `npm start`.
-- Navegador en `http://127.0.0.1:3847`.
-- Puerto configurable con `PORT`; `D6_NO_OPEN=1` evita abrir el navegador.
+- Docker Compose (desarrollo: `docker-compose.dev.yml`; test: `docker-compose.yml`).
+- `APP_KEY` definido en `.env` (obligatorio).
+- Navegador en `http://localhost:3848` (o `APP_URL` / `HTTP_PORT`).
+- Detalle de arranque: [README.md](../README.md) e [INSTRUCCIONES.md](../INSTRUCCIONES.md).
 
 ## 10. Criterios de aceptación (funcionales)
 
@@ -162,8 +163,9 @@ Runtime: **Laravel 11** (Blade + Alpine) + **Docker** (nginx, PHP-FPM, MySQL). V
 | Área | Clasificación de producto (Gestión / Tableros / Autogestión) |
 | Activo | Visible en Hoy y Tablero |
 | Follow-up | Seguimiento de avance, riesgo y plazos |
-| SQLite | Base local de trabajo |
+| MySQL | Base de datos del stack Laravel/Docker |
 | JSON backup | Paquete portable de resguardo |
+| Legacy | Runtime Node/sql.js archivado en `legacy/` (solo referencia) |
 
 ---
 

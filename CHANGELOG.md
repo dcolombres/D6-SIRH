@@ -7,6 +7,17 @@ y este proyecto adhiere a [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+## [2.0.1] - 2026-09-29
+
+### Corregido
+
+- Healthcheck de MySQL en Docker: la password root se evalúa dentro del contenedor (`$$MYSQL_ROOT_PASSWORD`), evitando fallos `unhealthy` por interpolación en el host.
+- Documentación alineada a rama `main`, arranque local vs test, y troubleshooting de MySQL / SSL corporativo.
+
+### Cambiado
+
+- `start_period` del healthcheck MySQL elevado a 40s para la primera inicialización.
+
 ## [2.0.0] - 2026-09-29
 
 ### Añadido
@@ -71,7 +82,8 @@ y este proyecto adhiere a [Versionado Semántico](https://semver.org/lang/es/).
 - Shell de navegación, catálogo de módulos, métricas e informe.
 - Persistencia local con sql.js / SQLite.
 
-[Unreleased]: https://github.com/dcolombres/D6-SIRH/compare/9a74365...HEAD
+[Unreleased]: https://github.com/dcolombres/D6-SIRH/compare/main...HEAD
+[2.0.1]: https://github.com/dcolombres/D6-SIRH/compare/9a74365...main
 [2.0.0]: https://github.com/dcolombres/D6-SIRH/compare/916064e...9a74365
 [1.1.0]: https://github.com/dcolombres/D6-SIRH/compare/4a7bbc8...916064e
 [1.0.1]: https://github.com/dcolombres/D6-SIRH/compare/381a07c...4a7bbc8

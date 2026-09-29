@@ -4,7 +4,8 @@ Documento para **DevOps / plataforma**. Objetivo: levantar el ambiente de test c
 
 ## Artefacto
 
-- Rama Git: `Laravel` (repo D6-SIRH)
+- Rama Git: **`main`**
+- Remotos: GitHub `dcolombres/D6-SIRH` · GitLab `secretaria-legal-y-administrativa/d6-sirh`
 - Orquestación: `docker compose` (archivo raíz `docker-compose.yml`)
 - Imagen app: build multi-stage (`Dockerfile`) → PHP 8.3-FPM + assets Vite
 - Sidecars: `nginx:1.27-alpine`, `mysql:8.4`
@@ -14,6 +15,7 @@ Documento para **DevOps / plataforma**. Objetivo: levantar el ambiente de test c
 - Docker Engine 24+ y Docker Compose v2
 - Puertos libres (defaults): **3848** (HTTP), **3307** (MySQL host, opcional)
 - Acceso a registry/base images: `php`, `node`, `composer`, `nginx`, `mysql`
+- Salida HTTPS hacia Packagist/GitHub/npm **sin** interceptación SSL sin CA (si hay proxy corporativo, instalar el CA en el build o usar el stack `docker-compose.dev.yml`)
 
 ## Variables
 
@@ -129,6 +131,16 @@ Importar dump SQLite legacy (si aplica):
 # colocar archivo en ./data/sirh.sqlite en el host y montarlo, o copiar al contenedor
 docker compose exec app php artisan sirh:import-sqlite /var/www/html/data/sirh.sqlite --fresh
 ```
+
+## Build falla por SSL (`curl error 60`)
+
+Síntoma: `composer install` o `npm ci` en el `Dockerfile` aborta con certificado self-signed en la cadena.
+
+Opciones:
+
+1. Inyectar el CA corporativo en las etapas `vendor` / `frontend` del Dockerfile.  
+2. En desarrollo local, no buildear: `docker compose -f docker-compose.dev.yml up -d` (ver [INSTRUCCIONES.md](../INSTRUCCIONES.md)).  
+3. Construir la imagen en un runner sin MITM SSL y publicarla al registry interno.
 
 ## Desarrollo (no usar en test)
 

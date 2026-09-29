@@ -1,5 +1,7 @@
-# Legacy Node runtime
+# Legacy — runtime Node
 
-Snapshot of the previous D6-SIRH stack (Node + sql.js + static HTML/JS).
+Snapshot del stack anterior de D6-SIRH (Node + sql.js + HTML/JS estático).
 
-Not used by the Laravel application. Kept for reference and for `php artisan sirh:import-sqlite` source data (`data/sirh.sqlite`).
+**No** forma parte del despliegue Laravel. Se conserva como referencia y como fuente posible para `php artisan sirh:import-sqlite` (`data/sirh.sqlite`).
+
+Para la aplicación actual, ver el [README](../README.md) en la raíz del repo.
